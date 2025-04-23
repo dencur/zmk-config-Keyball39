@@ -1,0 +1,147 @@
+// File: config/keymaps/cdmap/cdmap.keymap
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+
+//
+/ {
+    aliases {
+        base = &layer0;
+        fun  = &layer1;
+        nav  = &layer2;
+        md   = &layer3;
+        num  = &layer4;
+        pnt  = &layer5;
+        sym  = &layer6;
+    };
+
+    keymap {
+        compatible = "zmk,keymap";
+
+        /* ──────────────────────────────────────
+           Layer 0: Base QWERTY with home-row mods
+           ────────────────────────────────────── */
+        layer0 {
+            bindings = <
+            /* Row 1 */
+            &kp Q      &kp W      &kp E      &kp R      &kp T
+            &kp Y      &kp U      &kp I      &kp O      &kp P
+
+            /* Row 2 */
+            &mt LGUI   &mt LALT   &mt LCTRL  &mt LSHIFT &kp  G
+            &kp H     &mt RSHIFT &mt RCTRL   &mt LALT   &mt RGUI QUOT
+
+            /* Row 3 */
+            &lt pnt Z  &kp X      &kp C      &kp V      &kp B
+            &kp N      &kp M      &kp COMMA  &kp DOT   &lt pnt SLASH
+
+            /* Thumb row (tap: mod, hold: layer) */
+            &lt md  ESC  &lt nav BSPC  &lt fun TAB  &lt sym ENT  &lt num SPACE
+            >;
+        };
+
+        /* ──────────────────────────────────────
+           Layer 1: Function keys
+           ────────────────────────────────────── */
+        layer1 {
+            bindings = <
+            &none      &none      &none      &none      &none
+            &kp PSCR   &kp F7     &kp F8     &kp F9     &kp F12
+
+            &kp LGUI   &kp LALT   &kp LCTRL  &kp LSHIFT &none
+            &kp SCRL  &kp F4     &kp F5     &kp F6     &kp F11
+
+            &none      &none      &none      &none      &none
+            &kp PAUS  &kp F1     &kp F2     &kp F3     &kp F10
+
+            &none      &none      &trans     &none      &none
+            >;
+        };
+
+        /* ──────────────────────────────────────
+           Layer 2: Navigation
+           ────────────────────────────────────── */
+        layer2 {
+            bindings = <
+            &none      &none      &none      &none      &none
+            &none      &none      &none      &none      &none
+
+            &kp LGUI   &kp LALT   &kp LCTRL  &kp LSHIFT &none
+            &kp CAPS  &kp LEFT   &kp DOWN   &kp UP     &kp RIGHT
+
+            &none      &none      &none      &none      &none
+            &kp INS   &kp HOME   &kp PGDN   &kp PGUP   &kp END
+
+            &none      &trans     &none      &kp ENT    &kp BSPC
+            >;
+        };
+
+        /* ──────────────────────────────────────
+           Layer 3: Media & RGB
+           ────────────────────────────────────── */
+        layer3 {
+            bindings = <
+            &none      &rgb_ug RGB_RMOD  &rgb_ug RGB_TOG   &rgb_ug RGB_MOD  &none
+            &none      &rgb_ug RGB_RMOD  &rgb_ug RGB_TOG   &rgb_ug RGB_MOD  &none
+
+            &kp MPRV   &kp VOLD            &kp MUTE        &kp VOLU        &kp MNXT
+            &kp MPRV   &kp VOLD            &kp MUTE        &kp VOLU        &kp MNXT
+
+            &none      &none               &none           &eeclr          &bootloader
+            &bootloader &eeclr             &none           &none           &none
+
+            &trans     &kp MPLY            &kp MSTP        &kp MSTP        &kp MPLY
+            >;
+        };
+
+        /* ──────────────────────────────────────
+           Layer 4: Numerals (numpad layout)
+           ────────────────────────────────────── */
+        layer4 {
+            bindings = <
+            &kp LBRC   &kp 7      &kp 8      &kp 9      &kp RBRC
+            &none      &none      &none      &none      &none
+
+            &kp SCLN   &kp 4      &kp 5      &kp 6      &kp EQL
+            &none      &kp LSHIFT &kp LCTRL  &kp LALT   &kp LGUI
+
+            &kp GRV    &kp 1      &kp 2      &kp 3      &kp BSLS
+            &none      &none      &none      &none      &none
+
+            &kp DOT    &kp 0      &kp MINS   &none      &trans
+            >;
+        };
+
+        /* ──────────────────────────────────────
+           Layer 5: Pointer (trackball + mouse buttons)
+           ────────────────────────────────────── */
+        layer5 {
+            bindings = <
+            &bootloader &eeclr   &none    &bt BT_NXT   &bt BT_PRV
+            &bt BT_PRV   &bt BT_NXT &eeclr &none        &none
+
+            &none       &none     &none    &none        &none
+            &none       &none     &none    &none        &none
+
+            &kp BTN2    &kp BTN1  &kp BTN3 &kp BTN3    &kp BTN1
+            >;
+        };
+
+        /* ──────────────────────────────────────
+           Layer 6: Symbols (shifted punctuation)
+           ────────────────────────────────────── */
+        layer6 {
+            bindings = <
+            &kp LCBR   &kp AMPR  &kp ASTR  &kp LPRN  &kp RCBR
+            &none      &none      &none      &none      &none
+
+            &kp COLN   &kp DLR   &kp PERC  &kp CIRC  &kp PLUS
+            &none      &kp LSHIFT &kp LCTRL &kp LALT   &kp LGUI
+
+            &kp TILD   &kp EXLM  &kp AT    &kp HASH  &kp PIPE
+            &none      &none      &none      &none      &none
+
+            &kp LPRN   &kp RPRN  &kp UNDS  &trans     &none
+            >;
+        };
+    };
+};
