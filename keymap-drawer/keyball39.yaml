@@ -189,7 +189,7 @@ layers:
   - INS
   - HOME
   - PgDn
-  - PgDn
+  - PgUp
   - {t: END, type: held alternate}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}

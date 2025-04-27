@@ -1246,7 +1246,7 @@ rect.held, rect.combo.held {
 <g transform="translate(672, 147)" class="key keypos-28">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key side"/>
 <rect rx="4" ry="4" x="-20" y="-24" width="40" height="40" class="key"/>
-<text x="0" y="-4" class="key tap">PgDn</text>
+<text x="0" y="-4" class="key tap">PgUp</text>
 </g>
 <g transform="translate(728, 161)" class="key held alternate keypos-29">
 <rect rx="6" ry="6" x="-26" y="-26" width="52" height="52" class="key held alternate side"/>
