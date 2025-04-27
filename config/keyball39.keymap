@@ -89,7 +89,7 @@
 &none   &none  &none  &none      &none                            &none      &none  &none  &none  &none
 &none   &none  &none  &none      &none                            &none      &none  &none  &none  &none
 &trans  &mo 5  &none  &none      &none                            &none      &none  &none  &none  &trans
-&none   &none  &none  &mkp RCLK  &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp LCLK                       &none
+&none   &none  &none  &kp A      &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp LCLK                       &none
             >;
         };
 
