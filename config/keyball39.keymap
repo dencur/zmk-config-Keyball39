@@ -65,7 +65,7 @@
             label = "QWRT";
             bindings = <
 &kp Q                &kp W             &kp E             &kp R             &kp T                                    &kp Y            &kp U        &kp I         &kp O         &kp P
-&mt LGUI A           &mt LALT S        &mt LCTL D        &mt LSHFT F       &kp G                                    &kp H            &mt LSHFT J  &mt LCTL K    &mt LALT L    &mt LGUI SEMI
+&mt LGUI A           &mt LALT S        &mt LCTRL D        &mt LSHFT F       &kp G                                    &kp H            &mt LSHFT J  &mt LCTRL K    &mt LALT L    &mt LGUI SEMI
 &kp Z                &kp X             &kp C             &kp V             &kp B                                    &kp N            &kp M        &kp COMMA     &kp DOT       &kp SLASH
 &none                &none             &none             &lt 6 ESCAPE      &lt 4 BACKSPACE &lt 3 TAB                &lt 2 ENTER      &lt 1 SPACE                              &none
             >;
@@ -75,7 +75,7 @@
             label = "NUM";
             bindings = <
 &kp LEFT_BRACKET     &kp NUMBER_7      &kp NUMBER_8      &kp NUMBER_9      &kp RIGHT_BRACKET                        &none           &none         &none         &none         &none
-&kp SEMI             &kp NUMBER_4      &kp NUMBER_5      &kp NUMBER_6      &kp EQUAL                                &none           &kp LSHFT     &kp LCTL      &kp LALT      &kp LGUI
+&kp SEMI             &kp NUMBER_4      &kp NUMBER_5      &kp NUMBER_6      &kp EQUAL                                &none           &kp LSHFT     &kp LCTRL      &kp LALT      &kp LGUI
 &kp GRAVE            &kp NUMBER_1      &kp NUMBER_2      &kp NUMBER_3      &kp NON_US_BACKSLASH                     &none           &none         &none         &none         &none
 &none                &none             &none             &kp PERIOD        &kp NUMBER_0 &kp MINUS                   &none           &trans                                    &none
             >;
@@ -85,7 +85,7 @@
             label = "SYM";
             bindings = <
 &kp LS(LEFT_BRACKET) &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LS(RIGHT_BRACKET)                    &none           &none         &none         &none         &none
-&kp LS(SEMI)         &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp LS(EQUAL)                            &none           &kp LSHFT     &kp LCTL      &kp LALT      &kp LGUI
+&kp LS(SEMI)         &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp LS(EQUAL)                            &none           &kp LSHFT     &kp LCTRL      &kp LALT      &kp LGUI
 &kp LS(GRAVE)        &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp LS(NON_US_BACKSLASH)                 &none           &none         &none         &none         &none
 &none                &none             &none             &kp LS(PERIOD)    &kp LS(NUMBER_0) &kp LS(MINUS)           &none           &trans                                    &none
             >;
@@ -95,7 +95,7 @@
             label = "FUN";
             bindings = <
 &none               &none           &none           &none           &none                                    &kp PRINT_SCREEN &kp F7        &kp F8         &kp F9       &kp F12
-&kp LGUI            &kp LALT        &kp LCTL        &kp LSHFT       &none                                    &kp SCROLL_LOCK  &kp F4        &kp F5         &kp F6       &kp F11
+&kp LGUI            &kp LALT        &kp LCTRL        &kp LSHFT       &none                                    &kp SCROLL_LOCK  &kp F4        &kp F5         &kp F6       &kp F11
 &none               &none           &none           &none           &none                                    &kp PAUSE_BREAK  &kp F1        &kp F2         &kp F3       &kp F10
 &none               &none           &none           &none           &none $trans                             &none            &none                                     &none
             >;
