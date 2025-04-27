@@ -5,6 +5,7 @@
 #define MOUSE   4
 #define SCROLL  5
 #define SNIPE   6
+#define ARROW   7
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -123,6 +124,15 @@
 
         snipe_layer {
             label = "SNIPE";
+            bindings = <
+&trans  &trans  &trans  &trans  &bootloader                  &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
+&trans  &trans  &trans  &trans  &trans       &trans  &trans  &trans                          &trans
+            >;
+        };
+        arrow_layer {
+            label = "ARROW";
             bindings = <
 &trans  &trans  &trans  &trans  &bootloader                  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
