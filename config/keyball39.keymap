@@ -31,32 +31,16 @@
     // custom shift using mod-morph 
 
     behaviors {
-        cmqus: comma_question {
-            compatible = "zmk,behavior-mod-morph";
-            label = "COMMA_QUESTION";
-            #binding-cells = <0>;
-            bindings = <&kp COMMA>, <&kp QUESTION>;
 
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-
-        dtsmi: dot_semi {
-            compatible = "zmk,behavior-mod-morph";
-            label = "DOT_SEMI";
-            #binding-cells = <0>;
-            bindings = <&kp DOT>, <&kp SEMI>;
-
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
     };
 
     macros {
-        Hiragana: Hiragana {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&kp LC(SPACE)>;
-            label = "HIRAGANA";
-        };
+        // Hiragana: Hiragana {
+        //     compatible = "zmk,behavior-macro";
+        //     #binding-cells = <0>;
+        //     bindings = <&kp LC(SPACE)>;
+        //     label = "HIRAGANA";
+        // };
     };
 
     keymap {
