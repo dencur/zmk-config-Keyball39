@@ -6,7 +6,6 @@
 #define SCROLL  5
 #define SNIPE   6
 #define ARROW   7
-
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 5 // Default=10, lower is slower
 
 #include <behaviors/mouse_keys.dtsi>
@@ -47,10 +46,10 @@
         default_layer {
             label = "QWRT";
             bindings = <
-&kp Q       &kp W       &kp E        &kp R         &kp T                                    &kp Y        &kp U        &kp I        &kp O       &kp P
-&mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F   &kp G                                    &kp H        &mt LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI SEMI
-&lt 4 Z     &kp X       &kp C        &kp V         &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 4 SLASH
-&none       &none       &none        &kp ESCAPE  &lt 7 BACKSPACE  &lt 3 TAB  &lt 2 ENTER  &lt 1 SPACE                                        &none
+&kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y        &kp U        &kp I        &kp O       &kp P
+&mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F  &kp G                                    &kp H        &mt LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI SEMI
+&lt 4 Z     &kp X       &kp C        &kp V        &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 4 SLASH
+&none       &none       &none        &kp ESCAPE   &lt 7 BACKSPACE  &lt 3 TAB  &lt 2 ENTER  &lt 1 SPACE                                        &none
             >;
         };
 
@@ -87,10 +86,10 @@
         mouse_layer {
             label = "MOUSE";
             bindings = <
-&none   &none  &none  &none     &none                         &none     &none  &none  &none  &none
-&none   &none  &none  &none     &none                         &none     &none  &none  &none  &none
-&trans  &mo 5  &none  &none     &none                         &none     &none  &none  &none  &trans
-&none   &none  &none  &mkp MB2  &mkp MB1  &mkp MB3  &mkp MB2  &mkp MB1                       &none
+&none   &none  &none  &none      &none                            &none      &none  &none  &none  &none
+&none   &none  &none  &none      &none                            &none      &none  &none  &none  &none
+&trans  &mo 5  &none  &none      &none                            &none      &none  &none  &none  &trans
+&none   &none  &none  &mkp RCLK  &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp LCLK                       &none
             >;
         };
 
