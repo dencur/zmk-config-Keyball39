@@ -84,10 +84,10 @@
         symbol_layer {
             label = "SYM";
             bindings = <
-&kp LS(LEFT_BRACKET)  &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LS(RIGHT_BRACKET)                           &none   &none      &none      &none     &none
-&kp LS(SEMI)          &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp LS(EQUAL)                                   &none   &kp LSHFT  &kp LCTRL  &kp LALT  &kp LGUI
-&kp LS(GRAVE)         &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp LS(NON_US_BACKSLASH)                        &none   &none      &none      &none     &none
-&none                 &none             &none             &kp LS(PERIOD)    &kp LS(NUMBER_0)          &kp LS(MINUS)  &none  &trans                                  &none
+&kp LS(LEFT_BRACKET)  &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LS(RIGHT_BRACKET)                            &none  &none      &none      &none     &none
+&kp LS(SEMI)          &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp LS(EQUAL)                                    &none  &kp LSHFT  &kp LCTRL  &kp LALT  &kp LGUI
+&kp LS(GRAVE)         &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp LS(NON_US_BACKSLASH)                         &none  &none      &none      &none     &none
+&none                 &none             &none             &kp LS(PERIOD)    &kp LS(NUMBER_0)          &kp LS(MINUS)  &trans  &none                                  &none
             >;
         };
 
