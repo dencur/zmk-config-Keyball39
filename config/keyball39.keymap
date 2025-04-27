@@ -131,13 +131,14 @@
 &trans  &trans  &trans  &trans  &trans       &trans  &trans  &trans                          &trans
             >;
         };
+
         arrow_layer {
             label = "ARROW";
             bindings = <
-&trans  &trans  &trans  &trans  &bootloader                  &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans       &trans  &trans  &trans                          &trans
+&trans    &trans    &trans     &trans     &none                  &trans    &trans    &trans     &trans     &trans
+&kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &trans                 &kp CAPS  &kp LEFT  &kp DOWN   &kp UP     &kp RIGHT
+&trans    &trans    &trans     &trans     &trans                 &kp INS   &kp HOME  &kp PG_DN  &kp PG_UP  &kp END
+&trans    &trans    &trans     &none      &trans  &none  &trans  &trans                                    &trans
             >;
         };
     };
