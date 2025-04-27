@@ -7,6 +7,7 @@
 #include "keyball39.dtsi"
 
 &kscan0 {
+	wakeup-source;
 	col-gpios
 		= <&pro_micro 4 GPIO_ACTIVE_HIGH>
 		, <&pro_micro 5 GPIO_ACTIVE_HIGH>
