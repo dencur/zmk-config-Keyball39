@@ -322,6 +322,6 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
 combos:
 - p: [20, 33]
-  k: $$mdi:mouse-right-click-outline$$
+  k: '&z_esc_rclick'
 - p: [29, 33]
-  k: $$mdi:mouse-right-click-outline$$
+  k: '&z_esc_rclick'
