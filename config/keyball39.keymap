@@ -31,17 +31,6 @@
 / {
     // custom shift using mod-morph
 
-    behaviors {
-        z_plus_esc: z_plus_esc {
-            compatible = "zmk,behavior-mod-morph";
-            label = "Z_PLUS_ESC";
-            #binding-cells = <0>;
-            bindings = <&kp ESC>, <&mkp RCLK>;
-            mods = <(MOD_LSFT|MOD_RSFT)>;
-            keep-mods = <(MOD_LSFT|MOD_RSFT)>;
-        };
-    };
-
     macros {
         // Hiragana: Hiragana {
         //     compatible = "zmk,behavior-macro";
@@ -49,31 +38,6 @@
         //     bindings = <&kp LC(SPACE)>;
         //     label = "HIRAGANA";
         // };
-        
-        // Special macro for Z+ESC
-        z_esc_rclick: z_esc_rclick {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&macro_press &mkp RCLK>, <&macro_release &mkp RCLK>;
-            label = "Z_ESC_RCLICK";
-        };
-    };
-
-    combos {
-        compatible = "zmk,combos";
-        combo_z_esc_rclick {
-            timeout-ms = <100>;     // Increase timeout for better reliability
-            key-positions = <20 33>; // Z + ESC 
-            bindings = <&z_esc_rclick>;
-            slow-release;           // Make sure it releases correctly
-        };
-        
-        combo_slash_esc_rclick {
-            timeout-ms = <100>;     // Increase timeout for better reliability
-            key-positions = <29 33>; // SLASH + ESC
-            bindings = <&z_esc_rclick>;
-            slow-release;           // Make sure it releases correctly
-        };
     };
 
     keymap {
