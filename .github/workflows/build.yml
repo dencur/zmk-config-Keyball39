@@ -1,42 +1,5 @@
-name: Build Firmware
-
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    runs-on: self-hosted
-    strategy:
-      matrix:
-        include:
-          - board: nice_nano_v2
-            shield: keyball39_left
-          - board: nice_nano_v2
-            shield: keyball39_right
-            snippet: studio-rpc-usb-uart
-          - board: nice_nano_v2
-            shield: settings_reset
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Zephyr SDK
-        run: |
-          wget https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.1/zephyr-sdk-0.16.1_linux-x86_64.tar.gz
-          tar xvf zephyr-sdk-0.16.1_linux-x86_64.tar.gz
-          cd zephyr-sdk-0.16.1
-          ./setup.sh
-      - name: Install west
-        run: pip3 install --user west
-      - name: Clone ZMK
-        run: |
-          git clone https://github.com/zmkfirmware/zmk.git
-          cd zmk
-          west init -l .
-          west update
-      - name: Build Firmware
-        run: |
-          cd zmk
-          west build -b ${{ matrix.board }} -s ${{ matrix.shield }} -- -DZMK_CONFIG=$GITHUB_WORKSPACE/config
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: firmware
-          path: zmk/build/*/*/*.uf2
+    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
