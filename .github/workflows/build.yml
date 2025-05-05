@@ -25,15 +25,18 @@ jobs:
           ./setup.sh
       - name: Install west
         run: pip3 install --user west
-      - name: Initialize ZMK
+      - name: Clone ZMK
         run: |
+          git clone https://github.com/zmkfirmware/zmk.git
+          cd zmk
           west init -l .
           west update
       - name: Build Firmware
         run: |
+          cd zmk
           west build -b ${{ matrix.board }} -s ${{ matrix.shield }} -- -DZMK_CONFIG=$GITHUB_WORKSPACE/config
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: firmware
-          path: build/*/*/*.uf2
+          path: zmk/build/*/*/*.uf2
