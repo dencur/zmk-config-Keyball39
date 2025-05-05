@@ -1,5 +1,29 @@
+name: Build Firmware
+
 on: [push, pull_request, workflow_dispatch]
 
 jobs:
   build:
-    uses: zmkfirmware/zmk/.github/workflows/build-user-config.yml@main
+    runs-on: self-hosted
+    strategy:
+      matrix:
+        include:
+          - board: nice_nano_v2
+            shield: keyball39_left
+          - board: nice_nano_v2
+            shield: keyball39_right
+            snippet: studio-rpc-usb-uart
+          - board: nice_nano_v2
+            shield: settings_reset
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Firmware
+        run: |
+          west init -l .
+          west update
+          west build -b ${{ matrix.board }} -s ${{ matrix.shield }} -- -DZMK_CONFIG=$GITHUB_WORKSPACE/config
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware
+          path: build/*/*/*.uf2
