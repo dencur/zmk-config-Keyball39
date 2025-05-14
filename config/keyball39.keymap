@@ -32,21 +32,6 @@
     // custom shift using mod-morph
 
     macros {
-           rclick_macro: rclick_macro {
-               label = "RCLICK_MACRO";
-               compatible = "zmk,behavior-macro";
-               #binding-cells = <0>;
-               bindings = <&mkp RCLK>;
-           };
-       };
-
-    combos {
-        compatible = "zmk,combos";
-        combo_z_esc_rclick {
-            timeout-ms = <150>;
-            key-positions = <20 33>; // Z key (position 20) and ESC key (position 33)
-            bindings = <&mkp RCLK>;
-        };
     };
 
     keymap {
@@ -88,7 +73,7 @@
 &none     &none     &none      &none      &none                 &kp PRINTSCREEN  &kp F7  &kp F8  &kp F9  &kp F12
 &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &none                 &kp SCROLLLOCK   &kp F4  &kp F5  &kp F6  &kp F11
 &none     &none     &none      &none      &none                 &kp PAUSE_BREAK  &kp F1  &kp F2  &kp F3  &kp F10
-&none     &none     &none      &trans     &trans  &trans  &trans  &trans                                    &none
+&none     &none     &none      &none     &trans  &trans  &trans  &trans                                    &none
             >;
         };
 
@@ -98,7 +83,7 @@
 &none   &none   &none   &none      &none                            &none      &none     &none          &none        &kp DEL
 &trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT  &kp DOWN       &kp UP       &kp RIGHT
 &trans  &none   &none   &none      &none                            &kp INS    &kp HOME  &kp PAGE_DOWN  &kp PAGE_UP  &kp END
-&none   &none   &none   &rclick_macro  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
+&none   &none   &none   &mkp RCLK  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
             >;
         };
 
