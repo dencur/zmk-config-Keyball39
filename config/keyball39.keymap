@@ -32,7 +32,13 @@
     // custom shift using mod-morph
 
     macros {
-    };
+           rclick_macro: rclick_macro {
+               label = "RCLICK_MACRO";
+               compatible = "zmk,behavior-macro";
+               #binding-cells = <0>;
+               bindings = <&mkp RCLK>;
+           };
+       };
 
     keymap {
         compatible = "zmk,keymap";
@@ -43,7 +49,7 @@
 &kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y        &kp U        &kp I        &kp O       &kp P
 &mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F  &kp G                                    &kp H        &mt LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI SEMI
 &lt 4 Z     &lt 4 X     &kp C        &kp V        &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 4 SLASH
-&none       &none       &none        &mkp RCLK    &lt 7 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
+&none       &none       &none        &rclick_macro &lt 7 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
             >;
         };
 
@@ -83,7 +89,7 @@
 &none   &none   &none   &none      &none                            &none      &none     &none          &none        &kp DEL
 &trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT  &kp DOWN       &kp UP       &kp RIGHT
 &trans  &none   &none   &none      &none                            &kp INS    &kp HOME  &kp PAGE_DOWN  &kp PAGE_UP  &kp END
-&none   &none   &none   &mkp RCLK  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
+&none   &none   &none   &rclick_macro  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
             >;
         };
 
