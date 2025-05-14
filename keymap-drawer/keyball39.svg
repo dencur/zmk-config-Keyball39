@@ -492,11 +492,6 @@ rect.held, rect.combo.held {
 <a href="#SCROLL">
 <text x="56" y="154" class="combo tap layer-activator">SCROLL</text>
 </a></g>
-<g class="combo combopos-1">
-<rect rx="6" ry="6" x="42" y="141" width="28" height="26" class="combo"/>
-<a href="#SCROLL">
-<text x="56" y="154" class="combo tap layer-activator">SCROLL</text>
-</a></g>
 </g>
 </g>
 <g transform="translate(40, 344)" class="layer-NUM">
