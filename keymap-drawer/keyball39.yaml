@@ -20,7 +20,7 @@ layers:
   - {t: J, h: '$$mdi:apple-keyboard-shift$$'}
   - {t: K, h: '$$mdi:apple-keyboard-control$$'}
   - {t: L, h: '$$mdi:apple-keyboard-option$$'}
-  - {t: ;, h: LGUI, s: ':'}
+  - {t: '''', h: LGUI, s: '"'}
   - {t: Z, h: MOUSE}
   - X
   - C
