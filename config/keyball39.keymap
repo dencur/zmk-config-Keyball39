@@ -31,7 +31,37 @@
 / {
     // custom shift using mod-morph
 
+    behaviors {
+        zx_scroll: zx_scroll {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&mo>, <&kp>;
+            hold-trigger-key-positions = <21>; // X key position
+            hold-trigger-on-release;
+        };
+        
+        xz_scroll: xz_scroll {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&mo>, <&kp>;
+            hold-trigger-key-positions = <20>; // Z key position
+            hold-trigger-on-release;
+        };
+    };
+
     macros {
+        zx_macro: zx_macro {
+            label = "ZX_MACRO";
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_press &mo SCROLL>, <&macro_pause_for_release>, <&macro_release &mo SCROLL>;
+        };
     };
 
     combos {
@@ -53,7 +83,7 @@
 &kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y        &kp U        &kp I        &kp O       &kp P
 &mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F  &kp G                                    &kp H        &mt LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI SEMI
 &lt 4 Z     &lt 4 X     &kp C        &kp V        &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 4 SLASH
-&none       &none       &none        &kp ESC      &lt 7 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
+&none       &zx_macro   &none        &kp ESC      &lt 7 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
             >;
         };
 
