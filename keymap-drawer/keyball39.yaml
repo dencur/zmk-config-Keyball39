@@ -31,8 +31,8 @@ layers:
   - {t: ',', s: <}
   - {t: ., s: '>'}
   - {t: /, h: MOUSE, s: '?'}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: MOUSE, h: toggle}
+  - {t: QWRT, h: toggle}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - '&rclick_macro'
   - {t: '$$mdi:backspace$$', h: ARROW}
