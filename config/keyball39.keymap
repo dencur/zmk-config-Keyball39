@@ -28,6 +28,11 @@
     quick-tap-ms = <150>;
 };
 
+&msc {
+    acceleration-exponent = <0>; // No acceleration
+    time-to-max-speed-ms = <800>; // Very slow ramp-up
+};
+
 &caps_word { continue-list = <UNDERSCORE MINUS>; };
 
 / {
@@ -112,7 +117,7 @@
 &to 0     &trans  &trans  &trans  &trans  &trans  &trans  &trans                          &trans
             >;
             
-            sensor-bindings = <&inc_dec_kp MOVE_Y(-1) MOVE_Y(1) &inc_dec_kp MOVE_X(1) MOVE_X(-1)>;
+            sensor-bindings = <&inc_dec_kp MOVE_Y(-0.5) MOVE_Y(0.5) &inc_dec_kp MOVE_X(0.5) MOVE_X(-0.5)>;
         };
 
         snipe_layer {
