@@ -49,16 +49,6 @@
     macros {
     };
 
-    combos {
-        compatible = "zmk,combos";
-        combo_xz_scroll {
-            timeout-ms = <100>;
-            key-positions = <20 21>; // Z and X keys
-            bindings = <&mo SCROLL>;
-            layers = <0>;
-        };
-    };
-
     keymap {
         compatible = "zmk,keymap";
 
