@@ -6,7 +6,7 @@
 #define SCROLL  5
 #define SNIPE   6
 #define ARROW   7
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 2 // Default=10, lower is slower
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 1 // Default=10, lower is slower
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -26,6 +26,12 @@
     flavor = "tap-preferred";
     quick-tap-ms = <150>;
 };
+
+&msc {
+    acceleration-exponent = <0>;
+    time-to-max-speed-ms = <500>;
+};
+
 &caps_word { continue-list = <UNDERSCORE MINUS>; };
 
 / {
@@ -55,7 +61,7 @@
             label = "QWRT";
             bindings = <
 &kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y        &kp U        &kp I        &kp O       &kp P
-&mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F  &kp G                                    &kp H        &mt LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI SEMI
+&mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F  &kp G                                    &kp H        &mt LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI SQT
 &lt 4 Z     &kp X       &kp C        &kp V        &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 4 SLASH
 &kp GLOBE   &none       &none        &kp ESC      &lt 7 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
             >;
