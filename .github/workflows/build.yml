@@ -35,7 +35,7 @@ jobs:
         run: |
           west build -d build/settings_reset -b nice_nano_v2 -- -DSHIELD=settings_reset
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: firmware
           path: |
