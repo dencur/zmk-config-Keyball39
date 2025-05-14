@@ -6,7 +6,7 @@
 #define SCROLL  5
 #define SNIPE   6
 #define ARROW   7
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 1 // Default=10, lower is slower
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 4 // Default=10, lower is slower
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -28,8 +28,8 @@
 };
 
 &msc {
-    acceleration-exponent = <0>;
-    time-to-max-speed-ms = <500>;
+    acceleration-exponent = <1>;
+    time-to-max-speed-ms = <400>;
 };
 
 &caps_word { continue-list = <UNDERSCORE MINUS>; };
@@ -116,7 +116,7 @@
 &to 0     &trans  &trans  &trans  &trans  &trans  &trans  &trans                          &trans
             >;
             
-            sensor-bindings = <&inc_dec_kp DOWN UP &inc_dec_kp RIGHT LEFT>;
+            sensor-bindings = <&inc_dec_kp SCRL_DOWN SCRL_UP &inc_dec_kp SCRL_RIGHT SCRL_LEFT>;
         };
 
         snipe_layer {
