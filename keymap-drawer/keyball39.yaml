@@ -34,7 +34,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:mouse-right-click-outline$$
+  - '&rclick_macro'
   - {t: '$$mdi:backspace$$', h: ARROW}
   - {t: '$$mdi:keyboard-tab$$', h: FUN}
   - {t: '$$mdi:keyboard-return$$', h: SYM}
@@ -194,7 +194,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:mouse-right-click-outline$$
+  - '&rclick_macro'
   - $$mdi:mouse-left-click-outline$$
   - $$mdi:mouse-scroll-wheel$$
   - $$mdi:mouse-right-click-outline$$
