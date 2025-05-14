@@ -89,7 +89,7 @@
 &none   &none   &none   &none      &none                            &none      &none     &none          &none        &kp DEL
 &trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT  &kp DOWN       &kp RIGHT    &kp LEFT
 &trans  &mo 5   &none   &mkp RCLK  &none                            &kp INS    &kp HOME  &kp PAGE_DOWN  &kp PAGE_UP  &kp END
-&none   &none   &none   &mkp RCLK  &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp LCLK                                        &none
+&none   &none   &none   &kp X      &mkp LCLK  &mkp MCLK  &mkp RCLK  &mkp LCLK                                        &none
             >;
         };
 
