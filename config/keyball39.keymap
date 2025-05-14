@@ -6,7 +6,8 @@
 #define SCROLL  5
 #define SNIPE   6
 #define ARROW   7
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 4 // Default=10, lower is slower
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 200 // Default=600, lower is slower
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 1   // Default=10, lower is slower
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -27,9 +28,10 @@
     quick-tap-ms = <150>;
 };
 
+// Slow down scrolling with minimal acceleration
 &msc {
-    acceleration-exponent = <1>;
-    time-to-max-speed-ms = <400>;
+    acceleration-exponent = <0>; // No acceleration
+    time-to-max-speed-ms = <800>; // Very slow ramp-up
 };
 
 &caps_word { continue-list = <UNDERSCORE MINUS>; };
@@ -116,7 +118,7 @@
 &to 0     &trans  &trans  &trans  &trans  &trans  &trans  &trans                          &trans
             >;
             
-            sensor-bindings = <&inc_dec_kp SCRL_DOWN SCRL_UP &inc_dec_kp SCRL_RIGHT SCRL_LEFT>;
+            sensor-bindings = <&inc_dec_kp MOVE_Y(-1) MOVE_Y(1) &inc_dec_kp MOVE_X(1) MOVE_X(-1)>;
         };
 
         snipe_layer {
