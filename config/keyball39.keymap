@@ -6,7 +6,7 @@
 #define SCROLL  5
 #define SNIPE   6
 #define ARROW   7
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 5 // Default=10, lower is slower
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 2 // Default=10, lower is slower
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -26,7 +26,6 @@
     flavor = "tap-preferred";
     quick-tap-ms = <150>;
 };
-
 &caps_word { continue-list = <UNDERSCORE MINUS>; };
 
 / {
@@ -38,7 +37,7 @@
             timeout-ms = <100>;
             key-positions = <20 21>; // Z and X keys
             bindings = <&mo SCROLL>;
-            layers = <0>;
+            layers = <0 4>;
             slow-release; // Only release when both keys are released
         };
     };
