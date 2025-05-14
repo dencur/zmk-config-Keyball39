@@ -323,4 +323,4 @@ layers:
 combos:
 - p: [20, 21]
   k: SCROLL
-  l: [QWRT]
+  l: [QWRT, MOUSE]
