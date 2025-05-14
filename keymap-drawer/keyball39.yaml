@@ -34,7 +34,7 @@ layers:
   - F13
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:keyboard-esc$$
+  - F20
   - {t: '$$mdi:backspace$$', h: ARROW}
   - {t: '$$mdi:keyboard-tab$$', h: FUN}
   - {t: '$$mdi:keyboard-return$$', h: SYM}
