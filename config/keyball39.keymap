@@ -32,12 +32,6 @@
     // custom shift using mod-morph
 
     macros {
-        // Hiragana: Hiragana {
-        //     compatible = "zmk,behavior-macro";
-        //     #binding-cells = <0>;
-        //     bindings = <&kp LC(SPACE)>;
-        //     label = "HIRAGANA";
-        // };
     };
 
     keymap {
@@ -48,8 +42,8 @@
             bindings = <
 &kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y        &kp U        &kp I        &kp O       &kp P
 &mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F  &kp G                                    &kp H        &mt LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI SEMI
-&lt 4 Z     &lt 4 X       &kp C        &kp V        &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 4 SLASH
-&lt 4 LCTRL &to 4       &to 0        &kp A        &lt 7 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
+&lt 4 Z     &lt 4 X     &kp C        &kp V        &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 4 SLASH
+&none       &none       &none        &mkp RCLK    &lt 7 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
             >;
         };
 
@@ -59,7 +53,7 @@
 &kp LEFT_BRACKET  &kp NUMBER_7  &kp NUMBER_8  &kp NUMBER_9  &kp RIGHT_BRACKET                    &none   &none      &none      &none     &none
 &kp SEMI          &kp NUMBER_4  &kp NUMBER_5  &kp NUMBER_6  &kp EQUAL                            &none   &kp LSHFT  &kp LCTRL  &kp LALT  &kp LGUI
 &kp GRAVE         &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp BACKSLASH                        &none   &none      &none      &none     &none
-&none             &none         &none         &trans        &kp NUMBER_0       &kp MINUS  &none  &trans                                  &none
+&none             &none         &none         &kp PERIOD    &kp NUMBER_0   &kp MINUS             &none  &trans                           &none
             >;
         };
 
