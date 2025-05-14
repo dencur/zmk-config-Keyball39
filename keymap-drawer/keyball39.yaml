@@ -31,10 +31,10 @@ layers:
   - {t: ',', s: <}
   - {t: ., s: '>'}
   - {t: /, h: MOUSE, s: '?'}
-  - {t: MOUSE, h: toggle}
-  - {t: QWRT, h: toggle}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - '&rclick_macro'
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:keyboard-esc$$
   - {t: '$$mdi:backspace$$', h: ARROW}
   - {t: '$$mdi:keyboard-tab$$', h: FUN}
   - {t: '$$mdi:keyboard-return$$', h: SYM}
@@ -320,3 +320,6 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
+combos:
+- p: [20, 33]
+  k: $$mdi:mouse-right-click-outline$$
