@@ -22,7 +22,7 @@ layers:
   - {t: L, h: '$$mdi:apple-keyboard-option$$'}
   - {t: ;, h: LGUI, s: ':'}
   - {t: Z, h: MOUSE}
-  - {t: X, h: MOUSE}
+  - X
   - C
   - V
   - B
@@ -32,7 +32,7 @@ layers:
   - {t: ., s: '>'}
   - {t: /, h: MOUSE, s: '?'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - '&zx_macro'
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:keyboard-esc$$
   - {t: '$$mdi:backspace$$', h: ARROW}
@@ -182,7 +182,7 @@ layers:
   - $$mdi:arrow-up-bold$$
   - $$mdi:arrow-right-bold$$
   - {type: held}
-  - {t: '$$mdi:minus-circle-outline$$', type: held alternate}
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:mouse-right-click-outline$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -321,6 +321,9 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
 combos:
+- p: [20, 21]
+  k: SCROLL
+  l: [QWRT]
 - p: [20, 21]
   k: SCROLL
   l: [QWRT]
