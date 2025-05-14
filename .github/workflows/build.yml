@@ -10,6 +10,9 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v3
         with:
@@ -18,27 +21,34 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
+          check-latest: true
       - name: Install Dependencies
         run: |
-          sudo apt-get update
-          sudo apt-get install -y gcc-multilib
-          pip3 install west
-      - name: Build Left
+          apt-get update
+          apt-get install -y cmake gcc-multilib
+          pip3 install --user west
+      - name: Initialize ZMK
         run: |
           west init -l config
           west update
+          west zephyr-export
+      - name: Build Left
+        run: |
+          cd config
           west build -d build/left -b nice_nano_v2 -- -DSHIELD=keyball39_left
       - name: Build Right
         run: |
+          cd config
           west build -d build/right -b nice_nano_v2 -- -DSHIELD=keyball39_right
       - name: Build Settings Reset
         run: |
+          cd config
           west build -d build/settings_reset -b nice_nano_v2 -- -DSHIELD=settings_reset
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
           name: firmware
           path: |
-            build/left/zephyr/zmk.uf2
-            build/right/zephyr/zmk.uf2
-            build/settings_reset/zephyr/zmk.uf2
+            config/build/left/zephyr/zmk.uf2
+            config/build/right/zephyr/zmk.uf2
+            config/build/settings_reset/zephyr/zmk.uf2
