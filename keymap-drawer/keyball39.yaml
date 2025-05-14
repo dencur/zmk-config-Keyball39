@@ -32,7 +32,7 @@ layers:
   - {t: ., s: '>'}
   - {t: /, h: MOUSE, s: '?'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - '&zx_macro'
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:keyboard-esc$$
   - {t: '$$mdi:backspace$$', h: ARROW}
