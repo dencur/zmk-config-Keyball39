@@ -1,25 +1,38 @@
 /* Keyball39 – tame the scroll wheel
  *
- * Drop this file in your zmk-config repo's config/ folder.
- * It overrides listener settings that live in the upstream
- * keyball39_right.overlay without touching the ZMK source tree.
+ * This overlay configures layer-specific trackball behavior:
+ * - Default: Standard mouse pointer movement (potentially scaled).
+ * - SCROLL layer (5): Trackball movement becomes scroll, significantly slowed down.
  */
 
 #include <input/processors.dtsi>   /* processors come from core ZMK */
 
+// Define layer numbers to match keyball39.keymap
+#define MOUSE   4
+#define SCROLL  5
+
 / {
-    /* Optional: tone the sensor down a bit */
+    /* Optional: tone the sensor down a bit globally */
     &pmw3610 {                     /* label matches tangbonze repo */
-        cpi = <300>;              /* default ≈ 600 – 300 feels sane */
+        cpi = <300>;              /* default ≈ 600 – 300 feels sane for pointer */
     };
 
     /* Override the processor chain for the listener */
     &trackball_listener {
-        /* if the listener already has a chain, replace it */
-        /delete-property/input-processors;
-        input-processors = <
-            &zip_xy_to_scroll_mapper      /* Y‑axis → wheel events  */
-            &zip_scroll_scaler  1 20      /* divide deltas by 20    */
-        >;
+        // Base input processors (for MOUSE layer or default behavior)
+        // This example just provides a 1:1 scaler, you might not need explicit base processors
+        // if the default sensor output + CPI adjustment is fine for mouse movement.
+        // If you remove this, also remove '/delete-property/input-processors;' if it was previously added
+        // or ensure the shield provides a default chain.
+        input-processors = <&zip_xy_scaler 1 1>; // Default: 1:1 scaling for mouse movement
+
+        // Layer-specific override for the SCROLL layer
+        scroll_override {
+            layers = <SCROLL>; // Apply only when SCROLL layer (5) is active
+            input-processors = <
+                &zip_xy_to_scroll_mapper  /* Y-axis → wheel events, X-axis -> H-wheel events */
+                &zip_scroll_scaler 1 20   /* divide Y-scroll deltas by 20, H-scroll by 20 */
+            >;
+        };
     };
 }; 

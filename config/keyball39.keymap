@@ -29,7 +29,7 @@
 };
 
 &msc {
-    acceleration-exponent = <0x >; // No acceleration
+    acceleration-exponent = <0>; // No acceleration
     time-to-max-speed-ms = <1000>; // Very slow ramp-up
 };
 
@@ -111,13 +111,11 @@
         scroll_layer {
             label = "SCROLL";
             bindings = <
-&to 0     &trans  &trans  &trans  &trans                  &trans  &trans  &trans  &trans  &trans
 &trans    &trans  &trans  &trans  &trans                  &trans  &trans  &trans  &trans  &trans
 &trans    &trans  &trans  &trans  &trans                  &trans  &trans  &trans  &trans  &trans
-&to 0     &trans  &trans  &trans  &trans  &trans  &trans  &trans                          &trans
+&trans    &trans  &trans  &trans  &trans                  &trans  &trans  &trans  &trans  &trans
+&trans    &trans  &trans  &trans  &trans  &trans          &trans  &trans                  &trans
             >;
-            
-            sensor-bindings = <&inc_dec_kp MOVE_Y(-1) MOVE_Y(1) &inc_dec_kp MOVE_X(1) MOVE_X(-1)>;
         };
 
         snipe_layer {
