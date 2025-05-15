@@ -29,7 +29,7 @@
 };
 
 &msc {
-    acceleration-exponent = <0>; // No acceleration
+    acceleration-exponent = <0x >; // No acceleration
     time-to-max-speed-ms = <1000>; // Very slow ramp-up
 };
 

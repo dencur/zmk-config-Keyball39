@@ -1,0 +1,25 @@
+/* Keyball39 – tame the scroll wheel
+ *
+ * Drop this file in your zmk-config repo's config/ folder.
+ * It overrides listener settings that live in the upstream
+ * keyball39_right.overlay without touching the ZMK source tree.
+ */
+
+#include <input/processors.dtsi>   /* processors come from core ZMK */
+
+/ {
+    /* Optional: tone the sensor down a bit */
+    &pmw3610 {                     /* label matches tangbonze repo */
+        cpi = <300>;              /* default ≈ 600 – 300 feels sane */
+    };
+
+    /* Override the processor chain for the listener */
+    &trackball_listener {
+        /* if the listener already has a chain, replace it */
+        /delete-property/input-processors;
+        input-processors = <
+            &zip_xy_to_scroll_mapper      /* Y‑axis → wheel events  */
+            &zip_scroll_scaler  1 20      /* divide deltas by 20    */
+        >;
+    };
+}; 
