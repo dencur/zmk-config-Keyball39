@@ -30,8 +30,7 @@
         scroll_override {
             layers = <SCROLL>; // Apply only when SCROLL layer (5) is active
             input-processors = <
-                &zip_xy_to_scroll_mapper  /* Y-axis → wheel events, X-axis -> H-wheel events */
-                &zip_scroll_scaler 1 20   /* divide Y-scroll deltas by 20, H-scroll by 20 */
+                &zip_scroll_scaler 1 10   // divide Y-scroll deltas by 10, H-scroll by 10
             >;
         };
     };
