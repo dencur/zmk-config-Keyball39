@@ -341,7 +341,7 @@ layers:
   - K
   - L
   - {t: '''', s: '"'}
-  - Z
+  - {t: Z, h: MOUSE}
   - X
   - C
   - V
@@ -350,7 +350,7 @@ layers:
   - M
   - {t: ',', s: <}
   - {t: ., s: '>'}
-  - {t: /, s: '?'}
+  - {t: /, h: MOUSE, s: '?'}
   - $$mdi:apple-keyboard-control$$
   - $$mdi:apple-keyboard-option$$
   - $$mdi:apple-keyboard-shift$$
@@ -363,7 +363,7 @@ layers:
 combos:
 - p: [20, 21]
   k: SCROLL
-  l: [QWRT, MOUSE]
+  l: [QWRT, MOUSE, GAME]
 - p: [8, 9]
   k: {t: '$$mdi:minus-circle-outline$$', h: GAME}
   l: [QWRT, GAME]
