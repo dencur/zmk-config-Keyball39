@@ -115,16 +115,6 @@
             >;
         };
 
-        mouse_layer {
-            label = "MOUSE";
-            bindings = <
-&none   &none   &none   &none      &none                            &none      &none     &none          &none        &kp DEL
-&trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT  &kp DOWN       &kp UP       &kp RIGHT
-&trans  &none   &none   &mkp RCLK  &none                            &kp INS    &kp HOME  &kp PAGE_DOWN  &kp PAGE_UP  &kp END
-&none   &none   &none   &mkp RCLK  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
-            >;
-        };
-
         scroll_layer {
             label = "SCROLL";
             bindings = <
@@ -162,6 +152,16 @@
 &kp A     &kp S     &kp D      &kp F      &kp G                  &kp H     &kp J     &kp K      &kp L      &kp SQT
 &lt 8 Z   &kp X     &kp C      &kp V      &kp B                  &kp N     &kp M     &kp COMMA  &kp DOT    &lt 8 SLASH
 &kp LCTRL &kp LALT  &kp LSHFT  &kp ESC    &kp BSPC   &kp TAB     &kp ENTER &kp SPACE                       &kp DEL
+            >;
+        };
+
+        mouse_layer {
+            label = "MOUSE";
+            bindings = <
+&none   &none   &none   &none      &none                            &none      &none     &none          &none        &kp DEL
+&trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT  &kp DOWN       &kp UP       &kp RIGHT
+&trans  &none   &none   &mkp RCLK  &none                            &kp INS    &kp HOME  &kp PAGE_DOWN  &kp PAGE_UP  &kp END
+&none   &none   &none   &mkp RCLK  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
             >;
         };
     };
