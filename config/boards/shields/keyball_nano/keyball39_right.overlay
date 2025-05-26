@@ -5,6 +5,8 @@
  */
  
 #include "keyball39.dtsi"
+#define SCROLL  7
+#define SNIPE   8
 
 &default_transform {
     col-offset = <6>;
@@ -56,8 +58,8 @@
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio1 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
 //        automouse-layer = <4>;
-	scroll-layers = <5>;
-	snipe-layers = <6>;
+	scroll-layers = <SCROLL>;
+	snipe-layers = <SNIPE>;
     };
 };
 
