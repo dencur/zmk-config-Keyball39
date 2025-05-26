@@ -45,7 +45,7 @@
             timeout-ms = <100>;
             key-positions = <20 21>; // Z and X keys
             bindings = <&mo SCROLL>;
-            layers = <0 4>;
+            layers = <0 4 8>;
             slow-release; // Only release when both keys are released
         };
         
@@ -101,7 +101,7 @@
 &kp LS(LEFT_BRACKET)  &kp LS(NUMBER_7)  &kp LS(NUMBER_8)  &kp LS(NUMBER_9)  &kp LS(RIGHT_BRACKET)                         &none  &none      &none      &none     &none
 &kp LS(SEMI)          &kp LS(NUMBER_4)  &kp LS(NUMBER_5)  &kp LS(NUMBER_6)  &kp LS(EQUAL)                                 &none  &kp LSHFT  &kp LCTRL  &kp LALT  &kp LGUI
 &kp LS(GRAVE)         &kp LS(NUMBER_1)  &kp LS(NUMBER_2)  &kp LS(NUMBER_3)  &kp LS(BACKSLASH)                             &none  &none      &none      &none     &none
-&none                 &none             &none             &kp LS(NUMBER_9)  &kp LS(NUMBER_0)       &kp LS(MINUS)  &trans  &none                                  &none
+&none                 &none             &none             &kp LS(NUMBER_9)  &kp LS(NUMBER_0)       &kp LS(MINUS)          &trans &none                           &none
             >;
         };
 
@@ -111,7 +111,7 @@
 &none     &none     &none      &none      &none                 &kp PRINTSCREEN  &kp F7  &kp F8  &kp F9  &kp F12
 &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &none                 &kp SCROLLLOCK   &kp F4  &kp F5  &kp F6  &kp F11
 &none     &none     &none      &none      &none                 &kp PAUSE_BREAK  &kp F1  &kp F2  &kp F3  &kp F10
-&none     &none     &none      &none     &trans  &trans  &trans  &trans                                    &none
+&none     &none     &none      &none      &trans  &trans        &trans           &trans                  &none
             >;
         };
 
@@ -141,7 +141,7 @@
 &trans  &trans  &trans  &trans  &bootloader                  &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
-&trans  &trans  &trans  &trans  &trans       &trans  &trans  &trans                          &trans
+&trans  &trans  &trans  &trans  &trans &trans                &trans  &trans                  &trans
             >;
         };
 
@@ -151,7 +151,7 @@
 &trans    &trans    &trans     &trans     &none                  &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
 &kp LGUI  &kp LALT  &kp LCTRL  &kp LSHFT  &trans                 &kp CAPS  &kp LEFT  &kp DOWN   &kp UP     &kp RIGHT
 &trans    &trans    &trans     &trans     &bt BT_CLR             &kp INS   &kp HOME  &kp PG_DN  &kp PG_UP  &kp END
-&trans    &trans    &trans     &trans      &trans  &trans  &trans  &trans                                    &trans
+&trans    &trans    &trans     &trans     &trans  &trans         &trans  &trans                            &trans
             >;
         };
 
@@ -160,8 +160,8 @@
             bindings = <
 &kp Q     &kp W     &kp E      &kp R      &kp T                  &kp Y     &kp U     &kp I      &kp O      &kp P
 &kp A     &kp S     &kp D      &kp F      &kp G                  &kp H     &kp J     &kp K      &kp L      &kp SQT
-&kp Z     &kp X     &kp C      &kp V      &kp B                  &kp N     &kp M     &kp COMMA  &kp DOT    &kp SLASH
-&kp LCTRL &kp LALT  &kp LSHFT  &kp ESC    &kp BSPC   &kp TAB     &kp ENTER &kp SPACE                         &kp DEL
+&lt 4 Z   &kp X     &kp C      &kp V      &kp B                  &kp N     &kp M     &kp COMMA  &kp DOT    &lt 4 SLASH
+&kp LCTRL &kp LALT  &kp LSHFT  &kp ESC    &kp BSPC   &kp TAB     &kp ENTER &kp SPACE                       &kp DEL
             >;
         };
     };
