@@ -74,10 +74,10 @@ layers:
   - $$mdi:apple-keyboard-control$$
   - $$mdi:apple-keyboard-option$$
   - $$mdi:apple-keyboard-shift$$
-  - {t: '$$mdi:keyboard-esc$$', h: NUM}
+  - $$mdi:keyboard-esc$$
   - $$mdi:keyboard-space$$
   - $$mdi:keyboard-tab$$
-  - {t: '$$mdi:keyboard-return$$', type: enter}
+  - {t: '$$mdi:keyboard-return$$', h: NUM}
   - $$mdi:keyboard-space$$
   - {t: '$$mdi:backspace$$', type: backspace}
   NUM:
@@ -114,10 +114,10 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: ., type: held alternate}
+  - .
   - '0'
   - {t: '-', s: _}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: held alternate}
   - {type: held}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   SYM:
