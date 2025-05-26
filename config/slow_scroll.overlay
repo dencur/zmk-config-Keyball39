@@ -8,8 +8,8 @@
 #include <input/processors.dtsi>   /* processors come from core ZMK */
 
 // Define layer numbers to match keyball39.keymap
-#define MOUSE   4
-#define SCROLL  5
+#define MOUSE   6
+#define SCROLL  7
 
 / {
     /* Optional: tone the sensor down a bit globally */
