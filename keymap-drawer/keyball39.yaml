@@ -21,7 +21,7 @@ layers:
   - {t: K, h: '$$mdi:apple-keyboard-control$$'}
   - {t: L, h: '$$mdi:apple-keyboard-option$$'}
   - {t: '''', h: LGUI, s: '"'}
-  - {t: Z, h: MOUSE}
+  - {t: Z, h: GAME}
   - X
   - C
   - V
@@ -30,12 +30,12 @@ layers:
   - M
   - {t: ',', s: <}
   - {t: ., s: '>'}
-  - {t: /, h: MOUSE, s: '?'}
+  - {t: /, h: GAME, s: '?'}
   - GLOBE
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:keyboard-esc$$
-  - {t: '$$mdi:backspace$$', h: ARROW}
+  - {t: '$$mdi:backspace$$', h: SNIPE}
   - {t: '$$mdi:keyboard-tab$$', h: FUN}
   - {t: '$$mdi:keyboard-return$$', h: SYM}
   - {t: '$$mdi:keyboard-space$$', h: NUM}
@@ -182,7 +182,7 @@ layers:
   - $$mdi:arrow-up-bold$$
   - $$mdi:arrow-right-bold$$
   - {type: held}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:minus-circle-outline$$', type: held}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:mouse-right-click-outline$$
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -190,7 +190,7 @@ layers:
   - HOME
   - PgDn
   - PgUp
-  - {t: END, type: held alternate}
+  - END
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -221,8 +221,8 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held}
-  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -275,7 +275,7 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -315,7 +315,7 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -341,7 +341,7 @@ layers:
   - K
   - L
   - {t: '''', s: '"'}
-  - {t: Z, h: MOUSE}
+  - {t: Z, h: GAME, type: held}
   - X
   - C
   - V
@@ -350,7 +350,7 @@ layers:
   - M
   - {t: ',', s: <}
   - {t: ., s: '>'}
-  - {t: /, h: MOUSE, s: '?'}
+  - {t: /, h: GAME, s: '?', type: held alternate}
   - $$mdi:apple-keyboard-control$$
   - $$mdi:apple-keyboard-option$$
   - $$mdi:apple-keyboard-shift$$
@@ -362,8 +362,8 @@ layers:
   - $$mdi:backspace-reverse-outline$$
 combos:
 - p: [20, 21]
-  k: SCROLL
-  l: [QWRT, MOUSE, GAME]
+  k: MOUSE
+  l: [QWRT, MOUSE, ARROW, GAME]
 - p: [8, 9]
-  k: {t: '$$mdi:minus-circle-outline$$', h: GAME}
-  l: [QWRT, GAME]
+  k: {t: '$$mdi:minus-circle-outline$$', h: ARROW}
+  l: [QWRT, ARROW]
