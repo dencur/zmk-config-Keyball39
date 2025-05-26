@@ -363,7 +363,7 @@ layers:
 combos:
 - p: [20, 21]
   k: SCROLL
-  l: [QWRT, MOUSE]
+  l: [QWRT, MOUSE, GAME]
 - p: [8, 9]
   k: {t: '$$mdi:minus-circle-outline$$', h: GAME}
   l: [QWRT, GAME]
