@@ -40,6 +40,46 @@ layers:
   - {t: '$$mdi:keyboard-return$$', h: SYM}
   - {t: '$$mdi:keyboard-space$$', h: NUM}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
+  GAME:
+  - Q
+  - W
+  - E
+  - R
+  - T
+  - Y
+  - U
+  - I
+  - O
+  - P
+  - A
+  - S
+  - D
+  - F
+  - G
+  - H
+  - J
+  - K
+  - L
+  - {t: '''', s: '"'}
+  - {t: Z, h: MOUSE}
+  - X
+  - C
+  - V
+  - B
+  - N
+  - M
+  - {t: ',', s: <}
+  - {t: ., s: '>'}
+  - {t: /, h: MOUSE, s: '?'}
+  - $$mdi:apple-keyboard-control$$
+  - $$mdi:apple-keyboard-option$$
+  - $$mdi:apple-keyboard-shift$$
+  - {t: '$$mdi:keyboard-esc$$', h: NUM}
+  - $$mdi:keyboard-space$$
+  - $$mdi:keyboard-tab$$
+  - {t: '$$mdi:keyboard-return$$', type: enter}
+  - $$mdi:keyboard-space$$
+  - {t: '$$mdi:backspace$$', type: backspace}
   NUM:
   - {t: '[', s: '{'}
   - '7'
@@ -74,7 +114,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - .
+  - {t: ., type: held alternate}
   - '0'
   - {t: '-', s: _}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -200,46 +240,6 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  GAME:
-  - Q
-  - W
-  - E
-  - R
-  - T
-  - Y
-  - U
-  - I
-  - O
-  - P
-  - A
-  - S
-  - D
-  - F
-  - G
-  - H
-  - J
-  - K
-  - L
-  - {t: '''', s: '"'}
-  - {t: Z, h: MOUSE}
-  - X
-  - C
-  - V
-  - B
-  - N
-  - M
-  - {t: ',', s: <}
-  - {t: ., s: '>'}
-  - {t: /, h: MOUSE, s: '?'}
-  - $$mdi:apple-keyboard-control$$
-  - $$mdi:apple-keyboard-option$$
-  - $$mdi:apple-keyboard-shift$$
-  - {t: '$$mdi:keyboard-esc$$', h: NUM}
-  - $$mdi:keyboard-space$$
-  - $$mdi:keyboard-tab$$
-  - {t: '$$mdi:keyboard-return$$', type: enter}
-  - $$mdi:keyboard-space$$
-  - {t: '$$mdi:backspace$$', type: backspace}
   MOUSE:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
