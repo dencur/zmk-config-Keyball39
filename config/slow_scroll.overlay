@@ -2,7 +2,7 @@
  *
  * This overlay configures layer-specific trackball behavior:
  * - Default: Standard mouse pointer movement (potentially scaled).
- * - SCROLL layer (5): Trackball movement becomes scroll, significantly slowed down.
+ * - SCROLL layer (SCROLL): Trackball movement becomes scroll, significantly slowed down.
  */
 
 #include <input/processors.dtsi>   /* processors come from core ZMK */
@@ -28,7 +28,7 @@
 
         // Layer-specific override for the SCROLL layer
         scroll_override {
-            layers = <SCROLL>; // Apply only when SCROLL layer (5) is active
+            layers = <SCROLL>; // Apply only when SCROLL layer (SCROLL) is active
             input-processors = <
                 &zip_scroll_scaler 1 10   // divide Y-scroll deltas by 10, H-scroll by 10
             >;
