@@ -2,11 +2,11 @@
 #define NUM     1
 #define SYM     2
 #define FUN     3
-#define MOUSE   4
-#define SCROLL  5
-#define SNIPE   6
-#define ARROW   7
-#define GAME    8
+#define SCROLL  4
+#define SNIPE   5
+#define ARROW   6
+#define GAME    7
+#define MOUSE   8
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 200 // Default=600, lower is slower
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 1   // Default=10, lower is slower
 
@@ -45,7 +45,7 @@
             timeout-ms = <100>;
             key-positions = <20 21>; // Z and X keys
             bindings = <&mo SCROLL>;
-            layers = <0 4 8>;
+            layers = <0 4 7 8>; // Default, scroll, game, and mouse layers
             slow-release; // Only release when both keys are released
         };
         
@@ -53,7 +53,7 @@
             timeout-ms = <50>; // Quick activation
             key-positions = <8 9>; // P and O keys
             bindings = <&game_hold_toggle GAME 0>;
-            layers = <0 8>; // Works on default and game layers
+            layers = <0 7>; // Works on default and game layers
             slow-release; // Only trigger when both keys are held
         };
     };
@@ -80,8 +80,8 @@
             bindings = <
 &kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y        &kp U        &kp I        &kp O       &kp P
 &mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F  &kp G                                    &kp H        &mt LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI SQT
-&lt 4 Z     &kp X       &kp C        &kp V        &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 4 SLASH
-&kp GLOBE   &none       &none        &kp ESC      &lt 7 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
+&lt 8 Z     &kp X       &kp C        &kp V        &kp B                                    &kp N        &kp M        &kp COMMA    &kp DOT     &lt 8 SLASH
+&kp GLOBE   &none       &none        &kp ESC      &lt 6 BACKSPACE  &lt 3 TAB               &lt 2 ENTER  &lt 1 SPACE                           &none
             >;
         };
 
@@ -160,7 +160,7 @@
             bindings = <
 &kp Q     &kp W     &kp E      &kp R      &kp T                  &kp Y     &kp U     &kp I      &kp O      &kp P
 &kp A     &kp S     &kp D      &kp F      &kp G                  &kp H     &kp J     &kp K      &kp L      &kp SQT
-&lt 4 Z   &kp X     &kp C      &kp V      &kp B                  &kp N     &kp M     &kp COMMA  &kp DOT    &lt 4 SLASH
+&lt 8 Z   &kp X     &kp C      &kp V      &kp B                  &kp N     &kp M     &kp COMMA  &kp DOT    &lt 8 SLASH
 &kp LCTRL &kp LALT  &kp LSHFT  &kp ESC    &kp BSPC   &kp TAB     &kp ENTER &kp SPACE                       &kp DEL
             >;
         };
