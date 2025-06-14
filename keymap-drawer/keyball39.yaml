@@ -39,7 +39,7 @@ layers:
   - {t: '$$mdi:keyboard-tab$$', h: FUN}
   - {t: '$$mdi:keyboard-return$$', h: SYM}
   - {t: '$$mdi:keyboard-space$$', h: NUM}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: GAME, h: toggle}
   GAME:
   - Q
   - W
@@ -79,7 +79,7 @@ layers:
   - {t: '$$mdi:keyboard-tab$$', h: FUN}
   - {t: '$$mdi:keyboard-return$$', h: SYM}
   - {t: '$$mdi:keyboard-space$$', h: NUM}
-  - RGUI
+  - {t: QWRT, h: toggle}
   NUM:
   - {t: '[', s: '{'}
   - '7'
@@ -367,9 +367,3 @@ combos:
 - p: [28, 29]
   k: SCROLL
   l: [QWRT, MOUSE, GAME]
-- p: [8, 9]
-  k: {t: GAME, h: toggle}
-  l: [QWRT]
-- p: [8, 9]
-  k: {t: QWRT, h: toggle}
-  l: [GAME]
