@@ -157,7 +157,7 @@
 
         scroll_layer {
             label = "SCROLL";
-            bindings = <z
+            bindings = <
 &trans    &trans  &trans  &trans  &bootloader             &bootloader   &trans  &trans  &trans  &trans
 &trans    &trans  &trans  &trans  &trans                  &trans        &trans  &trans  &trans  &trans
 &trans    &trans  &trans  &trans  &trans                  &trans        &trans  &trans  &trans  &trans
