@@ -49,12 +49,22 @@
             slow-release; // Only release when both keys are released
         };
         
-        combo_po_game_toggle {
-            timeout-ms = <50>; // Quick activation
+        combo_po_to_game {
+            timeout-ms = <30>; // Shorter timeout to prevent accidental activation
             key-positions = <8 9>; // P and O keys
-            bindings = <&game_hold_toggle GAME 0>;
-            layers = <DEFAULT GAME>; // Works on default and game layers
+            bindings = <&to GAME>; // Switch to game layer
+            layers = <DEFAULT>; // Only works on default layer
             slow-release; // Only trigger when both keys are held
+            require-prior-idle-ms = <150>; // Prevent activation during fast typing
+        };
+        
+        combo_po_to_default {
+            timeout-ms = <30>; // Shorter timeout to prevent accidental activation
+            key-positions = <8 9>; // P and O keys
+            bindings = <&to DEFAULT>; // Switch back to default layer
+            layers = <GAME>; // Only works on game layer
+            slow-release; // Only trigger when both keys are held
+            require-prior-idle-ms = <150>; // Prevent activation during fast typing
         };
     };
 
@@ -63,8 +73,8 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "hold-preferred";
-            tapping-term-ms = <2000>; // 2 second hold
-            quick-tap-ms = <0>;
+            tapping-term-ms = <500>; // 500ms hold - much more reasonable
+            quick-tap-ms = <200>; // Allow quick taps to be ignored
             bindings = <&tog>, <&none>;
         };
     };
