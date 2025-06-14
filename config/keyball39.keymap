@@ -58,7 +58,7 @@
         };
         
         combo_po_to_game {
-            timeout-ms = <30>; // Shorter timeout to prevent accidental activation
+            timeout-ms = <3000>; // 3 second hold required to prevent accidental activation
             key-positions = <8 9>; // P and O keys
             bindings = <&to GAME>; // Switch to game layer
             layers = <DEFAULT>; // Only works on default layer
@@ -67,7 +67,7 @@
         };
         
         combo_po_to_default {
-            timeout-ms = <30>; // Shorter timeout to prevent accidental activation
+            timeout-ms = <3000>; // 3 second hold required to prevent accidental activation
             key-positions = <8 9>; // P and O keys
             bindings = <&to DEFAULT>; // Switch back to default layer
             layers = <GAME>; // Only works on game layer
