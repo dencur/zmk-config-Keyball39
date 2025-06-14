@@ -56,24 +56,6 @@
             layers = <DEFAULT MOUSE GAME>; // Default and mouse layers
             slow-release; // Only release when both keys are released
         };
-        
-        combo_po_to_game {
-            timeout-ms = <3000>; // 3 second hold required to prevent accidental activation
-            key-positions = <8 9>; // P and O keys
-            bindings = <&to GAME>; // Switch to game layer
-            layers = <DEFAULT>; // Only works on default layer
-            slow-release; // Only trigger when both keys are held
-            require-prior-idle-ms = <150>; // Prevent activation during fast typing
-        };
-        
-        combo_po_to_default {
-            timeout-ms = <3000>; // 3 second hold required to prevent accidental activation
-            key-positions = <8 9>; // P and O keys
-            bindings = <&to DEFAULT>; // Switch back to default layer
-            layers = <GAME>; // Only works on game layer
-            slow-release; // Only trigger when both keys are held
-            require-prior-idle-ms = <150>; // Prevent activation during fast typing
-        };
     };
 
     behaviors {
@@ -99,7 +81,7 @@
 &kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y          &kp U          &kp I        &kp O       &kp P
 &mt LGUI A  &mt LALT S  &mt LCTRL D  &mt LSHFT F  &kp G                                    &kp H          &mt LSHFT J    &mt LCTRL K  &mt LALT L  &mt LGUI APOS
 &lt MOUSE Z &kp X       &kp C        &kp V        &kp B                                    &kp N          &kp M          &kp COMMA    &kp DOT     &lt MOUSE SLASH
-&kp GLOBE   &none       &none        &kp ESC      &lt ARROW BACKSPACE  &lt FUN TAB         &lt SYM ENTER  &lt NUM SPACE                           &none
+&kp GLOBE   &none       &none        &kp ESC      &lt ARROW BACKSPACE  &lt FUN TAB         &lt SYM ENTER  &lt NUM SPACE                           &to GAME
             >;
         };
 
@@ -109,7 +91,7 @@
 &kp Q         &kp W     &kp E        &kp R        &kp T                                    &kp Y          &kp U          &kp I        &kp O       &kp P
 &mt LGUI A    &kp S     &kp D        &kp F        &kp G                                    &kp H          &mt LSHFT J    &kp K        &mt LALT L  &kp APOS
 &lt MOUSE Z   &kp X     &kp C        &kp V        &kp B                                    &kp N          &kp M          &kp COMMA    &kp DOT     &lt MOUSE SLASH
-&kp LCTRL     &kp LALT  &kp LSHFT    &kp ESC      &lt ARROW BACKSPACE  &lt FUN TAB         &lt SYM ENTER  &lt NUM SPACE                           &kp RGUI
+&kp LCTRL     &kp LALT  &kp LSHFT    &kp ESC      &lt ARROW BACKSPACE  &lt FUN TAB         &lt SYM ENTER  &lt NUM SPACE                           &to DEFAULT
             >;
         };
 
