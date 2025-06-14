@@ -309,8 +309,8 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {type: held alternate}
+  - {type: held alternate}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
@@ -362,6 +362,9 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
 combos:
 - p: [20, 21]
+  k: SCROLL
+  l: [QWRT, MOUSE, GAME]
+- p: [28, 29]
   k: SCROLL
   l: [QWRT, MOUSE, GAME]
 - p: [8, 9]
