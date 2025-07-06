@@ -9,6 +9,7 @@
 #define SNIPE   8
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 200 // Default=600, lower is slower
 #define ZMK_POINTING_DEFAULT_SCRL_VAL 1   // Default=10, lower is slower
+#define ZMK_POINTING_DEFAULT_SCRL_DIV 8   // Higher divisor = slower scrolling
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -31,7 +32,8 @@
 
 &msc {
     acceleration-exponent = <0>; // No acceleration
-    time-to-max-speed-ms = <1000>; // Very slow ramp-up
+    time-to-max-speed-ms = <2000>; // Even slower ramp-up
+    delay-ms = <0>; // No delay
 };
 
 &caps_word { continue-list = <UNDERSCORE MINUS>; };
