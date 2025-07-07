@@ -37,7 +37,8 @@
 
 &caps_word { continue-list = <UNDERSCORE MINUS>; };
 
-// Override the existing trackball listener for smooth scrolling
+// Override the existing trackball listener for smooth scrolling (right half only)
+#ifdef CONFIG_ZMK_POINTING
 &{/trackball_listener} {
     // Default behavior for normal layers
     input-processors = <&zip_xy_scaler 1 1>; // 1:1 scaling for mouse movement
@@ -51,6 +52,7 @@
         >;
     };
 };
+#endif
 
 / {
     // custom shift using mod-morph
