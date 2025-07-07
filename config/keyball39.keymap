@@ -7,7 +7,6 @@
 #define MOUSE   6
 #define SCROLL  7
 #define SNIPE   8
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 200 // Default=600, lower is slower
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
