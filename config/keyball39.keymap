@@ -47,6 +47,25 @@
     };
 
     macros {
+        click_and_exit_base: click_and_exit_base {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &mkp LCLK>, <&to DEFAULT>;
+        };
+
+        rclk_and_exit_base: rclk_and_exit_base {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &mkp RCLK>, <&to DEFAULT>;
+        };
+
+        mclk_and_exit_base: mclk_and_exit_base {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &mkp MCLK>, <&to DEFAULT>;
+        };
+
+        /* removed non-click exit macros per request */
     };
 
     keymap {
@@ -115,10 +134,10 @@
         mouse_layer {
             label = "MOUSE";
             bindings = <
-&none   &none   &none   &none      &none                            &none      &none     &none          &none        &kp DEL
-&trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT  &kp DOWN       &kp UP       &kp RIGHT
-&trans  &lt SCROLL X  &none   &none      &none                            &kp INS    &kp HOME  &kp PAGE_DOWN  &lt SCROLL PAGE_UP  &trans
-&none   &none   &none   &mkp RCLK  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
+&none   &none           &none      &none                &none                                                 &none                &none                 &none                      &none                     &none
+&trans  &trans          &trans     &trans               &none                                                 &none                &click_and_exit_base  &mclk_and_exit_base        &rclk_and_exit_base       &none
+&trans  &lt SCROLL X    &none      &none                &none                                                 &none                &kp PAGE_DOWN         &kp PAGE_UP                &lt SCROLL DOT            &trans
+&none   &none           &none      &rclk_and_exit_base  &click_and_exit_base  &mclk_and_exit_base             &rclk_and_exit_base  &click_and_exit_base                                                       &to 0
             >;
         };
 
