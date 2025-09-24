@@ -68,6 +68,12 @@
             bindings = <&macro_tap &mkp RCLK>;
         };
 
+        rclk_and_exit_base: rclk_and_exit_base {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &mkp RCLK>, <&to DEFAULT>;
+        };
+
         mclk_and_exit_base: mclk_and_exit_base {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
