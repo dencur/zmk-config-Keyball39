@@ -1,7 +1,6 @@
 /*
- * Overrides the default output status widget to show custom BT profile names.
- * Copied from ZMK main (app/src/display/widgets/output_status.c) and modified
- * only where the label text is composed.
+ * Overrides the default output status widget to show custom BT profile names
+ * while keeping all other output indicators identical to upstream ZMK.
  */
 
 #include <zephyr/kernel.h>
@@ -26,11 +25,11 @@ struct output_status_state {
 };
 
 static const char *const profile_names[] = {
-    "1 Work",
-    "2 iPad",
-    "3 Phone",
-    "4 Game",
-    "5 Spare",
+    "Work",
+    "iPad",
+    "Phone",
+    "Game",
+    "Spare",
 };
 
 static struct output_status_state get_state(const zmk_event_t *_eh) {
@@ -42,7 +41,7 @@ static struct output_status_state get_state(const zmk_event_t *_eh) {
 }
 
 static void set_status_symbol(lv_obj_t *label, struct output_status_state state) {
-    char text[32] = {};
+    char text[48] = {};
 
     switch (state.selected_endpoint.transport) {
     case ZMK_TRANSPORT_USB:
@@ -52,16 +51,15 @@ static void set_status_symbol(lv_obj_t *label, struct output_status_state state)
         int idx = state.selected_endpoint.ble.profile_index;
         const char *name = (idx >= 0 && idx < ARRAY_SIZE(profile_names)) ? profile_names[idx]
                                                                           : "Profile";
+        const char *status_icon;
 
         if (state.active_profile_bonded) {
-            if (state.active_profile_connected) {
-                snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_OK, name);
-            } else {
-                snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_CLOSE, name);
-            }
+            status_icon = state.active_profile_connected ? LV_SYMBOL_OK : LV_SYMBOL_CLOSE;
         } else {
-            snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_SETTINGS, name);
+            status_icon = LV_SYMBOL_SETTINGS;
         }
+
+        snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %d %s %s", idx + 1, name, status_icon);
         break;
     }
     }
