@@ -25,11 +25,11 @@ struct output_status_state {
 };
 
 static const char *const profile_names[] = {
-    "Work",
+    "Mac",
     "iPad",
     "Phone",
-    "Game",
-    "Spare",
+    "Work",
+    "AVP",
 };
 
 static struct output_status_state get_state(const zmk_event_t *_eh) {
