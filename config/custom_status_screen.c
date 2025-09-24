@@ -29,8 +29,16 @@ static struct zmk_widget_layer_status layer_status_widget;
 #endif
 
 lv_obj_t *zmk_display_status_screen(void) {
+    LOG_DBG("Creating custom status screen");
     lv_obj_t *screen;
     screen = lv_obj_create(NULL);
+    
+    if (screen == NULL) {
+        LOG_ERR("Failed to create LVGL screen object");
+        return NULL;
+    }
+    
+    LOG_DBG("Screen created successfully");
 
 #if IS_ENABLED(CONFIG_ZMK_WIDGET_BATTERY_STATUS)
     zmk_widget_battery_status_init(&battery_status_widget, screen);
@@ -55,6 +63,7 @@ lv_obj_t *zmk_display_status_screen(void) {
     lv_obj_align(zmk_widget_layer_status_obj(&layer_status_widget), LV_ALIGN_BOTTOM_LEFT, 0, 0);
 #endif
 
+    LOG_DBG("Custom status screen initialization complete");
     return screen;
 }
 
