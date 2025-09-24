@@ -18,8 +18,8 @@
         cpi = <300>;              /* default ≈ 600 – 300 feels sane for pointer */
     };
 
-    /* Override trackball button behaviors to use click-and-exit macros */
+    /* Override trackball button behaviors - left/right stay, middle exits */
     &zip_button_behaviors {
-        bindings = <&click_and_exit_base &mclk_and_exit_base &rclk_and_exit_base>;
+        bindings = <&lclk_with_timeout &mclk_and_exit_base &rclk_stay>;
     };
 };  

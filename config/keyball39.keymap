@@ -53,10 +53,19 @@
             bindings = <&macro_tap &mkp LCLK>, <&to DEFAULT>;
         };
 
-        rclk_and_exit_base: rclk_and_exit_base {
+        lclk_with_timeout: lclk_with_timeout {
             compatible = "zmk,behavior-macro";
             #binding-cells = <0>;
-            bindings = <&macro_tap &mkp RCLK>, <&to DEFAULT>;
+            bindings = 
+                <&macro_tap &mkp LCLK>,
+                <&macro_pause_for_release>,
+                <&macro_tap &to MOUSE>;  // Re-enter MOUSE to reset the 500ms timer
+        };
+
+        rclk_stay: rclk_stay {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &mkp RCLK>;
         };
 
         mclk_and_exit_base: mclk_and_exit_base {
