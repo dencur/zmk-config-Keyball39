@@ -72,6 +72,7 @@
     /* Auto-enable the MOUSE layer on movement; exit after 500ms idle */
     input-processors = <
         &zip_temp_layer MOUSE 500
+        &zip_button_behaviors
         &zip_xy_scaler 1 1
     >;
 
