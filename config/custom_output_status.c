@@ -1,6 +1,7 @@
 /*
- * Custom output status widget with named Bluetooth profiles
- * Based on ZMK's output_status.c but with custom profile names
+ * Overrides the default output status widget to show custom BT profile names.
+ * Copied from ZMK main (app/src/display/widgets/output_status.c) and modified
+ * only where the label text is composed.
  */
 
 #include <zephyr/kernel.h>
@@ -18,19 +19,18 @@ LOG_MODULE_DECLARE(zmk, CONFIG_ZMK_LOG_LEVEL);
 
 static sys_slist_t widgets = SYS_SLIST_STATIC_INIT(&widgets);
 
-// Custom profile names - edit these to your preference
-static const char* profile_names[] = {
-    "1 Work",   // Profile 0
-    "2 iPad",   // Profile 1 
-    "3 Phone",  // Profile 2
-    "4 Game",   // Profile 3
-    "5 Spare"   // Profile 4
-};
-
 struct output_status_state {
     struct zmk_endpoint_instance selected_endpoint;
     bool active_profile_connected;
     bool active_profile_bonded;
+};
+
+static const char *const profile_names[] = {
+    "1 Work",
+    "2 iPad",
+    "3 Phone",
+    "4 Game",
+    "5 Spare",
 };
 
 static struct output_status_state get_state(const zmk_event_t *_eh) {
@@ -38,6 +38,7 @@ static struct output_status_state get_state(const zmk_event_t *_eh) {
                                         .active_profile_connected =
                                             zmk_ble_active_profile_is_connected(),
                                         .active_profile_bonded = !zmk_ble_active_profile_is_open()};
+    ;
 }
 
 static void set_status_symbol(lv_obj_t *label, struct output_status_state state) {
@@ -47,24 +48,22 @@ static void set_status_symbol(lv_obj_t *label, struct output_status_state state)
     case ZMK_TRANSPORT_USB:
         strcat(text, LV_SYMBOL_USB);
         break;
-    case ZMK_TRANSPORT_BLE:
+    case ZMK_TRANSPORT_BLE: {
+        int idx = state.selected_endpoint.ble.profile_index;
+        const char *name = (idx >= 0 && idx < ARRAY_SIZE(profile_names)) ? profile_names[idx]
+                                                                          : "Profile";
+
         if (state.active_profile_bonded) {
-            int profile_idx = state.selected_endpoint.ble.profile_index;
-            const char* profile_name = (profile_idx >= 0 && profile_idx < 5) ? 
-                                     profile_names[profile_idx] : "Unknown";
-            
             if (state.active_profile_connected) {
-                snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_OK, profile_name);
+                snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_OK, name);
             } else {
-                snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_CLOSE, profile_name);
+                snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_CLOSE, name);
             }
         } else {
-            int profile_idx = state.selected_endpoint.ble.profile_index;
-            const char* profile_name = (profile_idx >= 0 && profile_idx < 5) ? 
-                                     profile_names[profile_idx] : "Unknown";
-            snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_SETTINGS, profile_name);
+            snprintf(text, sizeof(text), LV_SYMBOL_WIFI " %s " LV_SYMBOL_SETTINGS, name);
         }
         break;
+    }
     }
 
     lv_label_set_text(label, text);
@@ -72,22 +71,21 @@ static void set_status_symbol(lv_obj_t *label, struct output_status_state state)
 
 static void output_status_update_cb(struct output_status_state state) {
     struct zmk_widget_output_status *widget;
-    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { 
-        set_status_symbol(widget->obj, state); 
-    }
+    SYS_SLIST_FOR_EACH_CONTAINER(&widgets, widget, node) { set_status_symbol(widget->obj, state); }
 }
 
 ZMK_DISPLAY_WIDGET_LISTENER(widget_output_status, struct output_status_state,
                             output_status_update_cb, get_state)
 ZMK_SUBSCRIPTION(widget_output_status, zmk_endpoint_changed);
-
 #if defined(CONFIG_ZMK_BLE)
 ZMK_SUBSCRIPTION(widget_output_status, zmk_ble_active_profile_changed);
 #endif
 
 int zmk_widget_output_status_init(struct zmk_widget_output_status *widget, lv_obj_t *parent) {
     widget->obj = lv_label_create(parent);
+
     sys_slist_append(&widgets, &widget->node);
+
     widget_output_status_init();
     return 0;
 }
