@@ -72,7 +72,7 @@
     /* Auto-enable the MOUSE layer on movement; exit after 500ms idle */
     input-processors = <
         &zip_temp_layer MOUSE 500
-        &button_behaviors
+        &zip_button_behaviors
         &zip_xy_scaler 1 1
     >;
 
@@ -84,10 +84,10 @@
         &zip_scroll_scaler 1 10
       >;
     };
-    /* Ensure button behaviors (L/M/R) trigger clicks and exit */
-    button_behaviors: zip_button_behaviors {
-      /* Order is Left, Middle, Right */
-      bindings = <&click_and_exit_base &mclk_and_exit_base &rclk_and_exit_base>;
-    };
+  };
+  /* Ensure button behaviors (L/M/R) trigger clicks and exit */
+  &zip_button_behaviors {
+    /* Order is Left, Middle, Right */
+    bindings = <&click_and_exit_base &mclk_and_exit_base &rclk_and_exit_base>;
   };
 };
