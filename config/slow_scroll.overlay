@@ -17,29 +17,4 @@
     &pmw3610 {                     /* label matches tangbonze repo */
         cpi = <300>;              /* default ≈ 600 – 300 feels sane for pointer */
     };
-
-    /* Map buttons to behaviors that exit back to DEFAULT after click */
-    &zip_button_behaviors {
-        /* Order is Left, Middle, Right */
-        bindings = <&click_and_exit_base &mclk_and_exit_base &rclk_and_exit_base>;
-    };
-
-    /* Override the processor chain for the listener */
-    &trackball_listener {
-        /* Auto-enable the MOUSE layer on movement; exit after 500ms idle */
-        input-processors = <
-            &zip_temp_layer MOUSE 500
-            &zip_button_behaviors
-            &zip_xy_scaler 1 1
-        >;
-
-        /* While on SCROLL layer, convert XY to scroll and slow it down */
-        layer_scroll {
-            layers = <SCROLL>;
-            input-processors = <
-                &zip_xy_to_scroll_mapper
-                &zip_scroll_scaler 1 10
-            >;
-        };
-    };
-}; 
+};  
