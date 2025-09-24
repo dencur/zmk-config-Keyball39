@@ -23,16 +23,36 @@ config I2C
 config SSD1306
     default y
 
+config ZMK_WIDGET_BATTERY_STATUS
+    default y
+
 choice ZMK_DISPLAY_WORK_QUEUE
     default ZMK_DISPLAY_WORK_QUEUE_DEDICATED
 endchoice
 
 endif
 
+if ZMK_DISPLAY && (!ZMK_SPLIT_BLE || ZMK_SPLIT_ROLE_CENTRAL)
+
+config ZMK_WIDGET_OUTPUT_STATUS
+    default y
+
+config ZMK_WIDGET_LAYER_STATUS
+    default y
+
+endif
+
+if ZMK_DISPLAY && ZMK_SPLIT_BLE && !ZMK_SPLIT_ROLE_CENTRAL
+
+config ZMK_WIDGET_PERIPHERAL_STATUS
+    default y
+
+endif
+
 if LVGL
 
 config LV_Z_VDB_SIZE
-    default 64
+    default 512
 
 config LV_DPI_DEF
     default 148
