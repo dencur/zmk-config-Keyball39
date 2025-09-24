@@ -72,9 +72,16 @@
     /* Auto-enable the MOUSE layer on movement; exit after 500ms idle */
     input-processors = <
         &zip_temp_layer MOUSE 1000
-        &zip_button_behaviors
         &zip_xy_scaler 1 1
     >;
+
+    /* When on MOUSE layer (but not SCROLL), apply button behaviors */
+    layer_mouse {
+      layers = <MOUSE>;
+      input-processors = <
+        &zip_button_behaviors
+      >;
+    };
 
     /* While on SCROLL layer, convert XY to scroll and slow it down */
     layer_scroll {
