@@ -64,8 +64,6 @@
             #binding-cells = <0>;
             bindings = <&macro_tap &mkp MCLK>, <&to DEFAULT>;
         };
-
-        /* removed non-click exit macros per request */
     };
 
     keymap {

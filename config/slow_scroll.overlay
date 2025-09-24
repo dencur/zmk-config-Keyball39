@@ -20,7 +20,8 @@
 
     /* Map buttons to behaviors that exit back to DEFAULT after click */
     &zip_button_behaviors {
-        bindings = <&click_and_exit_base &rclk_and_exit_base &mclk_and_exit_base>;
+        /* Order is Left, Middle, Right */
+        bindings = <&click_and_exit_base &mclk_and_exit_base &rclk_and_exit_base>;
     };
 
     /* Override the processor chain for the listener */
