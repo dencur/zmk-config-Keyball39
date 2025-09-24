@@ -5,8 +5,6 @@
  */
  
 #include "keyball39.dtsi"
-#include <input/processors.dtsi>
-#define MOUSE   6
 #define SCROLL  7
 #define SNIPE   8
 
@@ -69,27 +67,6 @@
   trackball_listener {
     compatible = "zmk,input-listener";
     device = <&trackball>;
-    /* Auto-enable the MOUSE layer on movement; exit after 500ms idle */
-    input-processors = <
-        &zip_temp_layer MOUSE 1000
-        &zip_xy_scaler 1 1
-    >;
 
-    /* When on MOUSE layer (but not SCROLL), apply button behaviors */
-    layer_mouse {
-      layers = <MOUSE>;
-      input-processors = <
-        &zip_button_behaviors
-      >;
-    };
-
-    /* While on SCROLL layer, convert XY to scroll and slow it down */
-    layer_scroll {
-      layers = <SCROLL>;
-      input-processors = <
-        &zip_xy_to_scroll_mapper
-        &zip_scroll_scaler 1 10
-      >;
-    };
   };
 };
