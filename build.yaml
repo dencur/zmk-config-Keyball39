@@ -13,10 +13,22 @@
 #
 ---
 include:
+  # - board: nice_nano_v2
+  #   shield: keyball39_left
+  # - board: nice_nano_v2
+  #   shield: keyball39_right
+  #   snippet: studio-rpc-usb-uart
+  # - board: nice_nano_v2
+  #   shield: settings_reset
   - board: nice_nano_v2
     shield: keyball39_left
+    container: ghcr.io/zmkfirmware/zmk-build-arm:3.5
+
   - board: nice_nano_v2
     shield: keyball39_right
     snippet: studio-rpc-usb-uart
+    container: ghcr.io/zmkfirmware/zmk-build-arm:3.5
+
   - board: nice_nano_v2
     shield: settings_reset
+    container: ghcr.io/zmkfirmware/zmk-build-arm:3.5
