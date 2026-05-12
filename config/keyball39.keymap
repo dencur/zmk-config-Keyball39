@@ -133,42 +133,6 @@
     };
 
     macros {
-        // Used on MOUSEMOVE to make any non-mouse key press: toggle the layer
-        // off and emit the key. Note: this emits &kp X, so default-layer
-        // mod-tap (&mt) and layer-tap (&lt) hold behavior is NOT preserved on
-        // the FIRST keypress after exiting — you get a plain tap. Re-press
-        // gets the normal behavior. Acceptable trade-off for the auto-exit
-        // ergonomics.
-        exit_kp: exit_kp {
-            compatible = "zmk,behavior-macro-one-param";
-            #binding-cells = <1>;
-            bindings = <&macro_param_1to1>, <&tog MOUSEMOVE>, <&kp MACRO_PLACEHOLDER>;
-        };
-        // Click-then-exit macros for thumb cluster on MOUSEMOVE.
-        // The click fires first, then the layer toggles off — so you click,
-        // and the layer is gone, ready for normal typing/use.
-        lclk_exit: lclk_exit {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&mkp LCLK>, <&tog MOUSEMOVE>;
-        };
-        rclk_exit: rclk_exit {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&mkp RCLK>, <&tog MOUSEMOVE>;
-        };
-        mclk_exit: mclk_exit {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&mkp MCLK>, <&tog MOUSEMOVE>;
-        };
-        // Position 38 on default is &to GAME (layer switch, not a keypress).
-        // Wrap it so pressing it from MOUSEMOVE exits MOUSEMOVE first.
-        exit_to_game: exit_to_game {
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <&tog MOUSEMOVE>, <&to GAME>;
-        };
     };
 
     keymap {
@@ -270,19 +234,18 @@
         // Inverted-T movement clusters on each hand:
         //   left:  E=up, S=left, D=down, F=right     scroll: T=up, G=down
         //   right: I=up, J=left, K=down, L=right     scroll: Y=up, H=down
-        // Clicks on the thumb cluster (same positions as MOUSE layer) —
-        // pressing any click also exits the layer.
-        // ANY non-mouse/scroll/click key press exits the layer AND emits the
-        // default-layer character (via &exit_kp). Mod-tap behavior on home
-        // row is NOT preserved on the first exit-press (just gets the tap).
-        // The flow: combo → move/scroll/click freely → type anything → exit.
+        // Dedicated exit keys (alongside the combo): Q (top-left corner) and
+        // P (top-right corner). Either &tog MOUSEMOVE → back to default.
+        // Clicks on the thumb cluster — no auto-exit, click and scroll as
+        // much as you want. Other positions are &trans (fall through to
+        // default, layer stays).
         mousemove_layer {
             label = "MMOVE";
             bindings = <
-&exit_kp Q     &exit_kp W     &mmv MOVE_UP    &exit_kp R        &msc SCRL_UP                                &msc SCRL_UP   &exit_kp U     &mmv MOVE_UP   &exit_kp O      &exit_kp P
-&exit_kp A     &mmv MOVE_LEFT &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &msc SCRL_DOWN                              &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &exit_kp APOS
-&exit_kp Z     &exit_kp X     &exit_kp C      &exit_kp V        &exit_kp B                                  &exit_kp N     &exit_kp M     &exit_kp COMMA &exit_kp DOT    &exit_kp SLASH
-&exit_kp GLOBE &trans         &trans          &rclk_exit        &lclk_exit       &mclk_exit                 &rclk_exit     &lclk_exit                                    &exit_to_game
+&tog MOUSEMOVE  &trans         &mmv MOVE_UP    &trans            &msc SCRL_UP                            &msc SCRL_UP   &trans         &mmv MOVE_UP   &trans         &tog MOUSEMOVE
+&trans          &mmv MOVE_LEFT &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &msc SCRL_DOWN                          &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &trans
+&trans          &trans         &trans          &trans            &trans                                  &trans         &trans         &trans         &trans         &trans
+&trans          &trans         &trans          &mkp RCLK         &mkp LCLK        &mkp MCLK              &mkp RCLK      &mkp LCLK                                    &trans
             >;
         };
     };
