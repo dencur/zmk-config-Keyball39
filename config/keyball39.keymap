@@ -34,6 +34,21 @@
     delay-ms = <0>; // No delay
 };
 
+// Keyboard-driven mouse cursor (&mmv MOVE_* on the MOUSE layer).
+// Defaults from urob/zmk-config — gentle ramp for fine control.
+// Knobs:
+//   acceleration-exponent: 0=constant speed, 1=quadratic (smooth), higher=more aggressive
+//   time-to-max-speed-ms:  higher = more precision on short taps, lower = snappier traversal
+//   delay-ms:              dead time before motion starts (keep 0)
+// Max speed itself is set by ZMK_POINTING_DEFAULT_MOVE_VAL (default 600);
+// override with `#define ZMK_POINTING_DEFAULT_MOVE_VAL <n>` before pointing.h
+// if you find max traversal too slow/fast for your display resolution.
+&mmv {
+    acceleration-exponent = <1>;
+    time-to-max-speed-ms = <500>;
+    delay-ms = <0>;
+};
+
 &caps_word { continue-list = <UNDERSCORE MINUS>; };
 
 / {
