@@ -125,7 +125,7 @@
         scroll_layer {
             label = "SCROLL";
             bindings = <
-&trans    &trans  &trans  &soft_off  &bootloader          &bootloader   &soft_off  &trans  &trans  &trans
+&trans    &trans  &trans  &sys_reset  &bootloader          &bootloader   &sys_reset  &trans  &trans  &trans
 &trans    &trans  &trans  &trans     &trans               &trans        &trans     &trans  &trans  &trans
 &trans    &trans  &trans  &trans     &trans               &trans        &trans     &trans  &trans  &trans
 &trans    &trans  &trans  &trans     &trans      &trans   &trans        &trans                     &trans
