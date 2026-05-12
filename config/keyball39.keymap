@@ -7,6 +7,7 @@
 #define MOUSE   6
 #define SCROLL  7
 #define SNIPE   8
+#define MOUSEMOVE 9
 
 // Override max mouse cursor speed for &mmv (default 600 — tuned for 4K).
 // On Retina Macs this feels slow; 1500 ≈ 2.5x. Drop back to 600 if too fast,
@@ -61,6 +62,24 @@
 
     combos {
         compatible = "zmk,combos";
+
+        // Toggle the MOUSEMOVE layer with a one-handed two-finger chord.
+        // require-prior-idle-ms blocks accidental fires during normal typing
+        // (must pause ≥200ms before pressing the chord).
+        // timeout-ms is tight (30ms) so it only fires when the two keys hit
+        // near-simultaneously, not when typing words containing those letters.
+        combo_left_mousemove {
+            timeout-ms = <30>;
+            require-prior-idle-ms = <200>;
+            key-positions = <2 3>;   // E + R
+            bindings = <&tog MOUSEMOVE>;
+        };
+        combo_right_mousemove {
+            timeout-ms = <30>;
+            require-prior-idle-ms = <200>;
+            key-positions = <6 7>;   // U + I
+            bindings = <&tog MOUSEMOVE>;
+        };
     };
 
     behaviors {
@@ -136,7 +155,7 @@
             label = "MOUSE";
             bindings = <
 &none   &none   &none   &none      &none                            &none      &none     &none          &none        &kp DEL
-&trans  &trans  &trans  &trans     &none                            &kp CAPS   &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_UP  &mmv MOVE_RIGHT
+&trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT  &kp DOWN       &kp UP       &kp RIGHT
 &trans  &lt SCROLL X  &none   &none      &none                            &kp INS    &kp HOME  &kp PAGE_DOWN  &lt SCROLL PAGE_UP  &trans
 &none   &none   &none   &mkp RCLK  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
             >;
@@ -159,6 +178,26 @@
 &trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans                       &trans  &trans  &trans  &trans  &trans
 &trans  &trans  &trans  &trans  &trans &trans                &trans  &trans                  &trans
+            >;
+        };
+
+        // Two-handed keyboard mouse layer. Entered/exited via combos:
+        //   left hand:  E + R together (after 200ms idle)
+        //   right hand: U + I together (after 200ms idle)
+        // Inverted-T movement clusters on each hand:
+        //   left:  E=up, S=left, D=down, F=right     scroll: T=up, G=down
+        //   right: I=up, J=left, K=down, L=right     scroll: Y=up, H=down
+        // Clicks remain on the thumb cluster (same positions as MOUSE layer).
+        // All non-mouse positions are &trans — they fall through to default
+        // so you can still type while the layer is on. Re-fire the combo to
+        // exit, or just toggle off via either hand.
+        mousemove_layer {
+            label = "MMOVE";
+            bindings = <
+&trans    &trans         &mmv MOVE_UP    &trans            &msc SCRL_UP                            &msc SCRL_UP   &trans         &mmv MOVE_UP   &trans         &trans
+&trans    &mmv MOVE_LEFT &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &msc SCRL_DOWN                          &msc SCRL_DOWN &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &trans
+&trans    &trans         &trans          &trans            &trans                                  &trans         &trans         &trans         &trans         &trans
+&trans    &trans         &trans          &mkp RCLK         &mkp LCLK        &mkp MCLK              &mkp RCLK      &mkp LCLK                                    &trans
             >;
         };
     };
