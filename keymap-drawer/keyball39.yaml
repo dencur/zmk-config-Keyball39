@@ -284,10 +284,10 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - '&soft_off'
   - $$mdi:progress-download$$
   - $$mdi:progress-download$$
-  - {t: '$$mdi:transfer$$', type: trans}
+  - '&soft_off'
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
