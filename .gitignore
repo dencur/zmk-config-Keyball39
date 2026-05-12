@@ -1,0 +1,5 @@
+# Build artifacts from scripts/build_battery_reader.sh
+scripts/BatteryReader.app/
+
+# UF2 firmware images shouldn't be committed (they come from GHA artifacts)
+*.uf2

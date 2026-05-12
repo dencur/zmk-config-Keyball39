@@ -70,9 +70,13 @@ west build -s zmk/app -b nice_nano_v2 -- -DSHIELD=keyball39_right
 ```
 
 **Flashing:**
-1. Put controller in bootloader mode (double-tap reset)
-2. Copy generated `.uf2` file to mounted drive
-3. Controller auto-reboots with new firmware
+1. Put controller in bootloader mode. Three ways:
+   - Double-tap reset on the MCU
+   - Hold `Z`+`X`+tap `T` (left half) or `/`+`.`+tap `Y` (right half) — the `&bootloader` keybind lives on the SCROLL layer top row
+   - 1200-baud touch on the half's `/dev/cu.usbmodem*` — best-effort, unreliable on this firmware
+2. Copy the matching `.uf2` to the mounted `NICENANO` volume. **Use `cat src > dest`, not `cp`** — macOS `cp` errors out on FAT's missing xattr support and may leave the flash incomplete under `set -e`.
+3. Volume unmounts on its own once the bootloader has flashed and rebooted.
+4. Helper: `./scripts/flash.sh` handles all the above. `./scripts/flash.sh --right-only` for keymap-only changes (peripheral firmware doesn't depend on the keymap).
 
 **Testing:**
 - Use ZMK Studio for live configuration (right half has studio-rpc-usb-uart)
@@ -106,10 +110,12 @@ west build -s zmk/app -b nice_nano_v2 -- -DSHIELD=keyball39_right
 - Optimized buffer sizes to balance performance and power consumption
 
 **Trackball Integration:**
-- PMW3610 driver from kumamuk-git repository
-- CPI: 300 (reduced from default ~600 for precision)
+- PMW3610 driver from **tangbonze** repository (vendor pin of the active `AntoineGS/zmk-pmw3610-driver` fork — see `CLAUDE.md` for lineage). NOT `kumamuk-git`, which is stale and lacks ZMK v0.3 support.
+- CPI: 700, CPI divider: 1
+- Snipe CPI: 400, snipe divider: 4
 - Scroll/snipe layer support
 - Movement threshold: 0 (maximum sensitivity)
+- Device tree `compatible` string is `zmk,pmw3610` (vendor-prefix rename done in the AntoineGS fork in late 2025; the older `pixart,pmw3610` will not bind here).
 
 ## AI Prompting Guidance
 
@@ -157,3 +163,20 @@ west build -s zmk/app -b nice_nano_v2 -- -DSHIELD=keyball39_right
 - Verify trackball works in all relevant layers (MOUSE, SCROLL)
 - Check that auto-mouse timeout doesn't interfere with normal typing
 - Ensure Bluetooth reconnection works after firmware updates
+
+## Split Roles & Battery (post-2026-05 upgrade to ZMK v0.3)
+
+- **Right half = BLE central (master)**, left half = peripheral. Source of truth: `config/boards/shields/keyball_nano/Kconfig.defconfig`. Plug the right half into USB to talk to the host; plugging only the left does nothing. The full keymap is compiled into the right's firmware only.
+- ZMK is pinned to `v0.3` in `config/west.yml`; build workflow pinned to `@v0.3` in `.github/workflows/build.yml`.
+- Battery proxying is enabled (`CONFIG_ZMK_SPLIT_BLE_CENTRAL_BATTERY_LEVEL_FETCHING=y` + `..._PROXY=y`), so both halves' battery levels are exposed as separate BAS GATT instances. **macOS Bluetooth UI only shows one** — this is an `IOBluetooth` limitation, not a config bug. Use `scripts/BatteryReader.app` (raw CoreBluetooth) or the right-half OLED to see both.
+
+## Tooling in `scripts/`
+
+See `scripts/README.md` for full docs. Quick summary:
+- `flash.sh` — flash one or both halves; supports `--right-only` / `--left-only` / `--firmware-dir`
+- `read_batteries.swift` + `build_battery_reader.sh` — Swift+CoreBluetooth tool that reads both halves' battery levels by enumerating all GATT BAS instances directly. Output lands in `/tmp/battery_reader.log`. First run prompts for macOS Bluetooth permission.
+
+## Soft-off and sys_reset
+
+- **Do not use `&soft_off`** in this repo. The behavior compiles to a no-op in this ZMK fork even with `CONFIG_ZMK_SLEEP=y`, and adding `CONFIG_ZMK_BEHAVIOR_SOFT_OFF=y` breaks the build.
+- **Use `&sys_reset`** as the "power cycle" binding instead. Already on the SCROLL layer: position 3 (R, left half) and position 6 (U, right half). Combo paths: `Z`+`X`+`R` / `/`+`.`+`U`.
