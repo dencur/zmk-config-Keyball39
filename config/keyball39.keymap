@@ -99,17 +99,62 @@
     };
 
     behaviors {
-        // Home row mods for SHIFT — split into left/right so we can use
-        // hold-trigger-key-positions to restrict which keys can trigger the
-        // mod. SHIFT only fires when followed by an OPPOSITE-hand key.
-        //   F (left, pos 13) + any right-hand key → LSHFT
-        //   J (right, pos 16) + any left-hand key → LSHFT
-        // Same-hand sequences (typing rolls like "off", "jk", "fred") never
-        // fire shift — they just type normally.
+        // === Home row mods ===
+        // Pattern from urob/zmk-config (state-of-the-art for ZMK 3.5+):
         //
-        // `balanced` flavor means the decision is based on release order, not
-        // a tapping-term wait. Capitals feel instant: press F, press h,
-        // release h, release F → LSHFT+h.
+        //   1. flavor = "balanced": hold vs tap is decided by RELEASE
+        //      ORDER, not a timer. Typing roll (release first key first) →
+        //      tap. Deliberate shortcut (release inner key first, then
+        //      mod) → hold. Natural distinction.
+        //
+        //   2. hold-trigger-key-positions = <opposite-hand only>: the mod
+        //      ONLY fires when the next key is on the opposite hand.
+        //      Same-hand sequences ("knowledge" k+o, "off" o+f+f) can't
+        //      fire mods at all — they always type as letters.
+        //
+        //   3. hold-trigger-on-release: defers the decision to when the
+        //      second key is released, which combines cleanly with
+        //      balanced flavor for clean per-keypress resolution.
+        //
+        //   4. require-prior-idle-ms (non-shift only): blocks hold
+        //      detection if the mod key was pressed within Nms of any
+        //      prior key. Belt-and-suspenders on top of the cross-hand
+        //      protection.
+        //
+        // SHIFT (F, J) doesn't use require-prior-idle-ms because capitals
+        // need to fire instantly mid-typing-burst. Cross-hand triggers +
+        // balanced flavor are enough to keep it safe.
+        // CTRL/ALT/GUI (A, S, D, K, L, ') use require-prior-idle-ms 150
+        // since they're rarely needed mid-burst and the user reported
+        // misfires (e.g. "knowledge" → Ctrl+O) before this was added.
+
+        // Non-shift home row mod, LEFT hand. Used for A (LGUI), S (LALT), D (LCTRL).
+        hm_l: home_row_mod_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <150>;
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 35 36 37 38>;
+            bindings = <&kp>, <&kp>;
+        };
+        // Non-shift home row mod, RIGHT hand. Used for K (LCTRL), L (LALT), ' (LGUI).
+        hm_r: home_row_mod_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <150>;
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34>;
+            bindings = <&kp>, <&kp>;
+        };
+        // SHIFT home row mods. Same pattern as hm_l/hm_r but no
+        // require-prior-idle-ms — capitals need to fire instantly even
+        // mid-typing-burst.
         hm_shift_l: hm_shift_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
@@ -142,7 +187,7 @@
             label = "QWRT";
             bindings = <
 &kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y          &kp U          &kp I        &kp O       &kp P
-&mt LGUI A  &mt LALT S  &mt LCTRL D  &hm_shift_l LSHFT F  &kp G                            &kp H          &hm_shift_r LSHFT J  &mt LCTRL K  &mt LALT L  &mt LGUI APOS
+&hm_l LGUI A  &hm_l LALT S  &hm_l LCTRL D  &hm_shift_l LSHFT F  &kp G                        &kp H  &hm_shift_r LSHFT J  &hm_r LCTRL K  &hm_r LALT L  &hm_r LGUI APOS
 &lt MOUSE Z &kp X       &kp C        &kp V        &kp B                                    &kp N          &kp M          &kp COMMA    &kp DOT     &lt MOUSE SLASH
 &kp GLOBE   &none       &none        &kp ESC      &lt ARROW BACKSPACE  &lt FUN TAB         &lt SYM ENTER  &lt NUM SPACE                           &to GAME
             >;
@@ -152,7 +197,7 @@
             label = "GAME";
             bindings = <
 &kp Q         &kp W     &kp E        &kp R        &kp T                                    &kp Y          &kp U          &kp I        &kp O       &kp P
-&mt LGUI A    &kp S     &kp D        &kp F        &kp G                                    &kp H          &hm_shift_r LSHFT J  &kp K        &mt LALT L  &kp APOS
+&hm_l LGUI A    &kp S     &kp D        &kp F        &kp G                                    &kp H          &hm_shift_r LSHFT J  &kp K        &hm_r LALT L  &kp APOS
 &lt MOUSE Z   &kp X     &kp C        &kp V        &kp B                                    &kp N          &kp M          &kp COMMA    &kp DOT     &lt MOUSE SLASH
 &kp LCTRL     &kp LALT  &kp LSHFT    &kp ESC      &lt ARROW BACKSPACE  &lt FUN TAB         &lt SYM ENTER  &lt NUM SPACE                           &to DEFAULT
             >;
