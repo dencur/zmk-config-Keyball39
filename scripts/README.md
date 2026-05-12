@@ -57,7 +57,70 @@ PERIPHERAL (left): 100%
 
 The OLED on the right half also displays both — this script is just for when you want them on the Mac.
 
-## Common workflow after pushing a change
+## `build_local.sh` — GHA-equivalent local builds
+
+Mirrors `build.yaml` exactly (left half, right half + `studio-rpc-usb-uart` snippet, settings_reset). Produces byte-for-byte identical UF2s to the GitHub Actions artifact when SDK/inputs match — verified at setup time.
+
+```bash
+./build_local.sh                 # build all three targets (~1–2 min cold, ~30s incremental)
+./build_local.sh --right         # right half only (keymap-only changes)
+./build_local.sh --left
+./build_local.sh --settings-reset
+
+# Env vars:
+ZMK_WORKSPACE=~/zmk-workspace   # where west workspace lives
+ZMK_CONFIG_DIR=...              # config repo to build (default: workspace clone)
+ZMK_OUT_DIR=...                 # where to drop UF2s (default: ~/Downloads/keyball39-firmware)
+```
+
+Output filenames match the GHA artifact (`keyball39_{left,right}-nice_nano_v2-zmk.uf2`, `settings_reset-nice_nano_v2-zmk.uf2`), so they land in the same place `flash.sh` reads from. Whole workflow becomes:
+
+```bash
+./scripts/build_local.sh --right   # build it locally
+./scripts/flash.sh --right-only    # flash it
+```
+
+No push, no GitHub Actions wait, no nightly.link download. Useful for tight iteration on keymap experiments.
+
+### Local toolchain setup (one-time, ~10 min)
+
+```bash
+# 1. Homebrew deps
+brew install cmake ninja dtc libmagic ccache python-tk gperf wget
+
+# 2. Workspace, venv, west
+mkdir ~/zmk-workspace && cd ~/zmk-workspace
+python3 -m venv .venv && source .venv/bin/activate
+pip install west "setuptools<80"
+# setuptools<80 is needed because Python 3.14+ dropped pkg_resources, which
+# the nanopb generator (used by zmk's protobuf code) still imports.
+
+# 3. Clone repo + init west workspace
+git clone https://github.com/dencur/zmk-config-Keyball39.git zmk-config
+cd zmk-config && west init -l config
+west update                             # pulls zmk, pmw3610, zephyr (~5 min)
+west zephyr-export
+pip install -r zephyr/scripts/requirements.txt
+
+# 4. Zephyr SDK 0.16.x — minimal wrapper + just ARM toolchain (~85 MB)
+cd ~/zmk-workspace
+curl -fSL "https://github.com/zephyrproject-rtos/sdk-ng/releases/download/v0.16.8/zephyr-sdk-0.16.8_macos-$(uname -m | sed 's/x86_64/x86_64/;s/arm64/aarch64/')_minimal.tar.xz" -o sdk.tar.xz
+tar xf sdk.tar.xz && cd zephyr-sdk-0.16.8 && ./setup.sh -t arm-zephyr-eabi -c
+```
+
+After that, `./scripts/build_local.sh` works.
+
+**Building from local edits** (not yet pushed): set `ZMK_CONFIG_DIR` to your primary clone:
+
+```bash
+ZMK_CONFIG_DIR=~/dev/keyboard/keyball39/zmk-config-Keyball39 ./scripts/build_local.sh --right
+```
+
+This builds against your local working tree, picking up uncommitted changes. The `west update`d ZMK + pmw3610 + zephyr in `~/zmk-workspace` are still used for the dependencies (so the build is reproducible against your pinned `west.yml`).
+
+To pull new ZMK/pmw3610/zephyr revisions later (e.g. after a `west.yml` change), `cd ~/zmk-workspace/zmk-config && git pull && west update`.
+
+## Common workflow after pushing a change (GHA-based, no local setup needed)
 
 ```bash
 # 1. Wait for GitHub Actions build, download artifact
