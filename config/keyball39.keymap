@@ -8,6 +8,11 @@
 #define SCROLL  7
 #define SNIPE   8
 
+// Override max mouse cursor speed for &mmv (default 600 — tuned for 4K).
+// On Retina Macs this feels slow; 1500 ≈ 2.5x. Drop back to 600 if too fast,
+// bump toward 2000+ if still sluggish. Must precede <dt-bindings/zmk/pointing.h>.
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500
+
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
 #include <behaviors.dtsi>
