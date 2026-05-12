@@ -39,7 +39,7 @@ layers:
   - {t: '$$mdi:keyboard-tab$$', h: FUN}
   - {t: '$$mdi:keyboard-return$$', h: SYM}
   - {t: '$$mdi:keyboard-space$$', h: NUM}
-  - {t: GAME, h: toggle}
+  - '&game_td'
   GAME:
   - Q
   - W
