@@ -262,10 +262,16 @@
         //      tap. Deliberate shortcut (release inner key first, then
         //      mod) → hold. Natural distinction.
         //
-        //   2. hold-trigger-key-positions = <opposite-hand only>: the mod
-        //      ONLY fires when the next key is on the opposite hand.
-        //      Same-hand sequences ("knowledge" k+o, "off" o+f+f) can't
-        //      fire mods at all — they always type as letters.
+        //   2. hold-trigger-key-positions = <opposite-hand alphas +
+        //      ALL thumb keys>: the mod fast-resolves to hold only when
+        //      the next key is opposite-hand, OR any thumb key. Same-hand
+        //      alpha sequences ("knowledge" k+o, "off" o+f+f) can't fire
+        //      mods — they always type as letters. Thumb keys (space,
+        //      enter, tab, etc.) ARE included for both hands because
+        //      they're modifier targets, not alpha rolls — this is what
+        //      makes ' + space (Cmd+Space) fire instantly instead of
+        //      waiting out the 200ms tapping-term. require-prior-idle-ms
+        //      still guards against typing rolls into a thumb key.
         //
         //   3. hold-trigger-on-release: defers the decision to when the
         //      second key is released, which combines cleanly with
@@ -308,7 +314,7 @@
             quick-tap-ms = <200>;
             require-prior-idle-ms = <200>;
             hold-trigger-on-release;
-            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 35 36 37 38>;
+            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
         // Non-shift home row mod, RIGHT hand. Used for K (LCTRL), L (LALT), ' (LGUI).
@@ -320,7 +326,7 @@
             quick-tap-ms = <200>;
             require-prior-idle-ms = <200>;
             hold-trigger-on-release;
-            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34>;
+            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
         // SHIFT home row mods. Same pattern as hm_l/hm_r but no
@@ -333,7 +339,7 @@
             tapping-term-ms = <200>;
             quick-tap-ms = <200>;
             hold-trigger-on-release;
-            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 35 36 37 38>;
+            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
         hm_shift_r: hm_shift_right {
@@ -343,7 +349,7 @@
             tapping-term-ms = <200>;
             quick-tap-ms = <200>;
             hold-trigger-on-release;
-            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34>;
+            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
 
