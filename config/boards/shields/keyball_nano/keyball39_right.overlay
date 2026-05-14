@@ -5,6 +5,7 @@
  */
  
 #include "keyball39.dtsi"
+#define MOUSE   6
 #define SCROLL  7
 #define SNIPE   8
 
@@ -57,7 +58,12 @@
         reg = <0>;
         spi-max-frequency = <2000000>;
         irq-gpios = <&gpio1 11 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
-//        automouse-layer = <4>;
+        // Auto-mouse intentionally disabled. MOUSE layer is entered
+        // explicitly: hold &lt MOUSE Z / &lt MOUSE SLASH, or trigger
+        // the z+x / .+/ combos defined in keyball39.keymap. Trackball
+        // motion never auto-activates the layer because in practice the
+        // false-positive rate from typing-induced ball wiggle outweighed
+        // the convenience.
 	scroll-layers = <SCROLL>;
 	snipe-layers = <SNIPE>;
     };
@@ -67,6 +73,5 @@
   trackball_listener {
     compatible = "zmk,input-listener";
     device = <&trackball>;
-
   };
 };

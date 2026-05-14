@@ -246,9 +246,9 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - INS
+  - HOME
+  - PgDn
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:backspace-reverse-outline$$
   - {t: '$$mdi:transfer$$', type: trans}
@@ -266,19 +266,19 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - INS
-  - HOME
-  - PgDn
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - $$mdi:pan-down$$
+  - $$mdi:pan-up$$
   - {t: PgUp, h: SCROLL}
   - {type: held alternate}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:mouse-right-click-outline$$
-  - $$mdi:mouse-left-click-outline$$
-  - $$mdi:mouse-scroll-wheel$$
-  - $$mdi:mouse-right-click-outline$$
-  - $$mdi:mouse-left-click-outline$$
+  - {t: MOUSE, h: toggle}
+  - '&click_exit_l'
+  - '&click_exit_r'
+  - '&click_exit_r'
+  - '&click_exit_l'
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   SCROLL:
   - {t: '$$mdi:transfer$$', type: trans}
@@ -361,17 +361,17 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   MMOVE:
-  - PgUp
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: Gui+Alt+=, s: Gui+Alt++}
+  - {t: 'Gui+[', s: 'Gui+{'}
   - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
+  - {t: 'Gui+]', s: 'Gui+}'}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: 'Gui+[', s: 'Gui+{'}
   - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - PgUp
-  - PgDn
+  - {t: 'Gui+]', s: 'Gui+}'}
+  - {t: Gui+Alt+=, s: Gui+Alt++}
+  - {t: Gui+Alt+-, s: Gui+Alt+_}
   - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
@@ -380,28 +380,71 @@ layers:
   - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
-  - PgDn
-  - {t: MMOVE, h: toggle}
-  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: Gui+Alt+-, s: Gui+Alt+_}
+  - $$mdi:pan-left$$
+  - $$mdi:pan-right$$
   - $$mdi:pan-up$$
   - $$mdi:pan-down$$
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - $$mdi:pan-down$$
   - $$mdi:pan-up$$
+  - $$mdi:pan-left$$
+  - $$mdi:pan-right$$
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: MMOVE, h: toggle}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
-  - $$mdi:mouse-right-click-outline$$
   - $$mdi:mouse-left-click-outline$$
-  - $$mdi:mouse-scroll-wheel$$
+  - $$mdi:mouse-right-click-outline$$
   - $$mdi:mouse-right-click-outline$$
   - $$mdi:mouse-left-click-outline$$
   - {t: '$$mdi:transfer$$', type: trans}
 combos:
-- p: [2, 3]
+- p: [11, 12]
   k: {t: MMOVE, h: toggle}
-- p: [6, 7]
+- p: [17, 18]
   k: {t: MMOVE, h: toggle}
+- p: [20, 21]
+  k: {t: MOUSE, h: toggle}
+- p: [28, 29]
+  k: {t: MOUSE, h: toggle}
+- p: [6, 7, 8]
+  k: $$mdi:pan-up$$
+  l: [QWRT, MMOVE]
+- p: [26, 27, 28]
+  k: $$mdi:pan-down$$
+  l: [QWRT, MMOVE]
+- p: [1, 2, 3]
+  k: $$mdi:pan-up$$
+  l: [QWRT, MMOVE]
+- p: [21, 22, 23]
+  k: $$mdi:pan-down$$
+  l: [QWRT, MMOVE]
+- p: [0, 1]
+  k: $$mdi:keyboard-esc$$
+  l: [QWRT]
+- p: [16, 17]
+  k: $$mdi:keyboard-esc$$
+  l: [QWRT]
+- p: [16, 17]
+  k: {t: MMOVE, h: toggle}
+  l: [MMOVE]
+- p: [12, 13]
+  k: $$mdi:backspace-reverse-outline$$
+  l: [QWRT, MMOVE]
+- p: [10, 11]
+  k: {t: A, h: '$$mdi:apple-keyboard-command$$'}
+  l: [QWRT, MMOVE]
+- p: [21, 22]
+  k: {t: C, h: '$$mdi:apple-keyboard-command$$'}
+  l: [QWRT, MMOVE]
+- p: [22, 23]
+  k: {t: V, h: '$$mdi:apple-keyboard-command$$'}
+  l: [QWRT, MMOVE]
+- p: [21, 23]
+  k: {t: X, h: '$$mdi:apple-keyboard-command$$'}
+  l: [QWRT, MMOVE]
+- p: [10, 11, 12]
+  k: $$mdi:alpha-w-box$$
+  l: [QWRT]

@@ -79,22 +79,177 @@
     combos {
         compatible = "zmk,combos";
 
-        // Toggle the MOUSEMOVE layer with a one-handed two-finger chord.
-        // Tightened from the original 30/200: timeout-ms 15 means both keys
-        // must hit within a single human-perceivable instant (typing rolls
-        // have ≥30ms gaps), and require-prior-idle-ms 250 means there must
-        // be a real pause from typing before the combo fires.
-        combo_left_mousemove {
-            timeout-ms = <15>;
+        // Toggle the MOUSEMOVE layer with a two-finger chord. Global
+        // (no layers restriction) — same chord enters from QWRT and
+        // exits from MMOVE. timeout-ms 25 means both keys must hit
+        // within a quick window (typing rolls have ≥30ms gaps);
+        // require-prior-idle-ms 250 means a real pause from typing
+        // before it can fire.
+        // Left hand: S + D. Right hand: K + L.
+        // NOTE: on MMOVE, S and D are MOVE_LEFT / MOVE_DOWN. A deliberate
+        // simultaneous S+D tap exits the layer; normal diagonal movement
+        // (press S, then add D >25ms later, holding) does not.
+        combo_sd_mmove {
+            timeout-ms = <25>;
             require-prior-idle-ms = <250>;
-            key-positions = <2 3>;   // E + R
+            key-positions = <11 12>; // S + D
             bindings = <&tog MOUSEMOVE>;
         };
         combo_right_mousemove {
-            timeout-ms = <15>;
+            timeout-ms = <25>;
             require-prior-idle-ms = <250>;
-            key-positions = <6 7>;   // U + I
+            key-positions = <17 18>; // K + L
             bindings = <&tog MOUSEMOVE>;
+        };
+
+        // Lock MOUSE on via one-handed two-finger chord (same model as
+        // the MOUSEMOVE combos). Z and / are already &lt MOUSE — holding
+        // momentarily activates MOUSE; the combo is the "stay there"
+        // path. Click bindings on MOUSE call &tog MOUSE (via the
+        // click_exit_* macros) so clicking exits the lock.
+        combo_left_mouse {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <20 21>; // Z + X
+            bindings = <&tog MOUSE>;
+        };
+        combo_right_mouse {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <28 29>; // . + /
+            bindings = <&tog MOUSE>;
+        };
+
+        // Three-finger scroll combos, active on QWRT and MMOVE. Looser
+        // 50ms window than the 2-key combos — a 3-key chord is harder
+        // to land simultaneously, and rolling three specific keys
+        // mid-typing is unlikely, so the wider window is safe.
+        // require-prior-idle-ms 250 still blocks it during a typing
+        // burst. Held: all three keys down keeps &msc scrolling;
+        // release any one to stop. Both hands, mirrored:
+        //   right: U+I+O up, M+,+. down
+        //   left:  W+E+R up, X+C+V down
+        // NOTE: X+C+V is a superset of the copy/paste/cut 2-key combos,
+        // so those pick up ~50ms standalone activation latency (the
+        // resolver waits out X+C+V's candidacy window). Accepted
+        // tradeoff. W+E+R has no such overlap.
+        combo_scroll_up {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <250>;
+            key-positions = <6 7 8>;     // U + I + O
+            bindings = <&msc SCRL_UP>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+        combo_scroll_down {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <250>;
+            key-positions = <26 27 28>;  // M + , + .
+            bindings = <&msc SCRL_DOWN>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+        combo_scroll_up_left {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <250>;
+            key-positions = <1 2 3>;     // W + E + R
+            bindings = <&msc SCRL_UP>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+        combo_scroll_down_left {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <250>;
+            key-positions = <21 22 23>;  // X + C + V
+            bindings = <&msc SCRL_DOWN>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+
+        // Two-key action combos. 25ms window (the standard 2-key combo
+        // timing here) + require-prior-idle-ms 250 so they can't fire
+        // mid-typing-burst.
+        //   - ESC combos (Q+W, J+K): DEFAULT only.
+        //   - Editing combos (D+F del, A+S select-all, X+C copy,
+        //     C+V paste, X+V cut): DEFAULT + MOUSEMOVE, so they're
+        //     reachable while in the mouse-move layer too.
+        //
+        // The J+K position gets a SECOND combo gated to MOUSEMOVE
+        // (combo_exit_mmove_jk), which fires &tog MOUSEMOVE instead of
+        // ESC — so on MMOVE that chord is an extra layer-exit route,
+        // matching the ESC-position key. A combo has only one binding,
+        // hence the per-layer split. Q+W is DEFAULT-only ESC now (its
+        // MMOVE-exit variant was removed).
+        combo_esc_qw {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <0 1>;       // Q + W
+            bindings = <&kp ESC>;
+            layers = <DEFAULT>;
+        };
+        combo_esc_jk {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <16 17>;     // J + K
+            bindings = <&kp ESC>;
+            layers = <DEFAULT>;
+        };
+        combo_exit_mmove_jk {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <16 17>;     // J + K (on MMOVE → exit layer)
+            bindings = <&tog MOUSEMOVE>;
+            layers = <MOUSEMOVE>;
+        };
+        combo_del_df {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <12 13>;     // D + F
+            bindings = <&kp DEL>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+        // Select-all (Cmd+A) on A+S. Both A+S and S+D are subsets of
+        // the A+S+D caps_word combo — the resolver still picks the
+        // 2-key combo correctly when the 3rd key isn't pressed, but
+        // with ~50ms latency (it waits out caps_word's candidacy
+        // window). Acceptable: neither is speed-critical, and pressing
+        // all of A+S+D fires caps_word cleanly.
+        combo_select_all_as {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <10 11>;     // A + S
+            bindings = <&kp LG(A)>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+        combo_copy_xc {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <21 22>;     // X + C
+            bindings = <&kp LG(C)>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+        combo_paste_cv {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <22 23>;     // C + V
+            bindings = <&kp LG(V)>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+        combo_cut_xv {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <21 23>;     // X + V
+            bindings = <&kp LG(X)>;
+            layers = <DEFAULT MOUSEMOVE>;
+        };
+
+        // Three-key caps-word combo. A+S+D — position 10 (A) is unique
+        // to this combo, so there's no subset/superset ambiguity with
+        // any other combo. 50ms window (the >2-key standard here).
+        // Fires &caps_word: the next word is shifted, auto-ends on
+        // space/most punctuation (continue-list keeps it through - and _).
+        combo_caps_word {
+            timeout-ms = <50>;
+            require-prior-idle-ms = <250>;
+            key-positions = <10 11 12>;  // A + S + D
+            bindings = <&caps_word>;
+            layers = <DEFAULT>;
         };
     };
 
@@ -128,14 +283,30 @@
         // since they're rarely needed mid-burst and the user reported
         // misfires (e.g. "knowledge" → Ctrl+O) before this was added.
 
+        // Tuning for user typing 80 WPM static, ~130 WPM in bursts
+        // (inter-key gap ~92 ms burst, ~150 ms static).
+        //
+        // - tapping-term-ms = 200: tighter window for the balanced-flavor
+        //   release-order check. Combined with require-prior-idle-ms, this
+        //   shrinks the time where an opposite-hand release inside the
+        //   term can be misinterpreted as a completed hold.
+        // - quick-tap-ms = 200: typing the same letter twice in <200 ms
+        //   (e.g. "ll", "ss") forces tap-tap, not tap-then-hold.
+        // - require-prior-idle-ms = 200: blocks hold firing if the prior
+        //   key was pressed within 200 ms — fully covers 130 WPM bursts
+        //   (92 ms gaps) and most 80 WPM static (150 ms gaps). Only
+        //   deliberate mod use after a clear pause activates HRM.
+        // SHIFT mods keep no require-prior-idle-ms (capitals must fire
+        // mid-burst) but inherit the tighter term and longer quick-tap.
+
         // Non-shift home row mod, LEFT hand. Used for A (LGUI), S (LALT), D (LCTRL).
         hm_l: home_row_mod_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <280>;
-            quick-tap-ms = <150>;
-            require-prior-idle-ms = <150>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <200>;
             hold-trigger-on-release;
             hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 35 36 37 38>;
             bindings = <&kp>, <&kp>;
@@ -145,9 +316,9 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <280>;
-            quick-tap-ms = <150>;
-            require-prior-idle-ms = <150>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            require-prior-idle-ms = <200>;
             hold-trigger-on-release;
             hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34>;
             bindings = <&kp>, <&kp>;
@@ -159,8 +330,8 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <250>;
-            quick-tap-ms = <150>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
             hold-trigger-on-release;
             hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 35 36 37 38>;
             bindings = <&kp>, <&kp>;
@@ -169,8 +340,8 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <250>;
-            quick-tap-ms = <150>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
             hold-trigger-on-release;
             hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34>;
             bindings = <&kp>, <&kp>;
@@ -189,6 +360,34 @@
     };
 
     macros {
+        // Click-and-exit-MOUSE macros.
+        //
+        // MOUSE is entered explicitly (hold Z/SLASH via &lt, or the
+        // z+x / .+/ combos which &tog it on). These macros make clicks
+        // terminal: send the click, hold it for the duration the key is
+        // held (so drag works), and on release fire &tog MOUSE to drop
+        // the layer. Combined with the combos, the model is "enter →
+        // act → click exits."
+        click_exit_l: click_exit_left {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_press &mkp LCLK>
+                , <&macro_pause_for_release>
+                , <&macro_release &mkp LCLK>
+                , <&tog MOUSE>
+                ;
+        };
+        click_exit_r: click_exit_right {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_press &mkp RCLK>
+                , <&macro_pause_for_release>
+                , <&macro_release &mkp RCLK>
+                , <&tog MOUSE>
+                ;
+        };
     };
 
     keymap {
@@ -257,10 +456,10 @@
         mouse_layer {
             label = "MOUSE";
             bindings = <
-&none   &none   &none   &none      &none                            &none      &none     &none          &none        &kp DEL
-&trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT  &kp DOWN       &kp UP       &kp RIGHT
-&trans  &lt SCROLL X  &none   &none      &none                            &kp INS    &kp HOME  &kp PAGE_DOWN  &lt SCROLL PAGE_UP  &trans
-&none   &none   &none   &mkp RCLK  &mkp LCLK  &mkp MCLK             &mkp RCLK  &mkp LCLK                             &none
+&none   &none   &none   &none      &none                            &kp INS    &kp HOME      &kp PAGE_DOWN  &none               &kp DEL
+&trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT      &kp DOWN       &kp UP              &kp RIGHT
+&trans  &lt SCROLL X  &none   &none      &none                       &none      &msc SCRL_DOWN  &msc SCRL_UP  &lt SCROLL PAGE_UP  &trans
+&none   &none   &none   &tog MOUSE     &click_exit_l  &click_exit_r     &click_exit_r  &click_exit_l                     &none
             >;
         };
 
@@ -285,27 +484,39 @@
         };
 
         // Two-handed keyboard mouse layer. Entered/exited via combos:
-        //   left hand:  E + R together (after 250ms idle, 15ms timeout)
-        //   right hand: U + I together (same)
+        //   left hand:  S + D together (after 250ms idle, 25ms timeout)
+        //   right hand: K + L together (same)
+        //   also exits: J + K, or the ESC-position key
         // Inverted-T movement clusters on each hand:
         //   left:  E=up, S=left, D=down, F=right
         //   right: I=up, J=left, K=down, L=right
-        // Scroll moved to the bottom row, finger-natural (middle=up, index=down):
+        // Vertical scroll (bottom row, finger-natural — middle=up, index=down):
         //   left:  C=scroll up,  V=scroll down
-        //   right: ,=scroll up,  M=scroll down
-        // Dedicated EXIT keys (alongside the combo): Z (left bottom-row pinky)
-        // and / (right bottom-row pinky).
-        // Page navigation: PAGE_UP on Q and P (top-row corners, either pinky),
-        // PAGE_DOWN on A and ' (home-row corners, either pinky).
+        //   right: M=scroll down, ,=scroll up
+        // Horizontal scroll on the bottom-row pinky pairs:
+        //   left:  Z=scroll left, X=scroll right
+        //   right: .=scroll left, /=scroll right
+        // macOS Accessibility Zoom (Cmd+Option+= / Cmd+Option+-):
+        //   Q and P = zoom in, A and ' = zoom out.
+        // Compositor-level magnifier — scales screen pixels, items roll
+        // off the sides (closest keyboard equivalent to trackpad pinch).
+        // ONE-TIME SETUP: System Settings → Accessibility → Zoom →
+        // enable "Use keyboard shortcuts to zoom". Pick "Picture-in-
+        // Picture" zoom style for the loupe-like feel.
+        // Browser nav (Cmd+[ / Cmd+]) flanking the up-arrow on each hand:
+        //   W = back, R = forward; U = back, O = forward.
+        // EXIT: ESC position (left thumb on QWRT — muscle-memory) or
+        // re-fire one of the entry combos. The previous Z and / exit
+        // keys gave way to horizontal scroll.
         // Clicks on the thumb cluster — no auto-exit, click and scroll freely.
         // Other positions are &trans (type normally, layer stays on).
         mousemove_layer {
             label = "MMOVE";
             bindings = <
-&kp PAGE_UP     &trans         &mmv MOVE_UP    &trans            &trans                                  &trans         &trans         &mmv MOVE_UP   &trans         &kp PAGE_UP
-&kp PAGE_DOWN   &mmv MOVE_LEFT &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &trans                                  &trans         &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT &kp PAGE_DOWN
-&tog MOUSEMOVE  &trans         &msc SCRL_UP    &msc SCRL_DOWN    &trans                                  &trans         &msc SCRL_DOWN &msc SCRL_UP   &trans         &tog MOUSEMOVE
-&trans          &trans         &trans          &mkp RCLK         &mkp LCLK        &mkp MCLK              &mkp RCLK      &mkp LCLK                                    &trans
+&kp LG(LA(EQUAL))   &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &trans                                  &trans         &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(LA(EQUAL))
+&kp LG(LA(MINUS))   &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &trans                                  &trans         &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LG(LA(MINUS))
+&msc SCRL_LEFT      &msc SCRL_RIGHT     &msc SCRL_UP    &msc SCRL_DOWN    &trans                                  &trans         &msc SCRL_DOWN &msc SCRL_UP   &msc SCRL_LEFT      &msc SCRL_RIGHT
+&trans              &trans              &trans          &tog MOUSEMOVE    &mkp LCLK        &mkp RCLK              &mkp RCLK      &mkp LCLK                                        &trans
             >;
         };
     };
