@@ -365,22 +365,22 @@ layers:
   - {t: 'Gui+[', s: 'Gui+{'}
   - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
   - {t: 'Gui+]', s: 'Gui+}'}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: Gui+Alt+-, s: Gui+Alt+_}
+  - {t: Gui+Alt+=, s: Gui+Alt++}
   - {t: 'Gui+[', s: 'Gui+{'}
   - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
   - {t: 'Gui+]', s: 'Gui+}'}
-  - {t: Gui+Alt+=, s: Gui+Alt++}
   - {t: Gui+Alt+-, s: Gui+Alt+_}
+  - Ctl+$$mdi:arrow-left-bold$$
   - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - Ctl+$$mdi:arrow-right-bold$$
+  - Ctl+$$mdi:arrow-left-bold$$
   - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
-  - {t: Gui+Alt+-, s: Gui+Alt+_}
+  - Ctl+$$mdi:arrow-right-bold$$
   - $$mdi:pan-left$$
   - $$mdi:pan-right$$
   - $$mdi:pan-up$$

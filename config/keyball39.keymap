@@ -256,6 +256,7 @@
             bindings = <&caps_word>;
             layers = <DEFAULT>;
         };
+
     };
 
     behaviors {
@@ -533,13 +534,19 @@
         // Horizontal scroll on the bottom-row pinky pairs:
         //   left:  Z=scroll left, X=scroll right
         //   right: .=scroll left, /=scroll right
-        // macOS Accessibility Zoom (Cmd+Option+= / Cmd+Option+-):
-        //   Q and P = zoom in, A and ' = zoom out.
-        // Compositor-level magnifier — scales screen pixels, items roll
-        // off the sides (closest keyboard equivalent to trackpad pinch).
+        // macOS Accessibility Zoom (Cmd+Opt+= / Cmd+Opt+-):
+        //   Q and Y  = zoom in
+        //   T and P  = zoom out
         // ONE-TIME SETUP: System Settings → Accessibility → Zoom →
         // enable "Use keyboard shortcuts to zoom". Pick "Picture-in-
         // Picture" zoom style for the loupe-like feel.
+        // Desktop / Spaces navigation (macOS Ctrl+Left/Right) — used
+        // for macOS Exposé / Spaces switching:
+        //   A and H  = prev desktop (LC(LEFT))
+        //   G and '  = next desktop (LC(RIGHT))
+        // Each hand gets one outer-pinky access (A/') and one inner-
+        // index access (H/G), so either hand can swap in either direction
+        // without breaking the cursor-move cluster.
         // Browser nav (Cmd+[ / Cmd+]) flanking the up-arrow on each hand:
         //   W = back, R = forward; U = back, O = forward.
         // EXIT: ESC position (left thumb on QWRT — muscle-memory) or
@@ -552,8 +559,8 @@
         mousemove_layer {
             label = "MMOVE";
             bindings = <
-&kp LG(LA(EQUAL))   &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &none                                   &none          &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(LA(EQUAL))
-&kp LG(LA(MINUS))   &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &none                                   &none          &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LG(LA(MINUS))
+&kp LG(LA(EQUAL))   &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &kp LG(LA(MINUS))                       &kp LG(LA(EQUAL))  &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(LA(MINUS))
+&kp LC(LEFT)        &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &kp LC(RIGHT)                           &kp LC(LEFT)       &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LC(RIGHT)
 &msc SCRL_LEFT      &msc SCRL_RIGHT     &msc SCRL_UP    &msc SCRL_DOWN    &none                                   &none          &msc SCRL_DOWN &msc SCRL_UP   &msc SCRL_LEFT      &msc SCRL_RIGHT
 &none               &none               &none           &tog MOUSEMOVE    &mkp LCLK        &mkp RCLK              &mkp RCLK      &mkp LCLK                                        &none
             >;
