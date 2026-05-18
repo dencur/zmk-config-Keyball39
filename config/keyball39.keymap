@@ -10,9 +10,10 @@
 #define MOUSEMOVE 9
 
 // Override max mouse cursor speed for &mmv (default 600 — tuned for 4K).
-// On Retina Macs this feels slow; 1500 ≈ 2.5x. Drop back to 600 if too fast,
-// bump toward 2000+ if still sluggish. Must precede <dt-bindings/zmk/pointing.h>.
-#define ZMK_POINTING_DEFAULT_MOVE_VAL 1500
+// Bumped from 1500 → 2100 (+40%) to match Delta Omega's "big-monitor
+// reach" tuning. Drop back to 1500/600 if too fast. Must precede
+// <dt-bindings/zmk/pointing.h>.
+#define ZMK_POINTING_DEFAULT_MOVE_VAL 2100
 
 // Same idea for &msc scroll speed (default 10). Higher = more lines per tick.
 // 20 is urob/zmk-config's tested value; combined with the
