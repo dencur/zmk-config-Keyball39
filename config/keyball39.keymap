@@ -79,12 +79,11 @@
     combos {
         compatible = "zmk,combos";
 
-        // Toggle the MOUSEMOVE layer with a two-finger chord. Global
-        // (no layers restriction) — same chord enters from QWRT and
-        // exits from MMOVE. timeout-ms 25 means both keys must hit
-        // within a quick window (typing rolls have ≥30ms gaps);
-        // require-prior-idle-ms 250 means a real pause from typing
-        // before it can fire.
+        // Toggle the MOUSEMOVE layer with a two-finger chord.
+        // Restricted to <DEFAULT MOUSEMOVE> so a stray S+D / K+L on
+        // other layers (NUM, SYM, ARROW, etc.) doesn't fire &tog
+        // MOUSEMOVE — same defensive pattern Delta Omega's TODO calls
+        // out around combo layer-filter interference.
         // Left hand: S + D. Right hand: K + L.
         // NOTE: on MMOVE, S and D are MOVE_LEFT / MOVE_DOWN. A deliberate
         // simultaneous S+D tap exits the layer; normal diagonal movement
@@ -94,30 +93,35 @@
             require-prior-idle-ms = <250>;
             key-positions = <11 12>; // S + D
             bindings = <&tog MOUSEMOVE>;
+            layers = <DEFAULT MOUSEMOVE>;
         };
         combo_right_mousemove {
             timeout-ms = <25>;
             require-prior-idle-ms = <250>;
             key-positions = <17 18>; // K + L
             bindings = <&tog MOUSEMOVE>;
+            layers = <DEFAULT MOUSEMOVE>;
         };
 
-        // Lock MOUSE on via one-handed two-finger chord (same model as
-        // the MOUSEMOVE combos). Z and / are already &lt MOUSE — holding
-        // momentarily activates MOUSE; the combo is the "stay there"
-        // path. Click bindings on MOUSE call &tog MOUSE (via the
-        // click_exit_* macros) so clicking exits the lock.
+        // Lock MOUSE on via one-handed two-finger chord. Restricted to
+        // <DEFAULT MOUSE> for the same reason as the MOUSEMOVE combos.
+        // Z and / are already &lt MOUSE — holding momentarily activates
+        // MOUSE; the combo is the "stay there" path. Click bindings on
+        // MOUSE call &tog MOUSE (via the click_exit_* macros) so
+        // clicking exits the lock.
         combo_left_mouse {
             timeout-ms = <25>;
             require-prior-idle-ms = <250>;
             key-positions = <20 21>; // Z + X
             bindings = <&tog MOUSE>;
+            layers = <DEFAULT MOUSE>;
         };
         combo_right_mouse {
             timeout-ms = <25>;
             require-prior-idle-ms = <250>;
             key-positions = <28 29>; // . + /
             bindings = <&tog MOUSE>;
+            layers = <DEFAULT MOUSE>;
         };
 
         // Three-finger scroll combos, active on QWRT and MMOVE. Looser
@@ -170,12 +174,12 @@
         //     C+V paste, X+V cut): DEFAULT + MOUSEMOVE, so they're
         //     reachable while in the mouse-move layer too.
         //
-        // The J+K position gets a SECOND combo gated to MOUSEMOVE
-        // (combo_exit_mmove_jk), which fires &tog MOUSEMOVE instead of
-        // ESC — so on MMOVE that chord is an extra layer-exit route,
-        // matching the ESC-position key. A combo has only one binding,
-        // hence the per-layer split. Q+W is DEFAULT-only ESC now (its
-        // MMOVE-exit variant was removed).
+        // J+K consistently fires ESC across DEFAULT and MMOVE — two
+        // combos with the same positions, one per layer. Ported from
+        // Delta Omega: the MMOVE variant USED to fire &tog MOUSEMOVE
+        // (combo_exit_mmove_jk), but having J+K mean two different
+        // things on different layers was inconsistent. Exit MMOVE via
+        // S+D or K+L combos, or the ESC-position thumb key.
         combo_esc_qw {
             timeout-ms = <25>;
             require-prior-idle-ms = <250>;
@@ -190,11 +194,11 @@
             bindings = <&kp ESC>;
             layers = <DEFAULT>;
         };
-        combo_exit_mmove_jk {
+        combo_esc_mmove_jk {
             timeout-ms = <25>;
             require-prior-idle-ms = <250>;
-            key-positions = <16 17>;     // J + K (on MMOVE → exit layer)
-            bindings = <&tog MOUSEMOVE>;
+            key-positions = <16 17>;     // J + K (on MMOVE → also ESC)
+            bindings = <&kp ESC>;
             layers = <MOUSEMOVE>;
         };
         combo_del_df {
@@ -516,7 +520,9 @@
         // Two-handed keyboard mouse layer. Entered/exited via combos:
         //   left hand:  S + D together (after 250ms idle, 25ms timeout)
         //   right hand: K + L together (same)
-        //   also exits: J + K, or the ESC-position key
+        //   also exits: the ESC-position thumb key
+        // (J + K on MMOVE now fires ESC, matching its DEFAULT behavior —
+        // ported from Delta Omega for cross-layer consistency.)
         // Inverted-T movement clusters on each hand:
         //   left:  E=up, S=left, D=down, F=right
         //   right: I=up, J=left, K=down, L=right
@@ -539,14 +545,16 @@
         // re-fire one of the entry combos. The previous Z and / exit
         // keys gave way to horizontal scroll.
         // Clicks on the thumb cluster — no auto-exit, click and scroll freely.
-        // Other positions are &trans (type normally, layer stays on).
+        // All non-bound positions are &none (do nothing) rather than &trans
+        // — matches Delta Omega and prevents accidental fall-through to
+        // QWRT keys while on MMOVE.
         mousemove_layer {
             label = "MMOVE";
             bindings = <
-&kp LG(LA(EQUAL))   &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &trans                                  &trans         &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(LA(EQUAL))
-&kp LG(LA(MINUS))   &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &trans                                  &trans         &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LG(LA(MINUS))
-&msc SCRL_LEFT      &msc SCRL_RIGHT     &msc SCRL_UP    &msc SCRL_DOWN    &trans                                  &trans         &msc SCRL_DOWN &msc SCRL_UP   &msc SCRL_LEFT      &msc SCRL_RIGHT
-&trans              &trans              &trans          &tog MOUSEMOVE    &mkp LCLK        &mkp RCLK              &mkp RCLK      &mkp LCLK                                        &trans
+&kp LG(LA(EQUAL))   &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &none                                   &none          &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(LA(EQUAL))
+&kp LG(LA(MINUS))   &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &none                                   &none          &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LG(LA(MINUS))
+&msc SCRL_LEFT      &msc SCRL_RIGHT     &msc SCRL_UP    &msc SCRL_DOWN    &none                                   &none          &msc SCRL_DOWN &msc SCRL_UP   &msc SCRL_LEFT      &msc SCRL_RIGHT
+&none               &none               &none           &tog MOUSEMOVE    &mkp LCLK        &mkp RCLK              &mkp RCLK      &mkp LCLK                                        &none
             >;
         };
     };
