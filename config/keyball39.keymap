@@ -324,25 +324,40 @@
             hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
-        // Dedicated behavior for A (LGUI). A+L was misfiring as Cmd+L
-        // (= Win+L lock in the Windows VM) on fast finger-rolls into
-        // words like "all"/"always" — balanced flavor decides hold-vs-tap
-        // by release order, which a roll can get "wrong".
-        // tap-preferred ignores release order: the mod fires ONLY if A is
-        // held past tapping-term-ms. A roll holds A ~40-80ms → tap → "al".
-        // A deliberate hold past 150ms → Cmd. Tradeoff: A+space (Spotlight)
-        // and every A-mod chord now needs that ~150ms deliberate hold
-        // rather than fast-resolving instantly. Trial setting — if the
-        // hold-feel on A+space is too much, the fallback is to revert A
-        // to balanced and instead drop L from A's fast-resolve positions
-        // (deliberate Cmd+L would move to an L+' combo).
+        // Dedicated behavior for A (LGUI), the left pinky — the finger
+        // that lingers most, so A is the worst HRM misfire surface.
+        //
+        // HISTORY / why this is a separate behavior:
+        //   A previously used flavor="tap-preferred" + hold-trigger-on-
+        //   release. That combination is INCOHERENT and silently defeats
+        //   the cross-hand guard: hold-trigger-on-release only records
+        //   "what key followed A" on that key's RELEASE, but tap-preferred
+        //   decides HOLD the instant the timer expires (ignoring other
+        //   keypresses entirely — see behavior_hold_tap.c decide_tap_
+        //   preferred + decide_positional_hold). At timer expiry the
+        //   position is still unrecorded, so the positional guard is
+        //   skipped and Cmd fired on ANY linger — same-hand ("away" a+w,
+        //   "around" a+r) and cross-hand ("alone"/"alot" a+l) alike.
+        //
+        // FIX: the coherent urob/ZMK stack — balanced + hold-trigger-on-
+        //   release + cross-hand positions. balanced resolves a natural
+        //   roll (release A before the next key) to a TAP, and the
+        //   positional guard actually works because the decision is
+        //   deferred to the right moment. A gets urob's longer 280ms
+        //   term (vs 200 on the other mods): a longer term is MORE
+        //   forgiving of pinky linger before a timer-hold, which is
+        //   exactly what the pinky needs. quick-tap 175 / prior-idle 150
+        //   are urob's shipped values.
+        //   If "alone"/"alot" still misfire on an unusual release order,
+        //   the next escalation is to drop K/L/' (17/18/19) from A's
+        //   trigger list so a+l can never hold.
         hm_a: home_row_mod_a {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <150>;
-            quick-tap-ms = <200>;
-            require-prior-idle-ms = <200>;
+            flavor = "balanced";
+            tapping-term-ms = <280>;
+            quick-tap-ms = <175>;
+            require-prior-idle-ms = <150>;
             hold-trigger-on-release;
             hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;

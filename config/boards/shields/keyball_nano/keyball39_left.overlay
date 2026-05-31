@@ -8,6 +8,17 @@
 
 &kscan0 {
 	wakeup-source;
+	// Chatter fix for the left half. The T switch (Kailh Deep Sea
+	// Silent / Choc v2) started double/triple-firing ("yet" -> "yettt")
+	// — a worn/dirty single switch. ZMK's default release debounce is
+	// 5ms; release-bounce is what produces the repeat-character pattern,
+	// so we bump debounce-release-ms to 8 (press stays at the 5ms
+	// default). Latency cost on release is imperceptible for typing.
+	// This is a peripheral-only change (the left scans its own matrix),
+	// so ONLY the left half needs reflashing for it; the right build is
+	// untouched. If chatter persists or spreads, the real fix is to
+	// clean (contact cleaner) or hot-swap the offending switch.
+	debounce-release-ms = <8>;
 	col-gpios
 		= <&pro_micro 4 GPIO_ACTIVE_HIGH>
 		, <&pro_micro 5 GPIO_ACTIVE_HIGH>
