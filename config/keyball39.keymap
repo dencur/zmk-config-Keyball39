@@ -35,10 +35,10 @@
     quick-tap-ms = <150>;
 };
 
-// Default &mt — used for the gui/alt/ctrl home row mods (A S D / K L ').
-// Kept conservative: 150ms term + 150ms require-prior-idle. These mods are
-// rarely needed mid-typing, so we prioritize safety against typing rolls
-// over snappy activation.
+// Default &mt override. NOTE: the home-row mods do NOT use &mt — they use
+// the dedicated hm_l / hm_a / hm_r / hm_shift_* hold-taps below. This block
+// only affects any bare `&mt` bindings (currently none), so it's effectively
+// inert; kept for safety in case a plain &mt is added later.
 &mt {
     tapping-term-ms = <150>;
     flavor = "tap-preferred";
@@ -260,129 +260,140 @@
     };
 
     behaviors {
-        // === Home row mods ===
-        // Pattern from urob/zmk-config (state-of-the-art for ZMK 3.5+):
+        // === Home row mods — flavor matched PER FINGER ===
+        // Not one-size-fits-all: each modifier gets the flavor that fits
+        // how destructive/time-critical it is and how much that finger
+        // rolls. Common params: quick-tap-ms 150, require-prior-idle-ms
+        // 150 (non-shift), tapping-term-ms 300 (a deliberate-hold window;
+        // "additional hold requirement" so accidental taps don't mod).
         //
-        //   1. flavor = "balanced": hold vs tap is decided by RELEASE
-        //      ORDER, not a timer. Typing roll (release first key first) →
-        //      tap. Deliberate shortcut (release inner key first, then
-        //      mod) → hold. Natural distinction.
-        //
-        //   2. hold-trigger-key-positions = <opposite-hand alphas +
-        //      ALL thumb keys>: the mod fast-resolves to hold only when
-        //      the next key is opposite-hand, OR any thumb key. Same-hand
-        //      alpha sequences ("knowledge" k+o, "off" o+f+f) can't fire
-        //      mods — they always type as letters. Thumb keys (space,
-        //      enter, tab, etc.) ARE included for both hands because
-        //      they're modifier targets, not alpha rolls — this is what
-        //      makes ' + space (Cmd+Space) fire instantly instead of
-        //      waiting out the 200ms tapping-term. require-prior-idle-ms
-        //      still guards against typing rolls into a thumb key.
-        //
-        //   3. hold-trigger-on-release: defers the decision to when the
-        //      second key is released, which combines cleanly with
-        //      balanced flavor for clean per-keypress resolution.
-        //
-        //   4. require-prior-idle-ms (non-shift only): blocks hold
-        //      detection if the mod key was pressed within Nms of any
-        //      prior key. Belt-and-suspenders on top of the cross-hand
-        //      protection.
-        //
-        // SHIFT (F, J) doesn't use require-prior-idle-ms because capitals
-        // need to fire instantly mid-typing-burst. Cross-hand triggers +
-        // balanced flavor are enough to keep it safe.
-        // CTRL/ALT/GUI (A, S, D, K, L, ') use require-prior-idle-ms 150
-        // since they're rarely needed mid-burst and the user reported
-        // misfires (e.g. "knowledge" → Ctrl+O) before this was added.
-
-        // Tuning for user typing 80 WPM static, ~130 WPM in bursts
-        // (inter-key gap ~92 ms burst, ~150 ms static).
-        //
-        // - tapping-term-ms = 200: tighter window for the balanced-flavor
-        //   release-order check. Combined with require-prior-idle-ms, this
-        //   shrinks the time where an opposite-hand release inside the
-        //   term can be misinterpreted as a completed hold.
-        // - quick-tap-ms = 200: typing the same letter twice in <200 ms
-        //   (e.g. "ll", "ss") forces tap-tap, not tap-then-hold.
-        // - require-prior-idle-ms = 200: blocks hold firing if the prior
-        //   key was pressed within 200 ms — fully covers 130 WPM bursts
-        //   (92 ms gaps) and most 80 WPM static (150 ms gaps). Only
-        //   deliberate mod use after a clear pause activates HRM.
-        // SHIFT mods keep no require-prior-idle-ms (capitals must fire
-        // mid-burst) but inherit the tighter term and longer quick-tap.
+        //   A,S,D,K,L (GUI/Alt/Ctrl) = "tap-preferred": the mod fires ONLY
+        //     if you HOLD past the term — release order is ignored, so
+        //     fast rolls ("any","ld","sd"...) can never trigger a mod.
+        //     No hold-trigger-on-release (incoherent with tap-preferred).
+        //     Cross-hand positional kept for same-hand safety.
+        //   L (Alt) additionally drops D from its list -> Alt+D is fully
+        //     blocked (was firing by accident on "hold/world/old"); real
+        //     Alt+D is the voice key on MMOVE now (hm_lalt).
+        //   ' (GUI) = "balanced" but trigger list = THUMBS ONLY -> '+Space
+        //     fires Cmd+Space (Spotlight) INSTANTLY, while '+any letter
+        //     can't hold, so contractions ("it's","don't","I'm") never
+        //     misfire Cmd (hm_apos).
+        //   F,J (Shift) = "balanced", no require-prior-idle, term 280 —
+        //     capitals stay snappy; unchanged.
 
         // Non-shift home row mod, LEFT hand. Used for S (LALT), D (LCTRL).
-        // (A has its own behavior — hm_a — see below.)
+        // tap-preferred: hold past 300ms to mod; rolls never trigger.
         hm_l: home_row_mod_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "balanced";
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
-            require-prior-idle-ms = <200>;
-            hold-trigger-on-release;
+            flavor = "tap-preferred";
+            tapping-term-ms = <300>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <150>;
             hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
-        // Dedicated behavior for A (LGUI), the left pinky — the finger
-        // that lingers most, so A is the worst HRM misfire surface.
+        // A (LGUI), left pinky — the worst HRM roll surface. The pinky
+        // lifts LAST, so in any "a_" cross-hand roll ("any", "all",
+        // "and"...) you release the OTHER key before A. `balanced` reads
+        // that as "other key released while mod still held" -> deliberate
+        // hold -> fires Cmd ("any" -> Cmd+N, "all" -> Cmd+L). Neither the
+        // cross-hand positional list (A+N is already cross-hand) nor
+        // require-prior-idle (blind to post-pause word-starts) can stop it.
         //
-        // HISTORY / why this is a separate behavior:
-        //   A previously used flavor="tap-preferred" + hold-trigger-on-
-        //   release. That combination is INCOHERENT and silently defeats
-        //   the cross-hand guard: hold-trigger-on-release only records
-        //   "what key followed A" on that key's RELEASE, but tap-preferred
-        //   decides HOLD the instant the timer expires (ignoring other
-        //   keypresses entirely — see behavior_hold_tap.c decide_tap_
-        //   preferred + decide_positional_hold). At timer expiry the
-        //   position is still unrecorded, so the positional guard is
-        //   skipped and Cmd fired on ANY linger — same-hand ("away" a+w,
-        //   "around" a+r) and cross-hand ("alone"/"alot" a+l) alike.
+        // GOLDILOCKS FIX (researched: sunaku, urob #71, ZMK source): give
+        // the pinky `flavor = "tap-preferred"`. It IGNORES release order
+        // entirely and only fires a hold on the tapping-term TIMER. So a
+        // roll (A released within 280ms) is ALWAYS a tap, regardless of
+        // pinky-lifts-last. Deliberate left-Cmd still works: hold A past
+        // 280ms, then the next key. This is the ONLY mechanism that
+        // actually targets cross-hand-bigram rolls into a pinky mod.
         //
-        // FIX: the coherent urob/ZMK stack — balanced + hold-trigger-on-
-        //   release + cross-hand positions. balanced resolves a natural
-        //   roll (release A before the next key) to a TAP, and the
-        //   positional guard actually works because the decision is
-        //   deferred to the right moment. A gets urob's longer 280ms
-        //   term (vs 200 on the other mods): a longer term is MORE
-        //   forgiving of pinky linger before a timer-hold, which is
-        //   exactly what the pinky needs. quick-tap 175 / prior-idle 150
-        //   are urob's shipped values.
-        //   If "alone"/"alot" still misfire on an unusual release order,
-        //   the next escalation is to drop K/L/' (17/18/19) from A's
-        //   trigger list so a+l can never hold.
+        // hold-trigger-on-release is DROPPED — it's incoherent with
+        // tap-preferred (records the next key only on its release, which
+        // tap-preferred never consults; was the source of the original
+        // misfire). Positional list kept (full, = hm_l) for same-hand
+        // safety. Only the LEFT pinky changes: the other fingers stay
+        // `balanced` (they roll far less and keep snappy shortcuts), and
+        // the right GUI (') stays balanced so '+Space (Spotlight) keeps
+        // firing instantly. Cost: deliberate left-Cmd+key needs A held
+        // ~280ms first — fine, since Spotlight lives on '.
         hm_a: home_row_mod_a {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "balanced";
-            tapping-term-ms = <280>;
-            quick-tap-ms = <175>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <300>;
+            quick-tap-ms = <150>;
             require-prior-idle-ms = <150>;
-            hold-trigger-on-release;
             hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
-        // Non-shift home row mod, RIGHT hand. Used for K (LCTRL), L (LALT), ' (LGUI).
+        // K (LCTRL), right hand. tap-preferred, full cross-hand list.
         hm_r: home_row_mod_right {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "balanced";
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
-            require-prior-idle-ms = <200>;
-            hold-trigger-on-release;
+            flavor = "tap-preferred";
+            tapping-term-ms = <300>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <150>;
             hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
-        // SHIFT home row mods. Same pattern as hm_l/hm_r but no
-        // require-prior-idle-ms — capitals need to fire instantly even
-        // mid-typing-burst.
+        // L (LALT), right hand. Same as hm_r but D (pos 12) is REMOVED
+        // from the trigger list, so L + D can never hold -> Alt+D fully
+        // blocked (it was firing by accident on "ld" rolls: hold, world,
+        // field, old, told). Intentional Alt+D is the voice key on MMOVE.
+        hm_lalt: home_row_mod_l_alt {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <300>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <150>;
+            hold-trigger-key-positions = <0 1 2 3 4 10 11 13 14 20 21 22 23 24 30 31 32 33 34 35 36 37 38>;
+            bindings = <&kp>, <&kp>;
+        };
+        // ' (LGUI), right pinky. SPECIAL: balanced, but trigger list is
+        // THUMBS ONLY (30-38). So '+Space fires Cmd+Space (Spotlight)
+        // instantly, while '+any LETTER is forced to a tap -> contractions
+        // ("it's","don't","I'm","you're") can never misfire Cmd+S/T/M/R.
+        // balanced (not tap-preferred) is required so '+Space resolves
+        // instantly instead of needing a held term.
+        hm_apos: home_row_mod_apos {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <300>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <150>;
+            hold-trigger-on-release;
+            hold-trigger-key-positions = <30 31 32 33 34 35 36 37 38>;
+            bindings = <&kp>, <&kp>;
+        };
+        // SHIFT home row mods (F, J): balanced + cross-hand + hold-
+        // trigger-on-release, no require-prior-idle (capitals fire
+        // mid-burst).
+        //
+        // Why balanced and not hold-preferred: F is BOTH the letter 'f'
+        // and Shift, and at speed the keypresses overlap, so "fast
+        // f-word" and "fast capital" are the same motion. hold-preferred
+        // (fire Shift on the next keypress) made capitals reliable but
+        // OVER-capitalized fast f/j-words ("for" -> "Or"). balanced keeps
+        // f/j-words correct.
+        // The trade: a fast capital where you release F before the letter
+        // resolves to a tap ("I" -> "fi"). For a guaranteed capital, hold
+        // F a hair longer — release the LETTER before Shift. That's the
+        // standard home-row-shift motion, and the better trade here since
+        // a wrong capital mid-word is more disruptive than briefly holding
+        // shift on purpose. (There is no flavor that splits the two — they
+        // are the only two decision points the hold-tap has.)
         hm_shift_l: hm_shift_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
+            tapping-term-ms = <280>;
+            quick-tap-ms = <150>;
             hold-trigger-on-release;
             hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
@@ -391,8 +402,8 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <200>;
-            quick-tap-ms = <200>;
+            tapping-term-ms = <280>;
+            quick-tap-ms = <150>;
             hold-trigger-on-release;
             hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
@@ -448,7 +459,7 @@
             label = "QWRT";
             bindings = <
 &kp Q       &kp W       &kp E        &kp R        &kp T                                    &kp Y          &kp U          &kp I        &kp O       &kp P
-&hm_a LGUI A  &hm_l LALT S  &hm_l LCTRL D  &hm_shift_l LSHFT F  &kp G                        &kp H  &hm_shift_r LSHFT J  &hm_r LCTRL K  &hm_r LALT L  &hm_r LGUI APOS
+&hm_a LGUI A  &hm_l LALT S  &hm_l LCTRL D  &hm_shift_l LSHFT F  &kp G                        &kp H  &hm_shift_r LSHFT J  &hm_r LCTRL K  &hm_lalt LALT L  &hm_apos LGUI APOS
 &lt MOUSE Z &kp X       &kp C        &kp V        &kp B                                    &kp N          &kp M          &kp COMMA    &kp DOT     &lt MOUSE SLASH
 &kp GLOBE   &none       &none        &kp ESC      &lt ARROW BACKSPACE  &lt FUN TAB         &lt SYM ENTER  &lt NUM SPACE                           &game_td
             >;
@@ -498,7 +509,7 @@
             label = "ARROW";
             bindings = <
 &trans    &trans               &trans     &trans              &bt BT_CLR             &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&kp LGUI  &kp LALT             &kp LCTRL  &kp LSHFT           &trans                 &kp CAPS      &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT
+&kp LGUI  &kp LALT             &kp LCTRL  &kp LSHFT           &kp CAPS               &kp LEFT      &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT
 &trans    &kp K_VOLUME_DOWN    &kp K_MUTE &kp K_VOLUME_UP     &kp LC(LS(LA(LG(M))))  &kp INS       &kp HOME      &kp PG_DN     &kp PG_UP     &kp END
 &trans    &trans               &trans     &trans              &trans  &trans         &trans  &trans                                          &trans
             >;
@@ -576,7 +587,7 @@
             bindings = <
 &kp LG(LA(EQUAL))   &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &kp LG(LA(MINUS))                       &kp LG(LA(EQUAL))  &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(LA(MINUS))
 &kp LC(LEFT)        &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &kp LC(RIGHT)                           &kp LC(LEFT)       &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LC(RIGHT)
-&msc SCRL_LEFT      &msc SCRL_RIGHT     &msc SCRL_UP    &msc SCRL_DOWN    &none                                   &none          &msc SCRL_DOWN &msc SCRL_UP   &msc SCRL_LEFT      &msc SCRL_RIGHT
+&msc SCRL_LEFT      &msc SCRL_RIGHT     &msc SCRL_UP    &msc SCRL_DOWN    &kp LA(D)                               &kp LA(D)      &msc SCRL_DOWN &msc SCRL_UP   &msc SCRL_LEFT      &msc SCRL_RIGHT
 &none               &none               &none           &tog MOUSEMOVE    &mkp LCLK        &mkp RCLK              &mkp RCLK      &mkp LCLK                                        &none
             >;
         };

@@ -215,8 +215,8 @@ layers:
   - $$mdi:apple-keyboard-option$$
   - $$mdi:apple-keyboard-control$$
   - $$mdi:apple-keyboard-shift$$
-  - {t: '$$mdi:transfer$$', type: trans}
   - $$mdi:apple-keyboard-caps$$
+  - $$mdi:arrow-left-bold$$
   - $$mdi:arrow-left-bold$$
   - $$mdi:arrow-down-bold$$
   - $$mdi:arrow-up-bold$$
@@ -385,8 +385,8 @@ layers:
   - $$mdi:pan-right$$
   - $$mdi:pan-up$$
   - $$mdi:pan-down$$
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - Alt+D
+  - Alt+D
   - $$mdi:pan-down$$
   - $$mdi:pan-up$$
   - $$mdi:pan-left$$

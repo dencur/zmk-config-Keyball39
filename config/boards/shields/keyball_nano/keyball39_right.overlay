@@ -15,6 +15,10 @@
 
 &kscan0 {
 	wakeup-source;
+	// Match the left half's chatter mitigation: release-debounce 8ms
+	// (default 5). Keeps both halves consistent and pre-empts right-side
+	// switch chatter / jitter. Imperceptible latency on release.
+	debounce-release-ms = <8>;
 	col-gpios
 		= <&pro_micro 4 GPIO_ACTIVE_HIGH>
 		, <&pro_micro 5 GPIO_ACTIVE_HIGH>
