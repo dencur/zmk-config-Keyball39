@@ -29,21 +29,24 @@
 #include <dt-bindings/zmk/pointing.h>
 #include <input/processors.dtsi>
 
+// Layer-taps: matches QMK LT() defaults on the Charybdis (tap-preferred
+// semantics, 200ms term, 200ms quick-tap-repeat).
 &lt {
     tapping-term-ms = <200>;
     flavor = "tap-preferred";
-    quick-tap-ms = <150>;
+    quick-tap-ms = <200>;
 };
 
 // Default &mt override. NOTE: the home-row mods do NOT use &mt — they use
-// the dedicated hm_l / hm_a / hm_r / hm_shift_* hold-taps below. This block
-// only affects any bare `&mt` bindings (currently none), so it's effectively
-// inert; kept for safety in case a plain &mt is added later.
+// the dedicated hm_* hold-taps below. This block only affects any bare
+// `&mt` bindings (currently none). DANGER averted: stock ZMK &mt is
+// hold-preferred (fires mod on next keypress — the opposite of the
+// Charybdis feel), so this override pins it to the same Charybdis-parity
+// values as the hm_* behaviors in case a bare &mt is ever added.
 &mt {
-    tapping-term-ms = <150>;
+    tapping-term-ms = <200>;
     flavor = "tap-preferred";
-    quick-tap-ms = <150>;
-    require-prior-idle-ms = <150>;
+    quick-tap-ms = <200>;
 };
 
 &msc {
@@ -124,6 +127,60 @@
             bindings = <&tog MOUSE>;
             layers = <DEFAULT MOUSE>;
         };
+        // Same chords FROM MMOVE: lock MOUSE on and drop MMOVE
+        // underneath, so when MOUSE later exits (click / ESC-position)
+        // you land on QWRT, not back in MMOVE. Mirrors the QWRT-side
+        // muscle memory (Z+X / .+/) inside the mouse-move layer.
+        combo_left_mouse_mm {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <20 21>; // Z + X (on MMOVE)
+            bindings = <&mouse_lock_mm>;
+            layers = <MOUSEMOVE>;
+        };
+        combo_right_mouse_mm {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <28 29>; // . + / (on MMOVE)
+            bindings = <&mouse_lock_mm>;
+            layers = <MOUSEMOVE>;
+        };
+
+        // Horizontal scroll chords on MMOVE — 4 directions from 3 keys
+        // per hand. Rule: "lean the pair toward the direction":
+        //   left hand:  X+C = scroll left,  C+V = scroll right
+        //   right hand: M+, = scroll left,  ,+. = scroll right
+        // Hold the chord to keep scrolling (same as the 3-finger
+        // combos). No require-prior-idle — MMOVE is a nav layer, no
+        // typing rolls to guard against, and an idle gate would block
+        // chording right after a vertical scroll. 50ms window for an
+        // easy deliberate two-finger press. (Copy/paste X+C / C+V
+        // combos are QWRT-only now; on MMOVE these positions scroll.
+        // X+V cut, D+F del, A+S select-all still work on MMOVE.)
+        combo_hscroll_left_l {
+            timeout-ms = <50>;
+            key-positions = <21 22>; // X + C (on MMOVE)
+            bindings = <&msc SCRL_LEFT>;
+            layers = <MOUSEMOVE>;
+        };
+        combo_hscroll_right_l {
+            timeout-ms = <50>;
+            key-positions = <22 23>; // C + V (on MMOVE)
+            bindings = <&msc SCRL_RIGHT>;
+            layers = <MOUSEMOVE>;
+        };
+        combo_hscroll_left_r {
+            timeout-ms = <50>;
+            key-positions = <26 27>; // M + , (on MMOVE)
+            bindings = <&msc SCRL_LEFT>;
+            layers = <MOUSEMOVE>;
+        };
+        combo_hscroll_right_r {
+            timeout-ms = <50>;
+            key-positions = <27 28>; // , + . (on MMOVE)
+            bindings = <&msc SCRL_RIGHT>;
+            layers = <MOUSEMOVE>;
+        };
 
         // Three-finger scroll combos, active on QWRT and MMOVE. Looser
         // 50ms window than the 2-key combos — a 3-key chord is harder
@@ -143,28 +200,28 @@
             require-prior-idle-ms = <250>;
             key-positions = <6 7 8>;     // U + I + O
             bindings = <&msc SCRL_UP>;
-            layers = <DEFAULT MOUSEMOVE>;
+            layers = <DEFAULT>;
         };
         combo_scroll_down {
             timeout-ms = <50>;
             require-prior-idle-ms = <250>;
             key-positions = <26 27 28>;  // M + , + .
             bindings = <&msc SCRL_DOWN>;
-            layers = <DEFAULT MOUSEMOVE>;
+            layers = <DEFAULT>;
         };
         combo_scroll_up_left {
             timeout-ms = <50>;
             require-prior-idle-ms = <250>;
             key-positions = <1 2 3>;     // W + E + R
             bindings = <&msc SCRL_UP>;
-            layers = <DEFAULT MOUSEMOVE>;
+            layers = <DEFAULT>;
         };
         combo_scroll_down_left {
             timeout-ms = <50>;
             require-prior-idle-ms = <250>;
             key-positions = <21 22 23>;  // X + C + V
             bindings = <&msc SCRL_DOWN>;
-            layers = <DEFAULT MOUSEMOVE>;
+            layers = <DEFAULT>;
         };
 
         // Two-key action combos. 25ms window (the standard 2-key combo
@@ -227,14 +284,14 @@
             require-prior-idle-ms = <250>;
             key-positions = <21 22>;     // X + C
             bindings = <&kp LG(C)>;
-            layers = <DEFAULT MOUSEMOVE>;
+            layers = <DEFAULT>;
         };
         combo_paste_cv {
             timeout-ms = <25>;
             require-prior-idle-ms = <250>;
             key-positions = <22 23>;     // C + V
             bindings = <&kp LG(V)>;
-            layers = <DEFAULT MOUSEMOVE>;
+            layers = <DEFAULT>;
         };
         combo_cut_xv {
             timeout-ms = <25>;
@@ -260,152 +317,129 @@
     };
 
     behaviors {
-        // === Home row mods — flavor matched PER FINGER ===
-        // Not one-size-fits-all: each modifier gets the flavor that fits
-        // how destructive/time-critical it is and how much that finger
-        // rolls. Common params: quick-tap-ms 150, require-prior-idle-ms
-        // 150 (non-shift), tapping-term-ms 300 (a deliberate-hold window;
-        // "additional hold requirement" so accidental taps don't mod).
+        // === Home row mods — CHARYBDIS PARITY (QMK-default port) ===
+        // The user's Charybdis Nano (QMK bkb-master @ 0.24.7, keymap
+        // "cdmap") runs 100% stock QMK tap-hold: TAPPING_TERM 200,
+        // QUICK_TAP_TERM 200, no PERMISSIVE_HOLD, no HOLD_ON_OTHER_KEY_
+        // PRESS, no chordal/positional anything. Its feel — which the
+        // user calls "absolutely spot on, perfect" — is ONE rule on
+        // every finger:
         //
-        //   A,S,D,K,L (GUI/Alt/Ctrl) = "tap-preferred": the mod fires ONLY
-        //     if you HOLD past the term — release order is ignored, so
-        //     fast rolls ("any","ld","sd"...) can never trigger a mod.
-        //     No hold-trigger-on-release (incoherent with tap-preferred).
-        //     Cross-hand positional kept for same-hand safety.
-        //   L (Alt) additionally drops D from its list -> Alt+D is fully
-        //     blocked (was firing by accident on "hold/world/old"); real
-        //     Alt+D is the voice key on MMOVE now (hm_lalt).
-        //   ' (GUI) = "balanced" but trigger list = THUMBS ONLY -> '+Space
-        //     fires Cmd+Space (Spotlight) INSTANTLY, while '+any letter
-        //     can't hold, so contractions ("it's","don't","I'm") never
-        //     misfire Cmd (hm_apos).
-        //   F,J (Shift) = "balanced", no require-prior-idle, term 280 —
-        //     capitals stay snappy; unchanged.
+        //   Hold the key past 200ms -> modifier (any letters pressed in
+        //   the meantime are queued and come out WITH the mod).
+        //   Release before 200ms -> letters. Release order, roll
+        //   direction, typing flow: all irrelevant. Pure timer.
+        //
+        // ZMK equivalent (verified line-by-line against QMK
+        // action_tapping.c and ZMK behavior_hold_tap.c): flavor =
+        // "tap-preferred", tapping-term-ms 200, quick-tap-ms 200, NO
+        // require-prior-idle-ms, NO hold-trigger-key-positions, NO
+        // hold-trigger-on-release. The earlier per-finger flavor mix +
+        // 280-300ms terms + idle gates + cross-hand lists were the
+        // source of "takes too long" / "missed capitals" / inconsistent
+        // feel: the lists outright forced same-hand capitals (F held +
+        // R) and same-hand chords (A held + C = Cmd+C) to TAP unless
+        // the mod was held ALONE first, and the mixed flavors meant no
+        // single muscle-memory rule worked everywhere.
+        //
+        // Capitals under parity: press F, press the letter any time,
+        // keep F down until 200ms from F-down -> capital (the letter is
+        // captured and replayed shifted). Same as the Charybdis.
+        //
+        // TWO deliberate non-parity islands (explicit user requests):
+        //   hm_lalt (L): keeps a positions list of everything-except-D,
+        //     so an L+D overlap inside the decision window can't fire
+        //     Alt+D (= macOS dictation; the deliberate voice key lives
+        //     on MMOVE). Hold L alone past 200ms then D still works.
+        //   hm_apos ('): stays balanced + thumbs-only list + rpi 150 so
+        //     '+Space = Cmd+Space (Spotlight) fires INSTANTLY on Space
+        //     release, while '+letter can never mod (contractions safe).
+        //
+        // Tuning dial if mid-word linger-mods ever materialize: add
+        // require-prior-idle-ms <100-150> to the NON-shift mods only
+        // (QMK can't express it, but it only acts mid-burst). Ship
+        // strict parity first.
 
-        // Non-shift home row mod, LEFT hand. Used for S (LALT), D (LCTRL).
-        // tap-preferred: hold past 300ms to mod; rolls never trigger.
+        // S (LALT), D (LCTRL) — left hand.
         hm_l: home_row_mod_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <300>;
-            quick-tap-ms = <150>;
-            require-prior-idle-ms = <150>;
-            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
-        // A (LGUI), left pinky — the worst HRM roll surface. The pinky
-        // lifts LAST, so in any "a_" cross-hand roll ("any", "all",
-        // "and"...) you release the OTHER key before A. `balanced` reads
-        // that as "other key released while mod still held" -> deliberate
-        // hold -> fires Cmd ("any" -> Cmd+N, "all" -> Cmd+L). Neither the
-        // cross-hand positional list (A+N is already cross-hand) nor
-        // require-prior-idle (blind to post-pause word-starts) can stop it.
-        //
-        // GOLDILOCKS FIX (researched: sunaku, urob #71, ZMK source): give
-        // the pinky `flavor = "tap-preferred"`. It IGNORES release order
-        // entirely and only fires a hold on the tapping-term TIMER. So a
-        // roll (A released within 280ms) is ALWAYS a tap, regardless of
-        // pinky-lifts-last. Deliberate left-Cmd still works: hold A past
-        // 280ms, then the next key. This is the ONLY mechanism that
-        // actually targets cross-hand-bigram rolls into a pinky mod.
-        //
-        // hold-trigger-on-release is DROPPED — it's incoherent with
-        // tap-preferred (records the next key only on its release, which
-        // tap-preferred never consults; was the source of the original
-        // misfire). Positional list kept (full, = hm_l) for same-hand
-        // safety. Only the LEFT pinky changes: the other fingers stay
-        // `balanced` (they roll far less and keep snappy shortcuts), and
-        // the right GUI (') stays balanced so '+Space (Spotlight) keeps
-        // firing instantly. Cost: deliberate left-Cmd+key needs A held
-        // ~280ms first — fine, since Spotlight lives on '.
+        // A (LGUI) — left pinky.
         hm_a: home_row_mod_a {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <300>;
-            quick-tap-ms = <150>;
-            require-prior-idle-ms = <150>;
-            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
-        // K (LCTRL), right hand. tap-preferred, full cross-hand list.
+        // K (LCTRL) — right hand.
         hm_r: home_row_mod_right {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <300>;
-            quick-tap-ms = <150>;
-            require-prior-idle-ms = <150>;
-            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34 35 36 37 38>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
-        // L (LALT), right hand. Same as hm_r but D (pos 12) is REMOVED
-        // from the trigger list, so L + D can never hold -> Alt+D fully
-        // blocked (it was firing by accident on "ld" rolls: hold, world,
-        // field, old, told). Intentional Alt+D is the voice key on MMOVE.
+        // L (LALT) — non-parity island #1: list = everything except D
+        // (pos 12) so an L+D overlap in the window can't fire Alt+D
+        // (dictation). See header comment.
         hm_lalt: home_row_mod_l_alt {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <300>;
-            quick-tap-ms = <150>;
-            require-prior-idle-ms = <150>;
-            hold-trigger-key-positions = <0 1 2 3 4 10 11 13 14 20 21 22 23 24 30 31 32 33 34 35 36 37 38>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
+            hold-trigger-key-positions = <0 1 2 3 4 5 6 7 8 9 10 11 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
-        // ' (LGUI), right pinky. SPECIAL: balanced, but trigger list is
-        // THUMBS ONLY (30-38). So '+Space fires Cmd+Space (Spotlight)
-        // instantly, while '+any LETTER is forced to a tap -> contractions
-        // ("it's","don't","I'm","you're") can never misfire Cmd+S/T/M/R.
-        // balanced (not tap-preferred) is required so '+Space resolves
-        // instantly instead of needing a held term.
+        // ' (LGUI) — non-parity island #2: balanced + a curated list.
+        // Listed keys resolve Cmd INSTANTLY (on the key's release, like
+        // Spotlight); everything else is forced to tap. List = thumbs
+        // (30-38, '+Space Spotlight) + the left-hand edit cluster the
+        // user chords through ' all day:
+        //   10=A select-all, 13=F find, 20=Z undo, 21=X cut,
+        //   22=C copy, 23=V paste
+        // These are the letters that (almost) never follow an apostrophe
+        // in English. The real contraction letters stay OUT and can
+        // never mod: S('s), T('t), D('d), R/E('re), M('m), L('ll).
+        // Edge words ("I've", "o'clock", "y'all") are still protected
+        // in-flow by require-prior-idle-ms 150 — mid-word, ' is forced
+        // to tap before the list is even consulted.
         hm_apos: home_row_mod_apos {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <300>;
-            quick-tap-ms = <150>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
             require-prior-idle-ms = <150>;
             hold-trigger-on-release;
-            hold-trigger-key-positions = <30 31 32 33 34 35 36 37 38>;
+            hold-trigger-key-positions = <10 13 20 21 22 23 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
-        // SHIFT home row mods (F, J): balanced + cross-hand + hold-
-        // trigger-on-release, no require-prior-idle (capitals fire
-        // mid-burst).
-        //
-        // Why balanced and not hold-preferred: F is BOTH the letter 'f'
-        // and Shift, and at speed the keypresses overlap, so "fast
-        // f-word" and "fast capital" are the same motion. hold-preferred
-        // (fire Shift on the next keypress) made capitals reliable but
-        // OVER-capitalized fast f/j-words ("for" -> "Or"). balanced keeps
-        // f/j-words correct.
-        // The trade: a fast capital where you release F before the letter
-        // resolves to a tap ("I" -> "fi"). For a guaranteed capital, hold
-        // F a hair longer — release the LETTER before Shift. That's the
-        // standard home-row-shift motion, and the better trade here since
-        // a wrong capital mid-word is more disruptive than briefly holding
-        // shift on purpose. (There is no flavor that splits the two — they
-        // are the only two decision points the hold-tap has.)
+        // F, J (LSHFT) — full parity, same pure 200ms timer as the
+        // other mods. Capitals are timer-gated exactly like on the
+        // Charybdis: press F, press the letter, keep F down to 200ms.
         hm_shift_l: hm_shift_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "balanced";
-            tapping-term-ms = <280>;
-            quick-tap-ms = <150>;
-            hold-trigger-on-release;
-            hold-trigger-key-positions = <5 6 7 8 9 15 16 17 18 19 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
         hm_shift_r: hm_shift_right {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
-            flavor = "balanced";
-            tapping-term-ms = <280>;
-            quick-tap-ms = <150>;
-            hold-trigger-on-release;
-            hold-trigger-key-positions = <0 1 2 3 4 10 11 12 13 14 20 21 22 23 24 30 31 32 33 34 35 36 37 38>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
 
@@ -450,6 +484,31 @@
                 , <&tog MOUSE>
                 ;
         };
+
+        // MMOVE -> MOUSE handoff keys (bound on MMOVE Z and /).
+        // Hold: drop out of MMOVE, momentarily activate MOUSE; on
+        // release, fall through to QWRT — mirroring the QWRT-side
+        // "hold Z / hold SLASH for MOUSE" muscle memory from inside
+        // the mouse-move layer. A quick tap = exit MMOVE to QWRT
+        // (brief MOUSE blip, harmless).
+        mouse_hold_mm: mouse_hold_from_mmove {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings
+                = <&macro_tap &tog MOUSEMOVE>
+                , <&macro_press &mo MOUSE>
+                , <&macro_pause_for_release>
+                , <&macro_release &mo MOUSE>
+                ;
+        };
+        // Z+X / .+/ chord from MMOVE: lock MOUSE on and turn MMOVE
+        // off underneath — exiting MOUSE later (click / ESC-position)
+        // lands on QWRT.
+        mouse_lock_mm: mouse_lock_from_mmove {
+            compatible = "zmk,behavior-macro";
+            #binding-cells = <0>;
+            bindings = <&macro_tap &tog MOUSEMOVE &tog MOUSE>;
+        };
     };
 
     keymap {
@@ -469,7 +528,7 @@
             label = "GAME";
             bindings = <
 &kp Q         &kp W     &kp E        &kp R        &kp T                                    &kp Y          &kp U          &kp I        &kp O       &kp P
-&hm_l LGUI A    &kp S     &kp D        &kp F        &kp G                                    &kp H          &hm_shift_r LSHFT J  &kp K        &hm_r LALT L  &kp APOS
+&kp A         &kp S     &kp D        &kp F        &kp G                                    &kp H          &kp J          &kp K        &kp L       &kp APOS
 &lt MOUSE Z   &kp X     &kp C        &kp V        &kp B                                    &kp N          &kp M          &kp COMMA    &kp DOT     &lt MOUSE SLASH
 &kp LCTRL     &kp LALT  &kp LSHFT    &kp ESC      &lt ARROW BACKSPACE  &lt FUN TAB         &lt SYM ENTER  &lt NUM SPACE                           &to DEFAULT
             >;
@@ -557,9 +616,13 @@
         // Vertical scroll (bottom row, finger-natural — middle=up, index=down):
         //   left:  C=scroll up,  V=scroll down
         //   right: M=scroll down, ,=scroll up
-        // Horizontal scroll on the bottom-row pinky pairs:
-        //   left:  Z=scroll left, X=scroll right
-        //   right: .=scroll left, /=scroll right
+        // MOUSE handoff (mirrors QWRT muscle memory, see mouse_hold_mm):
+        //   hold Z or / = momentary MOUSE, release -> QWRT
+        //   Z+X or .+/ chord = lock MOUSE, exit lands on QWRT
+        // Horizontal scroll — chorded on the 3 vertical-scroll keys,
+        // "lean the pair toward the direction" (see combos block):
+        //   left hand:  X+C = left, C+V = right (C/V singles = up/down)
+        //   right hand: M+, = left, ,+. = right (,/M singles = up/down)
         // macOS Accessibility Zoom (Cmd+Opt+= / Cmd+Opt+-):
         //   Q and Y  = zoom in
         //   T and P  = zoom out
@@ -587,7 +650,7 @@
             bindings = <
 &kp LG(LA(EQUAL))   &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &kp LG(LA(MINUS))                       &kp LG(LA(EQUAL))  &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(LA(MINUS))
 &kp LC(LEFT)        &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &kp LC(RIGHT)                           &kp LC(LEFT)       &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LC(RIGHT)
-&msc SCRL_LEFT      &msc SCRL_RIGHT     &msc SCRL_UP    &msc SCRL_DOWN    &kp LA(D)                               &kp LA(D)      &msc SCRL_DOWN &msc SCRL_UP   &msc SCRL_LEFT      &msc SCRL_RIGHT
+&mouse_hold_mm      &none               &msc SCRL_UP    &msc SCRL_DOWN    &kp LA(D)                               &kp LA(D)      &msc SCRL_DOWN &msc SCRL_UP   &none               &mouse_hold_mm
 &none               &none               &none           &tog MOUSEMOVE    &mkp LCLK        &mkp RCLK              &mkp RCLK      &mkp LCLK                                        &none
             >;
         };

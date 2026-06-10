@@ -51,15 +51,15 @@ layers:
   - I
   - O
   - P
-  - {t: A, h: LGUI}
+  - A
   - S
   - D
   - F
   - G
   - H
-  - {t: J, h: '$$mdi:apple-keyboard-shift$$'}
+  - J
   - K
-  - {t: L, h: '$$mdi:apple-keyboard-option$$'}
+  - L
   - .
   - {t: Z, h: MOUSE}
   - X
@@ -381,16 +381,16 @@ layers:
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-right$$', s: '$$mdi:mouse$$'}
   - Ctl+$$mdi:arrow-right-bold$$
-  - $$mdi:pan-left$$
-  - $$mdi:pan-right$$
+  - '&mouse_hold_mm'
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
   - $$mdi:pan-up$$
   - $$mdi:pan-down$$
   - Alt+D
   - Alt+D
   - $$mdi:pan-down$$
   - $$mdi:pan-up$$
-  - $$mdi:pan-left$$
-  - $$mdi:pan-right$$
+  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - '&mouse_hold_mm'
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -413,18 +413,36 @@ combos:
 - p: [28, 29]
   k: {t: MOUSE, h: toggle}
   l: [QWRT, MOUSE]
+- p: [20, 21]
+  k: '&mouse_lock_mm'
+  l: [MMOVE]
+- p: [28, 29]
+  k: '&mouse_lock_mm'
+  l: [MMOVE]
+- p: [21, 22]
+  k: $$mdi:pan-left$$
+  l: [MMOVE]
+- p: [22, 23]
+  k: $$mdi:pan-right$$
+  l: [MMOVE]
+- p: [26, 27]
+  k: $$mdi:pan-left$$
+  l: [MMOVE]
+- p: [27, 28]
+  k: $$mdi:pan-right$$
+  l: [MMOVE]
 - p: [6, 7, 8]
   k: $$mdi:pan-up$$
-  l: [QWRT, MMOVE]
+  l: [QWRT]
 - p: [26, 27, 28]
   k: $$mdi:pan-down$$
-  l: [QWRT, MMOVE]
+  l: [QWRT]
 - p: [1, 2, 3]
   k: $$mdi:pan-up$$
-  l: [QWRT, MMOVE]
+  l: [QWRT]
 - p: [21, 22, 23]
   k: $$mdi:pan-down$$
-  l: [QWRT, MMOVE]
+  l: [QWRT]
 - p: [0, 1]
   k: $$mdi:keyboard-esc$$
   l: [QWRT]
@@ -442,10 +460,10 @@ combos:
   l: [QWRT, MMOVE]
 - p: [21, 22]
   k: {t: C, h: '$$mdi:apple-keyboard-command$$'}
-  l: [QWRT, MMOVE]
+  l: [QWRT]
 - p: [22, 23]
   k: {t: V, h: '$$mdi:apple-keyboard-command$$'}
-  l: [QWRT, MMOVE]
+  l: [QWRT]
 - p: [21, 23]
   k: {t: X, h: '$$mdi:apple-keyboard-command$$'}
   l: [QWRT, MMOVE]
