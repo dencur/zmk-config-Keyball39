@@ -423,14 +423,22 @@
             hold-trigger-key-positions = <10 13 20 21 22 23 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
-        // F, J (LSHFT) — full parity, same pure 200ms timer as the
-        // other mods. Capitals are timer-gated exactly like on the
-        // Charybdis: press F, press the letter, keep F down to 200ms.
+        // F, J (LSHFT) — same tap-preferred timer as the other mods but
+        // with a PER-FINGER shorter term: 170ms instead of 200.
+        // Rationale: the user hits shift very rapidly and was releasing
+        // F/J just before the 200ms mark -> "fi" instead of "I".
+        // Index fingers are the fastest fingers; sunaku's Glorious
+        // Engrammer ships index=180 on tap-preferred; user opted one
+        // notch below. 170 rescues releases in the 170-200ms band
+        // where the misses live.
+        // Tuning ladder if "fi" persists: 160 next, 150 is the hard
+        // floor (below that, a slow deliberate 'f' letter-tap starts
+        // registering as Shift and plain letters get dropped).
         hm_shift_l: hm_shift_left {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <200>;
+            tapping-term-ms = <170>;
             quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
@@ -438,7 +446,7 @@
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
-            tapping-term-ms = <200>;
+            tapping-term-ms = <170>;
             quick-tap-ms = <200>;
             bindings = <&kp>, <&kp>;
         };
