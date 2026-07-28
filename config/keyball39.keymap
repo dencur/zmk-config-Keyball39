@@ -844,7 +844,7 @@
 &mo BEN_MOUSE    &none                &none                 &none                &none                                &none          &none                 &none                 &none                 &mo BEN_MOUSE
 &none            &ben_hm_l LCTRL L    &ben_hm_l LALT G      &ben_hm_l LGUI D     &none                                &none          &ben_hm_r RGUI H      &ben_hm_r RALT U      &ben_hm_r RCTRL O     &none
 &ben_hl_l BEN_NUM I  &ben_hl_l BEN_S2 S  &ben_hl_l BEN_S1 R  &ben_hl_l BEN_SYS T  &none                                &none          &ben_hl_r BEN_SYS N   &ben_hl_r BEN_S1 E    &ben_hl_r BEN_S2 A    &ben_hl_r BEN_NUM C
-&to DEFAULT      &none                &none                 &none                &mt LC(LS(LALT)) SPACE  &key_repeat   &ben_sl BEN_A2U    &ben_sl BEN_A2                                                       &to DEFAULT
+&to DEFAULT      &none                &none                 &none                &kp BSPC             &ben_sl BEN_A2U  &ben_sl BEN_A2   &mt LC(LS(LALT)) SPACE                                              &to DEFAULT
             >;
         };
 
@@ -856,7 +856,7 @@
 &none            &none        &none        &none        &none                                       &none          &none          &none          &none          &none
 &none            &kp V        &kp W        &kp M        &none                                       &none          &kp F          &kp SQT        &kp Z          &none
 &kp Q            &kp J        &kp P        &kp K        &none                                       &none          &kp B          &kp DOT        &kp X          &kp Y
-&to DEFAULT      &none        &none        &none        &ben_sk LSHFT        &none                  &none          &ben_sl BEN_A2U                                  &to DEFAULT
+&to DEFAULT      &none        &none        &none        &trans               &ben_sk LSHFT          &trans         &trans                                           &to DEFAULT
             >;
         };
 
@@ -897,7 +897,7 @@
 &none                  &none                &none                 &none                  &none                        &none    &none                &none        &none                          &none
 &none                  &kp ESC              &kp LC(LS(TAB))       &kp RC(TAB)            &none                        &none    &ben_td LG(V) LG(C)  &kp UP       &ben_td Q BSPC                 &none
 &ben_td LG(GRAVE) TAB  &ben_td HOME DEL     &ben_td END LG(LBKT)  &kp LG(RBKT)           &none                        &none    &ben_td TAB LEFT     &kp DOWN     &ben_td LC(LG(LS(N4))) RIGHT   &kp RET
-&to DEFAULT            &none                &none                 &none                  &ben_sr LSHFT BEN   &none     &none    &kp RGUI                                                        &to DEFAULT
+&to DEFAULT            &none                &none                 &none                  &ben_sr LSHFT BEN   &none     &key_repeat  &kp RGUI                                                    &to DEFAULT
             >;
         };
 
@@ -924,7 +924,7 @@
 &none            &none        &none        &none        &none                                       &none          &none          &none          &none          &none
 &none            &kp LS(V)    &kp LS(W)    &kp LS(M)    &none                                       &none          &kp LS(F)      &kp DQT        &kp LS(Z)      &none
 &kp LS(Q)        &kp LS(J)    &kp LS(P)    &kp LS(K)    &none                                       &none          &kp LS(B)      &kp COMMA      &kp LS(X)      &kp LS(Y)
-&to DEFAULT      &none        &none        &none        &trans               &trans                 &trans         &none                                        &to DEFAULT
+&to DEFAULT      &none        &none        &none        &trans               &trans                 &trans         &trans                                       &to DEFAULT
             >;
         };
         // Mouse layer for the Ben profile. The trackball already moves the
