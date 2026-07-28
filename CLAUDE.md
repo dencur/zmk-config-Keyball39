@@ -86,6 +86,32 @@ It is *not* a chording layout. It splits the alphabet across two layers: the 14 
 
 Only 7 finger keys per hand are used — left `S D F Z X C V`, right `J K L M , . /` — plus 4 thumbs. Every other position on every BEN layer is `&none`, so nothing bleeds through from QWRT.
 
+#### The thumb cluster
+
+Rearranged from upstream at the user's request (2026-07-28). Positions 34/35/36/37, left to right:
+
+| layer | 34 `Bspc key` | 35 `Tab key` | 36 `Enter key` | 37 `Space key` |
+|-------|---------------|--------------|----------------|----------------|
+| BEN     | **Backspace** | sticky BEN_A2U | sticky BEN_A2 | **Space** (hold = Ctrl+Shift+Alt) |
+| BEN_A2  | `&trans` → Backspace | **sticky Shift** | `&trans` | `&trans` → Space |
+| BEN_A2U | `&trans` | `&trans` | `&trans` | `&trans` |
+
+Character sequences that follow from this:
+
+| output | presses |
+|--------|---------|
+| alpha1 letter (`etaoinsrhldcug`) | the keycap |
+| alpha2 letter (`vwmfzqjpkbxy`) | `Enter key` → keycap |
+| rare capital | `Tab key` → keycap |
+| common capital | `Enter key` → `Tab key` → keycap |
+| `'` / `"` | `Enter key` / `Tab key` → `K` |
+| `.` / `,` | `Enter key` / `Tab key` → `,` |
+
+Two things not to undo:
+
+- **Sticky Shift must not sit on position 34.** Upstream puts it on the left *outer* thumb, which since the rearrangement is Backspace. `ben_sl` has a 2000 ms window; overrun it and a binding on 34 fires the layer underneath — so sticky Shift there turns an expired prefix into a *destructive* backspace instead of a harmless one. It lives on 35 for exactly that reason.
+- **BEN_A2 / BEN_A2U may use `&trans`; BEN and BEN_BT may not.** The first two are entered with `&ben_sl` (which is `&mo`-based, so BEN stays active underneath and `&trans` resolves to it). The latter two are entered with `&to`, which drops BEN — `&trans` there falls through to QWRT. `scripts/validate_keymap.py` asserts this.
+
 | #  | Name     | How to reach          |
 |----|----------|-----------------------|
 | 10 | BEN      | triple-tap position 38 |
