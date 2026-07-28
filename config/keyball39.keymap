@@ -9,6 +9,27 @@
 #define SNIPE   8
 #define MOUSEMOVE 9
 
+// ── Ben Vallack "Piano" profile ────────────────────────────────────────
+// A complete 18-key alternative layout living on layers 10-17, ported
+// from benvallack/zmk-config-piano. It uses only 7 finger keys per hand
+// (left S D F Z X C V, right J K L M , . /) plus 4 thumbs; every other
+// position is &none so nothing bleeds through from QWRT.
+//
+// The alphabet is SPLIT: the 14 commonest letters (etaoinsrhldcug — ~85%
+// of English) sit on BEN itself, the remaining 12 on BEN_A2, reached by
+// a sticky-layer tap of the right outer thumb. Sub-layers are held from
+// the bottom row exactly as Ben has them.
+//
+// Enter: triple-tap position 38. Exit: single tap of 38 (or 30).
+#define BEN      10   // alpha1  — the 14 common letters + homerow mods
+#define BEN_A2   11   // alpha2  — the 12 rare letters, via sticky layer
+#define BEN_S1   12   // sym1    — hold C / ,
+#define BEN_S2   13   // sym2    — hold X / .
+#define BEN_NUM  14   // num     — hold Z / /
+#define BEN_SYS  15   // sys     — hold V / M  (nav, editing, clicks)
+#define BEN_BT   16   // bt      — bluetooth + &bootloader
+#define BEN_A2U  17   // alpha2 shifted — capitals of the rare letters
+
 // Override max mouse cursor speed for &mmv (default 600 — tuned for 4K).
 // Bumped from 1500 → 2100 (+40%) to match Delta Omega's "big-monitor
 // reach" tuning. Drop back to 1500/600 if too fast. Must precede
@@ -314,6 +335,50 @@
             layers = <DEFAULT>;
         };
 
+        // === Ben "Piano" profile combos ===
+        // Every one is gated to a BEN_* layer. ZMK matches a combo's
+        // `layers` list against the HIGHEST active layer, so a combo
+        // gated to BEN is automatically suppressed while a BEN sub-layer
+        // is held — which is exactly what Ben's config relies on.
+        ben_combo_sys {
+            timeout-ms = <30>;
+            key-positions = <16 17 18>;   // J + K + L
+            bindings = <&to BEN_SYS>;
+            layers = <BEN>;
+        };
+        ben_combo_caps {
+            timeout-ms = <30>;
+            key-positions = <26 27 28>;   // M + , + .
+            bindings = <&caps_word>;
+            layers = <BEN>;
+        };
+        // Escape hatch to the BT/bootloader layer: hold C (SYM1), then
+        // chord , + . — this is the reflash path while living in BEN.
+        ben_combo_bt {
+            timeout-ms = <10>;
+            key-positions = <27 28>;      // , + .
+            bindings = <&to BEN_BT>;
+            layers = <BEN_S1>;
+        };
+        ben_combo_lalt {
+            timeout-ms = <20>;
+            key-positions = <22 23>;      // C + V
+            bindings = <&kp LALT>;
+            layers = <BEN_SYS>;
+        };
+        ben_combo_lclk {
+            timeout-ms = <20>;
+            key-positions = <26 27>;      // M + ,
+            bindings = <&mkp LCLK>;
+            layers = <BEN_SYS>;
+        };
+        ben_combo_rclk {
+            timeout-ms = <20>;
+            key-positions = <16 17>;      // J + K
+            bindings = <&mkp RCLK>;
+            layers = <BEN_SYS>;
+        };
+
     };
 
     behaviors {
@@ -459,7 +524,74 @@
             compatible = "zmk,behavior-tap-dance";
             #binding-cells = <0>;
             tapping-term-ms = <250>;
-            bindings = <&none>, <&to GAME>;
+            bindings = <&none>, <&to GAME>, <&to BEN>;
+        };
+
+        // === Ben "Piano" profile behaviors ===
+        // Verbatim timings from benvallack/zmk-config-piano, kept in
+        // their own ben_* namespace so the Charybdis-parity tuning on
+        // the QWRT homerow mods above is left completely alone.
+        //
+        // NB hold-tap parameter order is <hold>, <tap> — so
+        // `&ben_td Q BSPC` is hold=Q, TAP=backspace.
+        ben_hm_l: ben_homerow_mod_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <300>;
+            quick-tap-ms = <250>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+        ben_hm_r: ben_homerow_mod_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <300>;
+            quick-tap-ms = <250>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+        ben_hl_l: ben_homerow_layer_left {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <220>;
+            quick-tap-ms = <250>;
+            flavor = "tap-preferred";
+            bindings = <&mo>, <&kp>;
+        };
+        ben_hl_r: ben_homerow_layer_right {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <220>;
+            quick-tap-ms = <250>;
+            flavor = "tap-preferred";
+            bindings = <&mo>, <&kp>;
+        };
+        // hold = shift, tap = jump back to the BEN alpha layer.
+        ben_sr: ben_shift_layer {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <300>;
+            quick-tap-ms = <0>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&to>;
+            retro-tap;
+        };
+        ben_td: ben_tapdance {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            tapping-term-ms = <190>;
+            quick-tap-ms = <250>;
+            flavor = "tap-preferred";
+            bindings = <&kp>, <&kp>;
+        };
+        // Local sticky key so Ben's 2s window doesn't mutate the global
+        // &sk that the QWRT profile may want later.
+        ben_sk: ben_sticky_key {
+            compatible = "zmk,behavior-sticky-key";
+            #binding-cells = <1>;
+            bindings = <&kp>;
+            release-after-ms = <2000>;
+            quick-release;
         };
     };
 
@@ -660,6 +792,102 @@
 &kp LC(LEFT)        &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &kp LC(RIGHT)                           &kp LC(LEFT)       &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LC(RIGHT)
 &mouse_hold_mm      &none               &msc SCRL_UP    &msc SCRL_DOWN    &kp LA(D)                               &kp LA(D)      &msc SCRL_DOWN &msc SCRL_UP   &none               &mouse_hold_mm
 &none               &none               &none           &tog MOUSEMOVE    &mkp LCLK        &mkp RCLK              &mkp RCLK      &mkp LCLK                                        &none
+            >;
+        };
+        // ══════════════ Ben Vallack "Piano" profile ══════════════
+        // Position map (Ben's 18 keys → Keyball39 positions):
+        //   his top trio   → S D F  (11 12 13) / J K L  (16 17 18)
+        //   his home quad  → Z X C V (20-23)   / M , . / (26-29)
+        //   his 4 thumbs   → 34 35 (left) / 36 37 (right)
+        // Everything else is &none. Position 30 and 38 both exit to QWRT.
+
+        ben_layer {
+            label = "BEN";
+            bindings = <
+&none            &none                &none                 &none                &none                                &none          &none                 &none                 &none                 &none
+&none            &ben_hm_l LCTRL L    &ben_hm_l LALT G      &ben_hm_l LGUI D     &none                                &none          &ben_hm_r RGUI H      &ben_hm_r RALT U      &ben_hm_r RCTRL O     &none
+&ben_hl_l BEN_NUM I  &ben_hl_l BEN_S2 S  &ben_hl_l BEN_S1 R  &ben_hl_l BEN_SYS T  &none                                &none          &ben_hl_r BEN_SYS N   &ben_hl_r BEN_S1 E    &ben_hl_r BEN_S2 A    &ben_hl_r BEN_NUM C
+&to DEFAULT      &none                &none                 &none                &mt LC(LS(LALT)) SPACE  &key_repeat   &sl BEN_A2U    &sl BEN_A2                                                       &to DEFAULT
+            >;
+        };
+
+        // The 12 rare letters. Reached by a sticky tap of the right outer
+        // thumb (Space key) — one key, then it drops back to BEN by itself.
+        ben_a2_layer {
+            label = "BEN2";
+            bindings = <
+&none            &none        &none        &none        &none                                       &none          &none          &none          &none          &none
+&none            &kp V        &kp W        &kp M        &none                                       &none          &kp F          &kp SQT        &kp Z          &none
+&kp Q            &kp J        &kp P        &kp K        &none                                       &none          &kp B          &kp DOT        &kp X          &kp Y
+&to DEFAULT      &none        &none        &none        &ben_sk LSHFT        &none                  &none          &sl BEN_A2U                                  &to DEFAULT
+            >;
+        };
+
+        ben_sym1_layer {
+            label = "BSY1";
+            bindings = <
+&none            &none        &none        &none        &none                                       &none          &none          &none          &none          &none
+&none            &kp LA(N3)   &kp LS(N3)   &kp DLLR     &none                                       &none          &kp LS(COMMA)  &kp LS(DOT)    &kp CARET      &none
+&kp GRAVE        &kp TILDE    &kp MINUS    &kp BSLH     &none                                       &none          &kp LBKT       &kp RBKT       &kp PIPE       &kp SLASH
+&to DEFAULT      &none        &none        &none        &trans               &trans                 &trans         &trans                                       &to DEFAULT
+            >;
+        };
+
+        ben_sym2_layer {
+            label = "BSY2";
+            bindings = <
+&none            &none        &none        &none        &none                                       &none          &none          &none          &none          &none
+&none            &kp ATSN     &ben_td LA(RBKT) LA(LS(RBKT))  &ben_td LA(LBKT) LA(LS(LBKT))  &none    &none          &kp LPRN       &kp RPRN       &kp SEMI       &none
+&kp STAR         &kp PRCNT    &ben_td QMARK EXCL   &kp DQT   &none                                   &none          &kp LBRC       &kp RBRC       &kp AMPS       &kp COLON
+&to DEFAULT      &none        &none        &none        &trans               &trans                 &trans         &trans                                       &to DEFAULT
+            >;
+        };
+
+        ben_num_layer {
+            label = "BNUM";
+            bindings = <
+&none            &none                &none                &none                &none                        &none          &none                &none                &none                &none
+&none            &ben_hm_l LCTRL DOT  &ben_hm_l LALT N0    &ben_hm_l LGUI N1    &none                        &none          &ben_hm_r RGUI N2    &ben_hm_r RALT N3    &ben_hm_r RCTRL N4   &none
+&kp MINUS        &kp PLUS             &kp N5               &kp N6               &none                        &none          &kp N7               &kp N8               &kp N9               &kp EQUAL
+&to DEFAULT      &none                &none                &none                &ben_sr LSHFT BEN   &trans    &trans         &trans                                                        &to DEFAULT
+            >;
+        };
+
+        // Nav + editing. Backspace lives here: hold V (or M), tap L.
+        ben_sys_layer {
+            label = "BSYS";
+            bindings = <
+&none                  &none                &none                 &none                  &none                        &none    &none                &none        &none                          &none
+&none                  &kp ESC              &kp LC(LS(TAB))       &kp RC(TAB)            &none                        &none    &ben_td LG(V) LG(C)  &kp UP       &ben_td Q BSPC                 &none
+&ben_td LG(GRAVE) TAB  &ben_td HOME DEL     &ben_td END LG(LBKT)  &kp LG(RBKT)           &none                        &none    &ben_td TAB LEFT     &kp DOWN     &ben_td LC(LG(LS(N4))) RIGHT   &kp RET
+&to DEFAULT            &none                &none                 &none                  &ben_sr LSHFT BEN   &none     &none    &kp RGUI                                                        &to DEFAULT
+            >;
+        };
+
+        // Entered with &to (BEN is dropped underneath), so every unused
+        // position here is &none rather than &trans — otherwise they would
+        // fall straight through to QWRT.
+        ben_bt_layer {
+            label = "BBT";
+            bindings = <
+&none            &none        &none        &none        &none                                       &none          &none          &none          &none          &none
+&none            &bt BT_PRV   &bt BT_NXT   &none        &none                                       &none          &none          &none          &none          &none
+&bootloader      &none        &none        &none        &none                                       &none          &none          &none          &none          &bt BT_CLR
+&to DEFAULT      &none        &none        &none        &to BEN              &none                  &none          &none                                        &to DEFAULT
+            >;
+        };
+
+        // Capitals of the rare letters — sticky tap of the right INNER
+        // thumb (Enter key). Ben leaves the ' slot &trans here, which
+        // silently falls through to alpha1 and emits "u"; bound to DQT
+        // instead, which is plainly what shift-apostrophe should give.
+        ben_a2u_layer {
+            label = "BEN2S";
+            bindings = <
+&none            &none        &none        &none        &none                                       &none          &none          &none          &none          &none
+&none            &kp LS(V)    &kp LS(W)    &kp LS(M)    &none                                       &none          &kp LS(F)      &kp DQT        &kp LS(Z)      &none
+&kp LS(Q)        &kp LS(J)    &kp LS(P)    &kp LS(K)    &none                                       &none          &kp LS(B)      &kp COMMA      &kp LS(X)      &kp LS(Y)
+&to DEFAULT      &none        &none        &none        &trans               &trans                 &trans         &none                                        &to DEFAULT
             >;
         };
     };
