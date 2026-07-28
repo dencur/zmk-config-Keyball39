@@ -29,6 +29,12 @@
 #define BEN_SYS  15   // sys     — hold V / M  (nav, editing, clicks)
 #define BEN_BT   16   // bt      — bluetooth + &bootloader
 #define BEN_A2U  17   // alpha2 shifted — capitals of the rare letters
+#define BEN_MOUSE 18  // mouse    — hold Q / P, or the Q+W / O+P chord
+#define BEN_SCRL  19  // scroll   — from BEN_MOUSE, hold W / O
+
+// NOTE: BEN_SCRL is duplicated as a #define in keyball39_right.overlay,
+// where it is listed in the trackball's scroll-layers. The two must stay
+// in sync — the overlay cannot see this file's defines.
 
 // Override max mouse cursor speed for &mmv (default 600 — tuned for 4K).
 // Bumped from 1500 → 2100 (+40%) to match Delta Omega's "big-monitor
@@ -359,6 +365,23 @@
             key-positions = <27 28>;      // , + .
             bindings = <&to BEN_BT>;
             layers = <BEN_S1>;
+        };
+        // Mouse toggle from BEN. Z+X and .+/ are real letters here
+        // (i+s and a+c), so the chord moves up to the unused top row —
+        // same shape, same hands, one row higher.
+        ben_combo_mouse_l {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <0 1>;        // Q + W
+            bindings = <&tog BEN_MOUSE>;
+            layers = <BEN>;
+        };
+        ben_combo_mouse_r {
+            timeout-ms = <25>;
+            require-prior-idle-ms = <250>;
+            key-positions = <8 9>;        // O + P
+            bindings = <&tog BEN_MOUSE>;
+            layers = <BEN>;
         };
         ben_combo_lalt {
             timeout-ms = <20>;
@@ -818,7 +841,7 @@
         ben_layer {
             label = "BEN";
             bindings = <
-&none            &none                &none                 &none                &none                                &none          &none                 &none                 &none                 &none
+&mo BEN_MOUSE    &none                &none                 &none                &none                                &none          &none                 &none                 &none                 &mo BEN_MOUSE
 &none            &ben_hm_l LCTRL L    &ben_hm_l LALT G      &ben_hm_l LGUI D     &none                                &none          &ben_hm_r RGUI H      &ben_hm_r RALT U      &ben_hm_r RCTRL O     &none
 &ben_hl_l BEN_NUM I  &ben_hl_l BEN_S2 S  &ben_hl_l BEN_S1 R  &ben_hl_l BEN_SYS T  &none                                &none          &ben_hl_r BEN_SYS N   &ben_hl_r BEN_S1 E    &ben_hl_r BEN_S2 A    &ben_hl_r BEN_NUM C
 &to DEFAULT      &none                &none                 &none                &mt LC(LS(LALT)) SPACE  &key_repeat   &ben_sl BEN_A2U    &ben_sl BEN_A2                                                       &to DEFAULT
@@ -902,6 +925,36 @@
 &none            &kp LS(V)    &kp LS(W)    &kp LS(M)    &none                                       &none          &kp LS(F)      &kp DQT        &kp LS(Z)      &none
 &kp LS(Q)        &kp LS(J)    &kp LS(P)    &kp LS(K)    &none                                       &none          &kp LS(B)      &kp COMMA      &kp LS(X)      &kp LS(Y)
 &to DEFAULT      &none        &none        &none        &trans               &trans                 &trans         &none                                        &to DEFAULT
+            >;
+        };
+        // Mouse layer for the Ben profile. The trackball already moves the
+        // cursor on every layer (the input listener gates only scroll and
+        // snipe MODE, never plain motion) — what BEN was missing was
+        // clicks, wheel, and a scroll-mode path. Cursor keys mirror the
+        // QWRT MMOVE cross so the muscle memory carries over.
+        ben_mouse_layer {
+            label = "BMOU";
+            bindings = <
+&trans           &mo BEN_SCRL     &mmv MOVE_UP     &none            &none                            &none          &none          &mmv MOVE_UP     &mo BEN_SCRL   &trans
+&none            &mmv MOVE_LEFT   &mmv MOVE_DOWN   &mmv MOVE_RIGHT  &none                            &none          &mmv MOVE_LEFT &mmv MOVE_DOWN   &mmv MOVE_RIGHT  &none
+&none            &msc SCRL_UP     &msc SCRL_DOWN   &none            &none                            &none          &none          &msc SCRL_DOWN   &msc SCRL_UP   &none
+&to DEFAULT      &none            &none            &tog BEN_MOUSE   &mkp LCLK        &mkp MCLK       &mkp RCLK      &mkp LCLK                                      &to DEFAULT
+            >;
+        };
+
+        // Ball-as-scrollwheel. Listed in scroll-layers in the right
+        // overlay, so merely being on this layer turns trackball motion
+        // into scrolling. Bindings stay &trans so BEN_MOUSE shows
+        // through underneath. Also carries the power-tools row, giving
+        // the Ben profile the same hold->hold->tap reflash chain the
+        // QWRT profile has (there Z->X->T; here Q->W->T).
+        ben_scroll_layer {
+            label = "BSCR";
+            bindings = <
+&trans           &trans           &trans           &sys_reset       &bootloader                      &bootloader    &sys_reset     &trans           &trans         &trans
+&trans           &trans           &trans           &trans           &trans                           &trans         &trans         &trans           &trans         &trans
+&trans           &trans           &trans           &trans           &trans                           &trans         &trans         &trans           &trans         &trans
+&to DEFAULT      &trans           &trans           &trans           &trans           &trans          &trans         &trans                                         &to DEFAULT
             >;
         };
     };

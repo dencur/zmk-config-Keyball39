@@ -8,6 +8,10 @@
 #define MOUSE   6
 #define SCROLL  7
 #define SNIPE   8
+// Ben profile scroll layer. MUST match #define BEN_SCRL in
+// config/keyball39.keymap — the overlay cannot see the keymap's defines,
+// so these two numbers are duplicated by necessity.
+#define BEN_SCRL 19
 
 &default_transform {
     col-offset = <6>;
@@ -68,7 +72,7 @@
         // motion never auto-activates the layer because in practice the
         // false-positive rate from typing-induced ball wiggle outweighed
         // the convenience.
-	scroll-layers = <SCROLL>;
+	scroll-layers = <SCROLL BEN_SCRL>;
 	snipe-layers = <SNIPE>;
     };
 };
