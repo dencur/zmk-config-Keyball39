@@ -53,19 +53,48 @@ See [`scripts/README.md`](scripts/README.md) for full script docs, including:
 
 Layer indices and chord paths defined in [config/keyball39.keymap:1](config/keyball39.keymap:1):
 
-| # | Name    | How to reach           |
-|---|---------|------------------------|
-| 0 | DEFAULT | (base)                 |
-| 1 | GAME    | tap `to GAME` (thumb on default), tap `to DEFAULT` to exit |
-| 2 | NUM     | hold space             |
-| 3 | SYM     | hold enter             |
-| 4 | FUN     | hold tab               |
-| 5 | ARROW   | hold backspace         |
-| 6 | MOUSE   | hold `Z` OR hold `/`   |
-| 7 | SCROLL  | from MOUSE, hold `X` OR hold `.` |
-| 8 | SNIPE   | (currently no hold key) |
+| # | Name      | How to reach           |
+|---|-----------|------------------------|
+| 0 | DEFAULT   | (base)                 |
+| 1 | GAME      | **double**-tap position 38 (`game_td`), tap 38 to exit |
+| 2 | NUM       | hold space             |
+| 3 | SYM       | hold enter             |
+| 4 | FUN       | hold tab               |
+| 5 | ARROW     | hold backspace         |
+| 6 | MOUSE     | hold `Z` OR hold `/`   |
+| 7 | SCROLL    | from MOUSE, hold `X` OR hold `.` |
+| 8 | SNIPE     | (currently no hold key) |
+| 9 | MOUSEMOVE | `S`+`D` or `K`+`L` chord; trackball motion |
 
-The hold-tap chain means SCROLL is two layers deep — used as a "power tools" layer for `&bootloader` (T, Y) and `&sys_reset` (R, U). Combos block is empty as of 2026-05.
+The hold-tap chain means SCROLL is two layers deep — used as a "power tools" layer for `&bootloader` (T, Y) and `&sys_reset` (R, U).
+
+### The "Ben Piano" profile (layers 10–17)
+
+A complete alternative layout ported from [benvallack/zmk-config-piano](https://github.com/benvallack/zmk-config-piano), living entirely above the QWRT stack. **Enter with the third tap of position 38** (tap 1 no-ops, tap 2 = GAME, tap 3 = BEN); **a single tap of 38 exits**, and position 30 is a second exit.
+
+It is *not* a chording layout. It splits the alphabet across two layers: the 14 commonest letters (`etaoinsrhldcug`, ~85% of English text) sit on BEN itself, and the other 12 live on BEN_A2, reached by a sticky-layer tap of the right outer thumb — tap it, the next key comes from BEN_A2, and it drops back on its own.
+
+Only 7 finger keys per hand are used — left `S D F Z X C V`, right `J K L M , . /` — plus 4 thumbs. Every other position on every BEN layer is `&none`, so nothing bleeds through from QWRT.
+
+| #  | Name     | How to reach          |
+|----|----------|-----------------------|
+| 10 | BEN      | triple-tap position 38 |
+| 11 | BEN_A2   | sticky-tap right outer thumb (Space key) |
+| 12 | BEN_S1   | hold `C` or `,`       |
+| 13 | BEN_S2   | hold `X` or `.`       |
+| 14 | BEN_NUM  | hold `Z` or `/`       |
+| 15 | BEN_SYS  | hold `V` or `M`; or the `J`+`K`+`L` combo |
+| 16 | BEN_BT   | from BEN_S1, chord `,`+`.` |
+| 17 | BEN_A2U  | sticky-tap right inner thumb (Enter key) |
+
+**Reflash path from inside the profile**: hold `C` → chord `,`+`.` → tap `Z` (`&bootloader`). Keep this reachable — it is the only in-profile escape that doesn't require dropping back to QWRT first.
+
+Two gotchas worth remembering when editing these layers:
+
+- `ben_layer` and `ben_bt_layer` are entered with `&to`, which drops BEN out from underneath. `&trans` on those two layers falls **all the way through to QWRT** — use `&none`. The other BEN sub-layers are entered with `&mo`, so BEN stays active beneath them and `&trans` correctly resolves to BEN.
+- Behaviors are namespaced `ben_*` (including a local `ben_sk` instead of overriding the global `&sk`) specifically so the Charybdis-parity homerow-mod tuning on QWRT is never touched.
+
+Combos: the QWRT ones are gated to `<DEFAULT MOUSE MOUSEMOVE>`, the Ben ones to their `BEN_*` layer. Note ZMK matches a combo's `layers` list against the **highest active layer only**, which is why a combo gated to `BEN` is automatically suppressed while a BEN sub-layer is held.
 
 ## Hardware reference
 
