@@ -96,8 +96,28 @@ Only 7 finger keys per hand are used — left `S D F Z X C V`, right `J K L M , 
 | 15 | BEN_SYS  | hold `V` or `M`; or the `J`+`K`+`L` combo |
 | 16 | BEN_BT   | from BEN_S1, chord `,`+`.` |
 | 17 | BEN_A2U  | sticky-tap right inner thumb (Enter key) |
+| 18 | BEN_MOUSE | hold `Q` or `P`; or the `Q`+`W` / `O`+`P` chord to latch |
+| 19 | BEN_SCRL | from BEN_MOUSE, hold `W` or `O` |
 
-**Reflash path from inside the profile**: hold `C` → chord `,`+`.` → tap `Z` (`&bootloader`). Keep this reachable — it is the only in-profile escape that doesn't require dropping back to QWRT first.
+**Reflash path from inside the profile**: hold `Q` → hold `W` → tap `T` (`&bootloader`), mirroring the QWRT chain (`Z` → `X` → `T`). A second route survives from the BT layer: hold `C` → chord `,`+`.` → tap `Z`.
+
+#### Trackball behaviour on the Ben layers
+
+The `zmk,input-listener` in [keyball39_right.overlay](config/boards/shields/keyball_nano/keyball39_right.overlay) gates only *scroll* and *snipe* mode via `scroll-layers` / `snipe-layers`. **Plain cursor motion is never layer-gated**, so the ball moved the pointer on the Ben layers from day one — what was missing was clicks, wheel, and ball-as-scroll. BEN_MOUSE supplies clicks (L/M/R on the thumbs) and a keyboard cursor cross mirroring MMOVE; BEN_SCRL is listed in `scroll-layers` so merely being on it turns ball motion into scrolling.
+
+> ⚠️ **`BEN_SCRL` is `#define`d twice** — once in `config/keyball39.keymap` and once in `keyball39_right.overlay`. The overlay is preprocessed without visibility of the keymap's defines, so the number is duplicated by necessity. Change one, change both.
+
+### Pre-flight checks
+
+Run before pushing any keymap change:
+
+```bash
+python3 scripts/validate_keymap.py
+```
+
+[`scripts/validate_keymap.py`](scripts/validate_keymap.py) checks only failure modes that have actually bitten this repo: 39 bindings per layer; layer *declaration order* matching the `#define` indices (ZMK numbers layers by position in the keymap node, not by the name you define, so inserting one in the wrong place silently renumbers everything above it); the duplicated `BEN_SCRL` staying in sync with the overlay and present in `scroll-layers`; combo positions in range and layer-gated; no `&trans` on `&to`-entered layers; the Ben alpha split covering A–Z exactly once; and an exit at position 38 on every Ben layer.
+
+The QWRT mouse chords are `Z`+`X` and `.`+`/`, but in Ben those are real letters (`i`+`s` and `a`+`c`), so the Ben chord moves one row up to `Q`+`W` / `O`+`P` — same shape, same hands.
 
 Two gotchas worth remembering when editing these layers:
 
