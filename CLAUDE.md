@@ -16,7 +16,17 @@ Authoritative source: [config/boards/shields/keyball_nano/Kconfig.defconfig](con
 
 ### 2. Keymap-only changes don't need a left-half re-flash
 
-If only `config/keyball39.keymap` (or anything else that only affects the central build) changed, the left UF2 will be byte-for-byte identical across builds. Verify with `shasum`; if the hash matches the previous build, skip flashing the left. Use `scripts/flash.sh --right-only`.
+If only `config/keyball39.keymap` (or anything else that only affects the central build) changed, the left half does not need reflashing. Use `scripts/flash.sh --right-only`.
+
+**Do NOT decide this with `shasum` — the left build is not byte-reproducible.** Two CI builds from identical peripheral sources produce left UF2s that differ in ~2–3 bytes. Measured on 2026-07-28 (`main` known-good vs `claude/ben-layout`): exactly 3 bytes differ, at offsets 545420/545424/545428, and they are a *permutation of the same three pointers* (`0x0005de34`, `0x0005de4c`, `0x0005de1c` — three consecutive 24-byte structs listed in a different order). That is linker ordering nondeterminism in an iterable section, not a code change. A hash mismatch here means nothing, and trusting it will send you into a pointless left-half flash.
+
+The authoritative test is **which files changed**, not which bytes:
+
+```bash
+git diff --stat main...HEAD -- config/keyball39.conf config/west.yml config/boards/shields/keyball_nano/keyball39_left.conf config/boards/shields/keyball_nano/keyball39_left.overlay config/boards/shields/keyball_nano/Kconfig.defconfig build.yaml
+```
+
+Empty output ⇒ right-half only. If you do want a byte-level check, compare with `cmp -l` and look at *what* differs: a handful of reordered pointers near the end is benign; anything larger or in the body is real.
 
 Files that DO affect the peripheral build:
 - `config/keyball39.conf` (global Kconfig — both halves)
