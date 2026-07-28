@@ -435,10 +435,10 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:keyboard-space$$', h: 'Ctl+Sft+$$mdi:apple-keyboard-option$$'}
-  - '&key_repeat'
+  - {t: '$$mdi:backspace$$', type: backspace}
   - {t: BEN2S, h: '$$mdi:gesture-tap-hold$$'}
   - {t: BEN2, h: '$$mdi:gesture-tap-hold$$'}
+  - {t: '$$mdi:keyboard-space$$', h: 'Ctl+Sft+$$mdi:apple-keyboard-option$$'}
   - {t: QWRT, h: toggle}
   BEN2:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -475,10 +475,10 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:apple-keyboard-shift$$', h: '$$mdi:gesture-tap-hold$$'}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: BEN2S, h: '$$mdi:gesture-tap-hold$$', type: held}
+  - {type: held}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: QWRT, h: toggle}
   BSY1:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
@@ -637,7 +637,7 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: BEN, h: '$$mdi:apple-keyboard-shift$$'}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - {t: '$$mdi:minus-circle-outline$$', type: none}
+  - '&key_repeat'
   - RGUI
   - {t: QWRT, h: toggle}
   BBT:
@@ -716,9 +716,9 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - {t: '$$mdi:transfer$$', type: trans}
-  - {t: '$$mdi:transfer$$', type: trans}
   - {type: held}
-  - {t: '$$mdi:minus-circle-outline$$', type: held alternate}
+  - {t: '$$mdi:transfer$$', type: trans}
+  - {t: '$$mdi:transfer$$', type: trans}
   - {t: QWRT, h: toggle}
   BMOU:
   - {type: held}
