@@ -593,6 +593,20 @@
             release-after-ms = <2000>;
             quick-release;
         };
+        // Sticky LAYER for the alpha2 hop. Stock &sl expires after
+        // 1000ms; that is fine once the layout is in muscle memory but
+        // brutal while learning — overrun the window and the sticky
+        // layer has already dropped, so you silently get the alpha1
+        // letter instead of the alpha2 one you meant. 2000ms matches the
+        // window Ben picked for his own sticky key. Drop it back to
+        // 1000 once the layout is fluent.
+        ben_sl: ben_sticky_layer {
+            compatible = "zmk,behavior-sticky-key";
+            #binding-cells = <1>;
+            bindings = <&mo>;
+            release-after-ms = <2000>;
+            quick-release;
+        };
     };
 
     macros {
@@ -807,7 +821,7 @@
 &none            &none                &none                 &none                &none                                &none          &none                 &none                 &none                 &none
 &none            &ben_hm_l LCTRL L    &ben_hm_l LALT G      &ben_hm_l LGUI D     &none                                &none          &ben_hm_r RGUI H      &ben_hm_r RALT U      &ben_hm_r RCTRL O     &none
 &ben_hl_l BEN_NUM I  &ben_hl_l BEN_S2 S  &ben_hl_l BEN_S1 R  &ben_hl_l BEN_SYS T  &none                                &none          &ben_hl_r BEN_SYS N   &ben_hl_r BEN_S1 E    &ben_hl_r BEN_S2 A    &ben_hl_r BEN_NUM C
-&to DEFAULT      &none                &none                 &none                &mt LC(LS(LALT)) SPACE  &key_repeat   &sl BEN_A2U    &sl BEN_A2                                                       &to DEFAULT
+&to DEFAULT      &none                &none                 &none                &mt LC(LS(LALT)) SPACE  &key_repeat   &ben_sl BEN_A2U    &ben_sl BEN_A2                                                       &to DEFAULT
             >;
         };
 
@@ -819,7 +833,7 @@
 &none            &none        &none        &none        &none                                       &none          &none          &none          &none          &none
 &none            &kp V        &kp W        &kp M        &none                                       &none          &kp F          &kp SQT        &kp Z          &none
 &kp Q            &kp J        &kp P        &kp K        &none                                       &none          &kp B          &kp DOT        &kp X          &kp Y
-&to DEFAULT      &none        &none        &none        &ben_sk LSHFT        &none                  &none          &sl BEN_A2U                                  &to DEFAULT
+&to DEFAULT      &none        &none        &none        &ben_sk LSHFT        &none                  &none          &ben_sl BEN_A2U                                  &to DEFAULT
             >;
         };
 
