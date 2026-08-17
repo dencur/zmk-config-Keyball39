@@ -118,15 +118,17 @@
     // lead-in, because the accumulator must still reach 1.0 before the first
     // detent is emitted, at T = sqrt(2*ttms/SCRL_VAL).
     //
-    //   ttms   1st detent   speed at 50 / 100 / 150 ms
-    //    40      37 ms       60 / 60 / 60   (imperceptible — felt instant)
-    //   150      71 ms       20 / 40 / 60   <- here
-    //   300     100 ms       10 / 20 / 30   (full speed only at 300ms)
+    //   ttms   1st detent   speed at 50 / 100 / 150 / 200 ms
+    //    40      37 ms       60 / 60 / 60 / 60   (imperceptible — felt instant)
+    //   150      71 ms       20 / 40 / 60 / 60
+    //   200      82 ms       15 / 30 / 45 / 60   <- here
+    //   300     100 ms       10 / 20 / 30 / 40   (never reaches full on a tap)
     //
-    // 150 reaches the full 60/sec at 150ms for ~71ms of lead-in. Going much
-    // beyond this starts to break the TAPPED scroll combos (U+I+O, M+,+.):
-    // a tap shorter than the first-detent time emits nothing at all.
-    time-to-max-speed-ms = <150>;
+    // 200 is close to the practical ceiling. The scroll bindings are TAPPED
+    // combos (U+I+O, M+,+.), and a tap shorter than the first-detent time
+    // emits NOTHING — cumulative counts are max*T^2/(2*ttms), so at 200 a tap
+    // under ~82ms is silent. Past ~250 that starts eating ordinary taps.
+    time-to-max-speed-ms = <200>;
     // 8ms rather than the 16ms default: raises the emission ceiling from
     // 62.5Hz to 125Hz and spaces events more evenly, which is what macOS's
     // gap-based accelerator rewards.
