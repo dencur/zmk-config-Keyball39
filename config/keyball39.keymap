@@ -42,11 +42,27 @@
 // <dt-bindings/zmk/pointing.h>.
 #define ZMK_POINTING_DEFAULT_MOVE_VAL 2100
 
-// Same idea for &msc scroll speed (default 10). Higher = more lines per tick.
-// 20 is urob/zmk-config's tested value; combined with the
-// CONFIG_ZMK_POINTING_SMOOTH_SCROLLING flag in keyball39_right.conf this
-// produces smooth, fast scrolling on macOS.
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 20
+// &msc scroll magnitude per tick (ZMK default 10).
+//
+// Was 20, which made Safari jump rather than scroll. The old comment here
+// claimed CONFIG_ZMK_POINTING_SMOOTH_SCROLLING would render this
+// high-resolution and let macOS smooth it. That is not what the code does,
+// so the magnitude has to be right on its own:
+//
+//   1. zmk/app/src/pointing/resolution_multipliers.c defaults the wheel
+//      multiplier to 15, and input_listener.c computes div = 16 - wheel.
+//      15 -> div == 1, i.e. NO scaling at all unless the host negotiates a
+//      different multiplier via a HID Feature report.
+//   2. apply_resolution_scaling() in input_listener.c computes the divided
+//      value and then discards it:
+//          int16_t scaled = val / (int16_t)div;
+//          *remainder = val - (scaled * (int16_t)div);
+//          evt->value = val;      // <- unscaled; `scaled` is dead
+//      So even with a cooperating host it never attenuates. Upstream ZMK,
+//      not this config.
+//
+// 8 is a touch under ZMK's default and lands as a scroll rather than a leap.
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 8
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -77,13 +93,15 @@
 };
 
 &msc {
-    // Was 0/400 — felt steppy because constant-speed scrolling has no warm-up
-    // and the OS just rendered each event as one line. Now using a gentle
-    // quadratic ramp; combined with CONFIG_ZMK_POINTING_SMOOTH_SCROLLING in
-    // keyball39_right.conf, scroll events become high-resolution and macOS
-    // smooths across pixels.
+    // Constant-speed scrolling has no warm-up, so a held key rendered as a
+    // series of equal jumps. A quadratic ramp starts gently and builds.
+    // NB the ramp is doing the real work here — see the note on
+    // ZMK_POINTING_DEFAULT_SCRL_VAL above for why SMOOTH_SCROLLING does not
+    // actually attenuate anything.
     acceleration-exponent = <1>;  // quadratic — gentle start, faster end
-    time-to-max-speed-ms = <300>; // moderate ramp; lower=snappier, higher=more precision
+    time-to-max-speed-ms = <500>; // 300 -> 500: held scrolling ramps in
+                                  // rather than leaping. lower=snappier,
+                                  // higher=more precision
     delay-ms = <0>;
 };
 
