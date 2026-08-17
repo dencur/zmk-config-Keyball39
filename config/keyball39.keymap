@@ -112,11 +112,21 @@
     // get_acceleration_exponent() force-returns 0 for the wheel axes and
     // speed() short-circuits to max_speed. See keyball39_right.conf.
     acceleration-exponent = <1>;  // linear ramp in, then constant
-    // 40ms, not 500. The first count lands when speed*T^2/(2*ttms) crosses 1;
-    // at SCRL_VAL 60 that is ~36ms with ttms=40, versus ~200ms of dead hold at
-    // ttms=500. A long ramp on a 1-unit-per-event stream just means nothing
-    // happens for a fifth of a second.
-    time-to-max-speed-ms = <40>;
+    // Ease-in for held scrolling. exponent 1 is LINEAR: speed = max * t/ttms,
+    // starting from ZERO — ZMK has no floor parameter, so you cannot say
+    // "start at 70%". A longer ramp therefore buys ease-in at the cost of
+    // lead-in, because the accumulator must still reach 1.0 before the first
+    // detent is emitted, at T = sqrt(2*ttms/SCRL_VAL).
+    //
+    //   ttms   1st detent   speed at 50 / 100 / 150 ms
+    //    40      37 ms       60 / 60 / 60   (imperceptible — felt instant)
+    //   150      71 ms       20 / 40 / 60   <- here
+    //   300     100 ms       10 / 20 / 30   (full speed only at 300ms)
+    //
+    // 150 reaches the full 60/sec at 150ms for ~71ms of lead-in. Going much
+    // beyond this starts to break the TAPPED scroll combos (U+I+O, M+,+.):
+    // a tap shorter than the first-detent time emits nothing at all.
+    time-to-max-speed-ms = <150>;
     // 8ms rather than the 16ms default: raises the emission ceiling from
     // 62.5Hz to 125Hz and spaces events more evenly, which is what macOS's
     // gap-based accelerator rewards.
