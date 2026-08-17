@@ -73,11 +73,24 @@
 // closely spaced events get accelerated and blended into a glide, widely
 // spaced ones are rendered as bare individual notches.
 //
-// History: this was 20, briefly 8. 8 put events 125ms apart, squarely in the
-// dead zone (0.156x) — which read as "horribly slow and still jerky", and also
-// made short taps emit nothing at all. 60 puts them ~16.7ms apart, near the
-// top of the curve.
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 60
+// Retuned for the patched HID descriptor. With macOS computing a scroll
+// resolution of 85 instead of its 9.0 fallback, one wheel unit moves
+// 9/85 as far — about 0.32 lines instead of 3. That is the whole point: the
+// STEP is now ~9.4x finer, which is what smoothness actually is. Speed has to
+// be bought back by raising the rate to match, since speed = rate x step.
+//
+//   before:  60 units/sec x 3.00 lines = 180 lines/sec, in 3-line steps
+//   after:  480 units/sec x 0.32 lines = 152 lines/sec, in 0.32-line steps
+//
+// 480 rather than 566 (which would match the old speed exactly) because
+// trigger-period-ms below caps emission at 1000/period = 500/sec.
+//
+// CAVEAT — USB vs BLE. 480 reports/sec is comfortable over USB. Over BLE at
+// the 7.5ms connection interval in keyball39.conf the practical ceiling is
+// nearer 133/sec, so wireless scrolling will be roughly a quarter this speed.
+// If that bites, raise the connection interval or accept a slower wireless
+// scroll — the smoothness is unaffected either way, only the speed.
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 480
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -134,10 +147,12 @@
     // is now something you hold, not something you tap. If short taps need to
     // work again, lower this — the lead-in falls as sqrt(ttms).
     time-to-max-speed-ms = <1500>;
-    // 8ms rather than the 16ms default: raises the emission ceiling from
-    // 62.5Hz to 125Hz and spaces events more evenly, which is what macOS's
-    // gap-based accelerator rewards.
-    trigger-period-ms = <8>;
+    // 2ms. The ceiling on emitted events is 1000/trigger-period, so 8ms
+    // capped us at 125/sec — far below the 480/sec the finer step size now
+    // needs. NB this Mac reports HIDMouseScrollAcceleration = 0, so macOS
+    // applies a single linear segment rather than its gap-based accelerator
+    // curve; rate buys smoothness directly here, not via OS acceleration.
+    trigger-period-ms = <2>;
     delay-ms = <0>;
 };
 
