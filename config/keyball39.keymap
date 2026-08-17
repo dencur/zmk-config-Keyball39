@@ -118,17 +118,22 @@
     // lead-in, because the accumulator must still reach 1.0 before the first
     // detent is emitted, at T = sqrt(2*ttms/SCRL_VAL).
     //
-    //   ttms   1st detent   speed at 50 / 100 / 150 / 200 ms
-    //    40      37 ms       60 / 60 / 60 / 60   (imperceptible — felt instant)
-    //   150      71 ms       20 / 40 / 60 / 60
-    //   200      82 ms       15 / 30 / 45 / 60   <- here
-    //   300     100 ms       10 / 20 / 30 / 40   (never reaches full on a tap)
+    // The scale here is SECONDS, not milliseconds. 40/150/200ms all felt
+    // identical — a fifth of a second is below the threshold of noticing, so
+    // scrolling appeared to start at full speed no matter what. Full speed is
+    // 60 detents/sec, roughly 180 lines/sec at the macOS default of 3
+    // lines/detent, so a 300ms "tap" at ttms=200 was already covering a page.
     //
-    // 200 is close to the practical ceiling. The scroll bindings are TAPPED
-    // combos (U+I+O, M+,+.), and a tap shorter than the first-detent time
-    // emits NOTHING — cumulative counts are max*T^2/(2*ttms), so at 200 a tap
-    // under ~82ms is silent. Past ~250 that starts eating ordinary taps.
-    time-to-max-speed-ms = <200>;
+    //   ttms   1st detent   detents by 0.2s / 0.4s / 1.0s / 2.0s
+    //    200      82 ms        6.0 / 18.0 / 54.0 / 114.0   (felt instant)
+    //   1500     224 ms        0.8 /  3.2 / 20.0 /  75.0   <- here
+    //
+    // Deliberate consequence: a press SHORTER THAN ~224ms now emits nothing
+    // at all, because cumulative counts are max*T^2/(2*ttms) and that is
+    // below 1.0. A flick no longer jumps the page; it does nothing. Scrolling
+    // is now something you hold, not something you tap. If short taps need to
+    // work again, lower this — the lead-in falls as sqrt(ttms).
+    time-to-max-speed-ms = <1500>;
     // 8ms rather than the 16ms default: raises the emission ceiling from
     // 62.5Hz to 125Hz and spaces events more evenly, which is what macOS's
     // gap-based accelerator rewards.
