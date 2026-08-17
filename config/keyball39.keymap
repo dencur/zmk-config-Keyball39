@@ -455,6 +455,34 @@
             bindings = <&tog BEN_MOUSE>;
             layers = <BEN>;
         };
+        // Horizontal scroll inside the Ben profile, identical in shape to the
+        // MMOVE chords so there is only one thing to remember: the shared
+        // middle key is the pivot and the neighbour you add picks the
+        // direction. Z and SLASH stay clear as the layer escape.
+        ben_combo_hscroll_left_l {
+            timeout-ms = <50>;
+            key-positions = <21 22>;      // X + C
+            bindings = <&msc SCRL_LEFT>;
+            layers = <BEN_MOUSE>;
+        };
+        ben_combo_hscroll_right_l {
+            timeout-ms = <50>;
+            key-positions = <22 23>;      // C + V
+            bindings = <&msc SCRL_RIGHT>;
+            layers = <BEN_MOUSE>;
+        };
+        ben_combo_hscroll_left_r {
+            timeout-ms = <50>;
+            key-positions = <26 27>;      // M + ,
+            bindings = <&msc SCRL_LEFT>;
+            layers = <BEN_MOUSE>;
+        };
+        ben_combo_hscroll_right_r {
+            timeout-ms = <50>;
+            key-positions = <27 28>;      // , + .
+            bindings = <&msc SCRL_RIGHT>;
+            layers = <BEN_MOUSE>;
+        };
         ben_combo_lalt {
             timeout-ms = <20>;
             key-positions = <22 23>;      // C + V
@@ -1009,7 +1037,7 @@
             bindings = <
 &trans           &mo BEN_SCRL     &mmv MOVE_UP     &none            &none                            &none          &none          &mmv MOVE_UP     &mo BEN_SCRL   &trans
 &none            &mmv MOVE_LEFT   &mmv MOVE_DOWN   &mmv MOVE_RIGHT  &none                            &none          &mmv MOVE_LEFT &mmv MOVE_DOWN   &mmv MOVE_RIGHT  &none
-&msc SCRL_LEFT   &msc SCRL_UP     &msc SCRL_DOWN   &msc SCRL_RIGHT  &none                            &none          &msc SCRL_LEFT &msc SCRL_UP     &msc SCRL_DOWN &msc SCRL_RIGHT
+&to BEN          &none            &msc SCRL_UP     &msc SCRL_DOWN   &none                            &none          &msc SCRL_DOWN &msc SCRL_UP     &none          &to BEN
 &to DEFAULT      &none            &none            &tog BEN_MOUSE   &mkp LCLK        &mkp MCLK       &mkp RCLK      &mkp LCLK                                      &to DEFAULT
             >;
         };
