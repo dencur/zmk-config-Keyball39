@@ -17,8 +17,14 @@ manifest:
       remote: dencur
       revision: v0.3-wheel-resolution
       import: app/west.yml
+    # Fork of tangbonze/zmk-pmw3610-driver with ONE commit: process_scroll_events
+    # used to zero the OPPOSITE axis's accumulator when it fired. Vertical is
+    # processed first, so any vertical drift discarded the banked horizontal
+    # counts and left-right ball scrolling only worked on a perfectly
+    # horizontal roll. See dencur/zmk-pmw3610-driver@fix-hscroll-axis-wipe.
+    # Rebase on tangbonze/main rather than letting it drift.
     - name: zmk-pmw3610-driver
-      remote: tangbonze
-      revision: main
+      remote: dencur
+      revision: fix-hscroll-axis-wipe
   self:
     path: config
