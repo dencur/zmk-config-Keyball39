@@ -61,8 +61,23 @@
 //      So even with a cooperating host it never attenuates. Upstream ZMK,
 //      not this config.
 //
-// 8 is a touch under ZMK's default and lands as a scroll rather than a leap.
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 8
+// SCRL_VAL is WHEEL EVENTS PER SECOND, not a magnitude. behavior_input_two_axis.c
+// accumulates speed * trigger_period_ms/1000 per tick and emits only when the
+// accumulator crosses 1.0, so the emitted value is always +/-1 and the rate is
+// exactly SCRL_VAL.
+//
+// That matters because macOS supplies the smoothing itself, via
+// IOHIDScrollAccelerator::accelerate() — a polynomial in the INTER-EVENT GAP:
+//     8ms -> 1.386    16ms -> 1.276    50ms -> 0.849    125ms -> 0.156
+// ~815x collapse from 1ms to 150ms spacing. So event RATE is the whole game:
+// closely spaced events get accelerated and blended into a glide, widely
+// spaced ones are rendered as bare individual notches.
+//
+// History: this was 20, briefly 8. 8 put events 125ms apart, squarely in the
+// dead zone (0.156x) — which read as "horribly slow and still jerky", and also
+// made short taps emit nothing at all. 60 puts them ~16.7ms apart, near the
+// top of the curve.
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 60
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -93,15 +108,19 @@
 };
 
 &msc {
-    // Constant-speed scrolling has no warm-up, so a held key rendered as a
-    // series of equal jumps. A quadratic ramp starts gently and builds.
-    // NB the ramp is doing the real work here — see the note on
-    // ZMK_POINTING_DEFAULT_SCRL_VAL above for why SMOOTH_SCROLLING does not
-    // actually attenuate anything.
-    acceleration-exponent = <1>;  // quadratic — gentle start, faster end
-    time-to-max-speed-ms = <500>; // 300 -> 500: held scrolling ramps in
-                                  // rather than leaping. lower=snappier,
-                                  // higher=more precision
+    // These two only do anything because SMOOTH_SCROLLING is off — with it on,
+    // get_acceleration_exponent() force-returns 0 for the wheel axes and
+    // speed() short-circuits to max_speed. See keyball39_right.conf.
+    acceleration-exponent = <1>;  // linear ramp in, then constant
+    // 40ms, not 500. The first count lands when speed*T^2/(2*ttms) crosses 1;
+    // at SCRL_VAL 60 that is ~36ms with ttms=40, versus ~200ms of dead hold at
+    // ttms=500. A long ramp on a 1-unit-per-event stream just means nothing
+    // happens for a fifth of a second.
+    time-to-max-speed-ms = <40>;
+    // 8ms rather than the 16ms default: raises the emission ceiling from
+    // 62.5Hz to 125Hz and spaces events more evenly, which is what macOS's
+    // gap-based accelerator rewards.
+    trigger-period-ms = <8>;
     delay-ms = <0>;
 };
 
