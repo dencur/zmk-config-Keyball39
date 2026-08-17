@@ -80,17 +80,20 @@
 // be bought back by raising the rate to match, since speed = rate x step.
 //
 //   before:  60 units/sec x 3.00 lines = 180 lines/sec, in 3-line steps
-//   after:  480 units/sec x 0.32 lines = 152 lines/sec, in 0.32-line steps
+//   after:  552 units/sec x 0.32 lines = 175 lines/sec, in 0.32-line steps
 //
-// 480 rather than 566 (which would match the old speed exactly) because
-// trigger-period-ms below caps emission at 1000/period = 500/sec.
+// 552 is the user's requested +15% over the 480 that first felt right.
+// trigger-period-ms below caps EVENT emission at 1000/period = 500/sec, so
+// above 500 a fraction of ticks carry 2 units rather than 1. At 0.32 lines
+// per unit that worst-case step is 0.64 lines — still 4.7x finer than the
+// 3-line step we had before the descriptor fix, so the cost is negligible.
 //
 // CAVEAT — USB vs BLE. 480 reports/sec is comfortable over USB. Over BLE at
 // the 7.5ms connection interval in keyball39.conf the practical ceiling is
 // nearer 133/sec, so wireless scrolling will be roughly a quarter this speed.
 // If that bites, raise the connection interval or accept a slower wireless
 // scroll — the smoothness is unaffected either way, only the speed.
-#define ZMK_POINTING_DEFAULT_SCRL_VAL 480
+#define ZMK_POINTING_DEFAULT_SCRL_VAL 552
 
 #include <behaviors/mouse_keys.dtsi>
 #include <dt-bindings/zmk/mouse.h>
@@ -1006,7 +1009,7 @@
             bindings = <
 &trans           &mo BEN_SCRL     &mmv MOVE_UP     &none            &none                            &none          &none          &mmv MOVE_UP     &mo BEN_SCRL   &trans
 &none            &mmv MOVE_LEFT   &mmv MOVE_DOWN   &mmv MOVE_RIGHT  &none                            &none          &mmv MOVE_LEFT &mmv MOVE_DOWN   &mmv MOVE_RIGHT  &none
-&none            &msc SCRL_UP     &msc SCRL_DOWN   &none            &none                            &none          &none          &msc SCRL_DOWN   &msc SCRL_UP   &none
+&msc SCRL_LEFT   &msc SCRL_UP     &msc SCRL_DOWN   &msc SCRL_RIGHT  &none                            &none          &msc SCRL_LEFT &msc SCRL_UP     &msc SCRL_DOWN &msc SCRL_RIGHT
 &to DEFAULT      &none            &none            &tog BEN_MOUSE   &mkp LCLK        &mkp MCLK       &mkp RCLK      &mkp LCLK                                      &to DEFAULT
             >;
         };
