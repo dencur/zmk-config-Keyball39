@@ -900,12 +900,25 @@
         // "lean the pair toward the direction" (see combos block):
         //   left hand:  X+C = left, C+V = right (C/V singles = up/down)
         //   right hand: M+, = left, ,+. = right (,/M singles = up/down)
-        // macOS Accessibility Zoom (Cmd+Opt+= / Cmd+Opt+-):
+        // App content zoom (Cmd+= / Cmd+-):
         //   Q and Y  = zoom in
         //   T and P  = zoom out
-        // ONE-TIME SETUP: System Settings → Accessibility → Zoom →
-        // enable "Use keyboard shortcuts to zoom". Pick "Picture-in-
-        // Picture" zoom style for the loupe-like feel.
+        // Was Cmd+Opt+= / Cmd+Opt+-, the macOS Accessibility screen
+        // magnifier, which needed a System Settings opt-in and blew up
+        // the whole display. Cmd+= is the app's OWN zoom, so Safari
+        // reflows and rescales the page instead. No setup required.
+        //
+        // NOT pointer-centred, and that is not fixable from here.
+        // Safari reaches page magnification only from AppKit gesture
+        // events -- WebViewImpl::scrollWheel() never inspects modifiers,
+        // and every magnification entry point requires NSEventTypeMagnify,
+        // which macOS generates solely from Apple Multi-Touch hardware.
+        // There is no consumer HID usage for zoom. Ctrl+wheel is a dead
+        // end too: since Safari 15 a pinch EMITS a synthetic ctrl+wheel
+        // to page JS as a compat shim, but that is an output, not an
+        // input -- feeding one back in just scrolls. Pointer-centred zoom
+        // needs host software synthesising a magnify gesture through
+        // private CGEvent SPI (ScrollToZoom, Mac Mouse Fix).
         // Desktop / Spaces navigation (macOS Ctrl+Left/Right) — used
         // for macOS Exposé / Spaces switching:
         //   A and H  = prev desktop (LC(LEFT))
@@ -925,7 +938,7 @@
         mousemove_layer {
             label = "MMOVE";
             bindings = <
-&kp LG(LA(EQUAL))   &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &kp LG(LA(MINUS))                       &kp LG(LA(EQUAL))  &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(LA(MINUS))
+&kp LG(EQUAL)       &kp LG(LBKT)        &mmv MOVE_UP    &kp LG(RBKT)      &kp LG(MINUS)                           &kp LG(EQUAL)      &kp LG(LBKT)   &mmv MOVE_UP   &kp LG(RBKT)        &kp LG(MINUS)
 &kp LC(LEFT)        &mmv MOVE_LEFT      &mmv MOVE_DOWN  &mmv MOVE_RIGHT   &kp LC(RIGHT)                           &kp LC(LEFT)       &mmv MOVE_LEFT &mmv MOVE_DOWN &mmv MOVE_RIGHT     &kp LC(RIGHT)
 &mouse_hold_mm      &none               &msc SCRL_UP    &msc SCRL_DOWN    &kp LA(D)                               &kp LA(D)      &msc SCRL_DOWN &msc SCRL_UP   &none               &mouse_hold_mm
 &none               &none               &none           &tog MOUSEMOVE    &mkp LCLK        &mkp RCLK              &mkp RCLK      &mkp LCLK                                        &none
