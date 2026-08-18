@@ -361,16 +361,16 @@ layers:
   - {t: '$$mdi:transfer$$', type: trans}
   - {t: '$$mdi:transfer$$', type: trans}
   MMOVE:
-  - {t: Gui+Alt+=, s: Gui+Alt++}
+  - {t: Gui+=, s: Gui++}
   - {t: 'Gui+[', s: 'Gui+{'}
   - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
   - {t: 'Gui+]', s: 'Gui+}'}
-  - {t: Gui+Alt+-, s: Gui+Alt+_}
-  - {t: Gui+Alt+=, s: Gui+Alt++}
+  - {t: Gui+-, s: Gui+_}
+  - {t: Gui+=, s: Gui++}
   - {t: 'Gui+[', s: 'Gui+{'}
   - {t: '$$mdi:menu-up$$', s: '$$mdi:mouse$$'}
   - {t: 'Gui+]', s: 'Gui+}'}
-  - {t: Gui+Alt+-, s: Gui+Alt+_}
+  - {t: Gui+-, s: Gui+_}
   - Ctl+$$mdi:arrow-left-bold$$
   - {t: '$$mdi:menu-left$$', s: '$$mdi:mouse$$'}
   - {t: '$$mdi:menu-down$$', s: '$$mdi:mouse$$'}
