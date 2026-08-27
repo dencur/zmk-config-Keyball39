@@ -564,6 +564,26 @@
             flavor = "tap-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <200>;
+            // Veto list: every position EXCEPT 18 (L). Mirror of hm_lalt's
+            // everything-except-D list (which blocks Alt+D dictation).
+            //
+            // Why: rolling "al" (all, also, always, total...) with A held past
+            // the 200ms term resolved A as GUI, and GUI+L on the user's RDP'd
+            // Windows box is Win+L — instant session lock. With 18 omitted,
+            // an L that arrives while A is still undecided FORBIDS the hold,
+            // so it resolves as tap and emits the literal "al" instead.
+            //
+            // A veto can only cancel holds, never create them, so every other
+            // GUI chord (Cmd+S, Cmd+C, Win+anything) is unaffected. Deliberate
+            // Cmd+L (macOS address bar) still works: hold A alone past 200ms
+            // FIRST, then tap L — by then the hold is already decided and the
+            // list is never consulted.
+            //
+            // Do NOT add hold-trigger-on-release here: with tap-preferred the
+            // decision fires on the timer, before releases are processed, so
+            // on-release leaves position_of_first_other_key_pressed at -1 and
+            // silently defeats this list (bitten by this before).
+            hold-trigger-key-positions = <0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38>;
             bindings = <&kp>, <&kp>;
         };
         // K (LCTRL) — right hand.
