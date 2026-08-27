@@ -865,7 +865,7 @@
             label = "ARROW";
             bindings = <
 &trans    &trans               &trans     &trans              &bt BT_CLR             &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4
-&kp LGUI  &kp LALT             &kp LCTRL  &kp LSHFT           &kp CAPS               &kp LEFT      &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT
+&kp LGUI  &kp LALT             &kp LCTRL  &kp LSHFT           &none                  &kp LEFT      &kp LEFT      &kp DOWN      &kp UP        &kp RIGHT
 &trans    &kp K_VOLUME_DOWN    &kp K_MUTE &kp K_VOLUME_UP     &kp LC(LS(LA(LG(M))))  &kp INS       &kp HOME      &kp PG_DN     &kp PG_UP     &kp END
 &trans    &trans               &trans     &trans              &trans  &trans         &trans  &trans                                          &trans
             >;
@@ -875,7 +875,7 @@
             label = "MOUSE";
             bindings = <
 &none   &none   &none   &none      &none                            &kp INS    &kp HOME      &kp PAGE_DOWN  &none               &kp DEL
-&trans  &trans  &trans  &trans     &none                            &kp CAPS   &kp LEFT      &kp DOWN       &kp UP              &kp RIGHT
+&trans  &trans  &trans  &trans     &none                            &none      &kp LEFT      &kp DOWN       &kp UP              &kp RIGHT
 &trans  &lt SCROLL X  &none   &none      &none                       &none      &msc SCRL_DOWN  &msc SCRL_UP  &lt SCROLL PAGE_UP  &trans
 &none   &none   &none   &tog MOUSE     &click_exit_l  &click_exit_r     &click_exit_r  &click_exit_l                     &none
             >;
