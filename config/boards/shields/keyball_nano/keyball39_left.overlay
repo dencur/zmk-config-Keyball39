@@ -14,6 +14,11 @@
 	// 5ms; release-bounce is what produces the repeat-character pattern,
 	// so we bump debounce-release-ms to 8 (press stays at the 5ms
 	// default). Latency cost on release is imperceptible for typing.
+	// HISTORY: that switch chattered AGAIN in 2026-08 ("gettting") and
+	// was physically swapped out on 2026-08-30, which fixed it. So if T
+	// ever chatters a THIRD time, the switch is no longer the suspect —
+	// look at the hotswap socket / solder joint at that position instead.
+	// The 8ms release debounce stays as cheap insurance for every switch.
 	// This is a peripheral-only change (the left scans its own matrix),
 	// so ONLY the left half needs reflashing for it; the right build is
 	// untouched. If chatter persists or spreads, the real fix is to
