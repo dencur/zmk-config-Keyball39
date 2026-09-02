@@ -32,8 +32,8 @@ layers:
   - {t: ., s: '>'}
   - {t: /, h: MOUSE, s: '?'}
   - GLOBE
-  - $$mdi:mouse-left-click-outline$$
   - $$mdi:mouse-right-click-outline$$
+  - $$mdi:mouse-left-click-outline$$
   - $$mdi:keyboard-esc$$
   - {t: '$$mdi:backspace$$', h: ARROW}
   - {t: '$$mdi:keyboard-tab$$', h: FUN}
@@ -272,8 +272,8 @@ layers:
   - {t: PgUp, h: SCROLL}
   - {type: held alternate}
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:mouse-left-click-outline$$
   - $$mdi:mouse-right-click-outline$$
+  - $$mdi:mouse-left-click-outline$$
   - {t: MOUSE, h: toggle}
   - '&click_exit_l'
   - '&click_exit_r'
@@ -392,8 +392,8 @@ layers:
   - {t: '$$mdi:minus-circle-outline$$', type: none}
   - '&mouse_hold_mm'
   - {t: '$$mdi:minus-circle-outline$$', type: none}
-  - $$mdi:mouse-left-click-outline$$
   - $$mdi:mouse-right-click-outline$$
+  - $$mdi:mouse-left-click-outline$$
   - {t: MMOVE, h: toggle}
   - $$mdi:mouse-left-click-outline$$
   - $$mdi:mouse-right-click-outline$$
